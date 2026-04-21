@@ -5,11 +5,11 @@ Thứ tự thực thi trong Query Enhancement:
   analyze_query → rewrite_query | decompose_query | hyde_query → expand_queries
 """
 from typing import List
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 
 from app.graph.conversation.state import ConversationState
+from app.prompt.loader import load_prompt
 from app.log import get_logger
 
 logger = get_logger(__name__)
@@ -20,7 +20,6 @@ logger = get_logger(__name__)
 # ---------------------------------------------------------------------------
 
 def _make_llm() -> ChatOpenAI:
-    """LLM phụ nhẹ dùng riêng cho query enhancement (không stream)."""
     from app.model.llm import get_llm
     return get_llm(stream=False)
 
@@ -32,30 +31,14 @@ def _parse_lines(text: str) -> List[str]:
 
 # ---------------------------------------------------------------------------
 # Node 1: analyze_query
-# Phân loại query để chọn đúng enhancement strategy
 # ---------------------------------------------------------------------------
-
-_ANALYZE_PROMPT = ChatPromptTemplate.from_template(
-    """Bạn là hệ thống phân loại câu hỏi cho chatbot Hành chính Nhân sự (HCNS).
-
-Phân loại câu hỏi sau thành đúng 1 trong 3 loại:
-- simple  : câu hỏi đơn giản, 1 chủ đề, cần tìm kiếm trực tiếp
-- complex : câu hỏi nhiều chủ đề hoặc nhiều ý, cần tách nhỏ để tìm
-- factual : câu hỏi hỏi về số liệu, quy định, con số cụ thể
-
-Chỉ trả về đúng 1 từ: simple | complex | factual
-
-Câu hỏi: {question}
-Loại:"""
-)
-
 
 async def analyze_query(state: ConversationState) -> dict:
     """Phân loại query → xác định strategy nào sẽ được dùng."""
-    logger.info(f"[analyze_query] question='{state['original_question']}'")
+    logger.info(f"[analyze_query] question='{state['message']}'")
     llm = _make_llm()
-    chain = _ANALYZE_PROMPT | llm | StrOutputParser()
-    result = await chain.ainvoke({"question": state["original_question"]})
+    chain = load_prompt("conversation/analyze_query") | llm | StrOutputParser()
+    result = await chain.ainvoke({"question": state["message"]})
     query_type = result.strip().lower()
 
     # Fallback an toàn nếu LLM trả về giá trị không hợp lệ
@@ -63,132 +46,69 @@ async def analyze_query(state: ConversationState) -> dict:
         query_type = "simple"
 
     logger.info(f"[analyze_query] query_type='{query_type}'")
-    return {
-        "query_type": query_type,
-        "iteration": state.get("iteration", 0) + 1,
-    }
+    logger.info(state)
+    return {"query_type": query_type, **state}
 
 
 # ---------------------------------------------------------------------------
 # Node 2a: rewrite_query  (dùng cho simple)
-# Viết lại câu hỏi ngắn/mơ hồ thành rõ ràng, đầy đủ hơn
 # ---------------------------------------------------------------------------
-
-_REWRITE_PROMPT = ChatPromptTemplate.from_template(
-    """Bạn là chuyên gia cải thiện câu hỏi tìm kiếm cho hệ thống HCNS.
-
-Viết lại câu hỏi sau để tìm kiếm hiệu quả hơn trong tài liệu nội quy công ty:
-- Làm rõ nghĩa, thêm context nếu thiếu
-- Dùng từ ngữ chính thức, đầy đủ (không viết tắt)
-- Chỉ trả về câu hỏi đã viết lại, không giải thích
-
-Câu hỏi gốc: {question}
-Câu hỏi viết lại:"""
-)
-
 
 async def rewrite_query(state: ConversationState) -> dict:
     """Rewrite cho simple query."""
     logger.info("[rewrite_query] rewriting simple query")
     llm = _make_llm()
-    chain = _REWRITE_PROMPT | llm | StrOutputParser()
-    rewritten = await chain.ainvoke({"question": state["original_question"]})
+    chain = load_prompt("conversation/rewrite_query") | llm | StrOutputParser()
+    rewritten = await chain.ainvoke({"question": state["message"]})
     rewritten = rewritten.strip()
     logger.info(f"[rewrite_query] result='{rewritten}'")
-    return {
-        "rewritten_query": rewritten,
-        "final_queries": [rewritten],
-    }
+    return {"rewritten_query": rewritten, "final_queries": [rewritten], **state}
 
 
 # ---------------------------------------------------------------------------
 # Node 2b: decompose_query  (dùng cho complex)
-# Tách câu hỏi nhiều ý thành các câu hỏi con độc lập
 # ---------------------------------------------------------------------------
-
-_DECOMPOSE_PROMPT = ChatPromptTemplate.from_template(
-    """Bạn là chuyên gia phân tích câu hỏi cho hệ thống HCNS.
-
-Tách câu hỏi sau thành tối đa 3 câu hỏi con độc lập.
-Mỗi câu hỏi con phải:
-- Có thể tìm kiếm độc lập trong tài liệu nội quy
-- Rõ ràng, đầy đủ không cần context câu gốc
-- Mỗi câu trên 1 dòng, không đánh số, không bullet
-
-Câu hỏi gốc: {question}
-Câu hỏi con:"""
-)
-
 
 async def decompose_query(state: ConversationState) -> dict:
     """Tách complex query thành sub-questions."""
     logger.info("[decompose_query] decomposing complex query")
     llm = _make_llm()
-    chain = _DECOMPOSE_PROMPT | llm | StrOutputParser()
-    result = await chain.ainvoke({"question": state["original_question"]})
+    chain = load_prompt("conversation/decompose_query") | llm | StrOutputParser()
+    result = await chain.ainvoke({"question": state["message"]})
     sub_questions = _parse_lines(result)
 
     # Đảm bảo luôn có ít nhất câu hỏi gốc nếu decompose thất bại
     if not sub_questions:
-        sub_questions = [state["original_question"]]
+        sub_questions = [state["message"]]
 
     logger.info(f"[decompose_query] sub_questions={sub_questions}")
-    return {
-        "sub_questions": sub_questions,
-        "final_queries": sub_questions,
-    }
+    return {"sub_questions": sub_questions, "final_queries": sub_questions, **state}
 
 
 # ---------------------------------------------------------------------------
 # Node 2c: hyde_query  (dùng cho factual)
-# Tạo hypothetical document → embed doc này thay vì embed query
-# Giúp tìm kiếm chính xác hơn cho câu hỏi về số liệu/quy định
 # ---------------------------------------------------------------------------
-
-_HYDE_PROMPT = ChatPromptTemplate.from_template(
-    """Viết một đoạn văn ngắn (~100 từ) như thể đây là nội dung trích từ
-tài liệu nội quy công ty, trả lời trực tiếp cho câu hỏi sau.
-Chỉ viết nội dung thuần túy, không thêm câu giới thiệu.
-
-Câu hỏi: {question}
-Đoạn nội dung:"""
-)
-
 
 async def hyde_query(state: ConversationState) -> dict:
     """Tạo hypothetical document cho factual query."""
     logger.info("[hyde_query] generating hypothetical document")
     llm = _make_llm()
-    chain = _HYDE_PROMPT | llm | StrOutputParser()
-    hyde_doc = await chain.ainvoke({"question": state["original_question"]})
+    chain = load_prompt("conversation/hyde_query") | llm | StrOutputParser()
+    hyde_doc = await chain.ainvoke({"question": state["message"]})
     hyde_doc = hyde_doc.strip()
     logger.info(f"[hyde_query] hyde_document length={len(hyde_doc)}")
-    return {
-        "hyde_document": hyde_doc,
-        "final_queries": [hyde_doc],    # embed doc này thay vì query gốc
-    }
+    return {"hyde_document": hyde_doc, "final_queries": [state["message"], hyde_doc], **state}
 
 
 # ---------------------------------------------------------------------------
 # Node 3: expand_queries
-# Tạo thêm multi-query variants cho mỗi query trong final_queries
-# Chạy sau tất cả 3 strategy trên
 # ---------------------------------------------------------------------------
-
-_EXPAND_PROMPT = ChatPromptTemplate.from_template(
-    """Tạo {n} cách diễn đạt khác nhau cho câu hỏi sau, phù hợp tìm kiếm trong tài liệu HCNS.
-Mỗi cách trên 1 dòng. Không đánh số, không bullet.
-
-Câu hỏi gốc: {question}
-Các cách diễn đạt khác:"""
-)
-
 
 async def expand_queries(state: ConversationState) -> dict:
     """Sinh thêm multi-query variants, dedup và trả về final_queries đầy đủ."""
     logger.info(f"[expand_queries] expanding {len(state['final_queries'])} queries")
     llm = _make_llm()
-    chain = _EXPAND_PROMPT | llm | StrOutputParser()
+    chain = load_prompt("conversation/expand_queries") | llm | StrOutputParser()
 
     all_queries: List[str] = []
     seen: set = set()
@@ -207,4 +127,25 @@ async def expand_queries(state: ConversationState) -> dict:
                 seen.add(variant)
 
     logger.info(f"[expand_queries] total final_queries={len(all_queries)}")
-    return {"final_queries": all_queries}
+    return {"final_queries": all_queries, **state}
+
+
+# ---------------------------------------------------------------------------
+# Node 4: generate_response  (placeholder — retrieval chưa triển khai)
+# Node cuối của subgraph, set `response` để trả về AppState.
+# Khi retrieval + synthesis hoàn chỉnh, node này sẽ tổng hợp từ retrieved_docs.
+# ---------------------------------------------------------------------------
+
+async def generate_response(state: ConversationState) -> dict:
+    """Tổng hợp câu trả lời cuối cùng từ context đã retrieve → set response."""
+    logger.info("[generate_response] generating final response")
+
+    # TODO: thay bằng LLM synthesis từ retrieved_docs khi retrieval hoàn chỉnh
+    final_queries = state.get("final_queries", [])
+    response = (
+        f"[Đang xử lý] Đã chuẩn bị {len(final_queries)} query để tìm kiếm. "
+        f"Retrieval chưa được triển khai."
+    )
+
+    logger.info(f"[generate_response] response set (length={len(response)})")
+    return {"response": response, **state}
