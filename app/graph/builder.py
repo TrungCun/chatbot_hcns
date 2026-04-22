@@ -31,7 +31,7 @@ def build_main_graph():
     # END
     workflow.add_edge("conversation_subgraph", END)
     workflow.add_edge("summary_subgraph", END)
-    
+
     return workflow.compile(checkpointer=MemorySaver())
 
 main_graph = build_main_graph()

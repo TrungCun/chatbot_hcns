@@ -4,9 +4,9 @@ from app.graph.state import AppState
 
 def route_by_intent(
     state: AppState,
-) -> Literal["conversation_subgraph", "interview_subgraph"]:
-    
+) -> Literal["conversation_subgraph", "summary_subgraph"]:
+
     intent = state.get("intent", "ask")
     if intent == "provide":
-        return "interview_subgraph"
+        return "summary_subgraph"
     return "conversation_subgraph"

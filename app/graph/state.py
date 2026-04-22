@@ -6,6 +6,8 @@ class AppState(TypedDict):
     message: str
 
     intent: Literal["ask", "provide"]
-    current_phase: Literal["conversation", "interview"]
+    current_phase: Literal["conversation", "summary"]
 
     response: Optional[str]
+    
+    template: dict  # Shared across all subgraphs - bảo vệ dữ liệu extracted
