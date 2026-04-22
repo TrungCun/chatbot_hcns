@@ -8,7 +8,6 @@ load_dotenv()
 from app.log import get_logger
 logger = get_logger(__name__)
 
-
 def get_llm(stream: bool = False) -> ChatOpenAI:
     return ChatOpenAI(
         base_url=os.getenv("LLM_BASE_URL"),

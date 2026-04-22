@@ -38,6 +38,3 @@ Thumbs.db
 # Project-specific exclusions
 pdf/
 weights/
-app/tools/qdrant.py
-app/tools/helper.py
-app/services/upsert_services.py
