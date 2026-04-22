@@ -2,12 +2,12 @@
 Chat Services — business logic xử lý tin nhắn qua graph.
 """
 import uuid
-from typing import Dict, Any
+from typing import Optional
 from langchain_core.runnables import RunnableConfig
 
 from app.graph.builder import main_graph
 from app.graph.state import AppState
-from app.schema import ChatRequest, ChatResponse
+from app.schema.chat_schema import ChatRequest, ChatResponse
 from app.log import get_logger
 
 logger = get_logger(__name__)
@@ -34,14 +34,6 @@ class ChatService:
         session_id = request.session_id or str(uuid.uuid4())
         logger.info(f"[process_message] session_id={session_id}, message='{request.message[:50]}...'")
 
-        # --- Build state ---
-        state: AppState = {
-            "message": request.message,
-            "intent": "ask",  # default, sẽ được override bởi classify_intent node
-            "current_phase": "conversation",  # default
-            "response": None,
-        }
-
         # --- Config cho MemorySaver (thread_id là session_id) ---
         config: RunnableConfig = {
             "configurable": {
@@ -49,15 +41,66 @@ class ChatService:
             }
         }
 
+        # --- Build state ---
+        # Load previous state từ MemorySaver checkpoint nếu có
+        previous_state_values = None
+        try:
+            previous_state = main_graph.get_state(config)
+            if previous_state and previous_state.values:
+                previous_state_values = previous_state.values
+                logger.info(f"[process_message] loaded previous state from checkpoint")
+        except Exception as e:
+            logger.debug(f"[process_message] no previous checkpoint: {e}")
+
+        # Nếu có previous state, merge vào; nếu không, tạo mới
+        if previous_state_values:
+            # QUAN TRỌNG: Preserve template cũ - cơ chế mới chỉ cập nhật các trường có dữ liệu
+            previous_template = previous_state_values.get("template", {})
+            logger.info(f"[process_message] preserving template from previous state: {previous_template}")
+
+            state: AppState = {
+                **previous_state_values,  # Inherit toàn bộ state cũ (bao gồm template cũ)
+                "message": request.message,  # Update message mới
+            }
+        else:
+            state: AppState = {
+                "message": request.message,
+                "intent": "ask",
+                "current_phase": "conversation",
+                "response": None,
+                "template": {
+                    "name": None,
+                    "email": None,
+                    "phone": None,
+                    "education": None,
+                    "experience": None,
+                    "skills": [],
+                }
+            }
+            logger.info(f"[process_message] initialized new template")
+
         try:
             # --- Invoke graph ---
-            logger.info(f"[process_message] invoking main_graph...")
+            # Cơ chế mới: extract_info chỉ cập nhật các trường có dữ liệu thực tế (không ghi đè null/rỗng)
+            logger.info(f"[process_message] invoking main_graph with template: {state.get('template')}")
             result = await main_graph.ainvoke(state, config)
 
             # Handle response (có thể None từ subgraph)
             response_text = result.get("response") or "Không có phản hồi từ hệ thống"
             logger.info(f"[process_message] graph done | intent={result.get('intent')} | response_len={len(str(response_text))}")
-            logger.info(f"[process_message] state: {state}") # Log state để debug
+
+            # Log template changes - chi tiết hơn để track cơ chế preserve
+            result_template = result.get("template", {})
+            logger.info(f"[process_message] updated template: {result_template}")
+
+            # So sánh template để đảm bảo chỉ các trường có dữ liệu được cập nhật
+            for field_name in state.get("template", {}).keys():
+                old_value = state.get("template", {}).get(field_name)
+                new_value = result_template.get(field_name)
+                if old_value != new_value:
+                    logger.info(f"[process_message] template field '{field_name}' changed: {old_value} → {new_value}")
+
+            # MemorySaver tự động persist state checkpoint, không cần save riêng
 
             # --- Build response ---
             response = ChatResponse(
@@ -77,6 +120,7 @@ class ChatService:
                 session_id=session_id,
                 current_phase="conversation",
             )
+
 
 
 async def chat_message(request: ChatRequest) -> ChatResponse:
