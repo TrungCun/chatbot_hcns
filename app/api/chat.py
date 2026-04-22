@@ -8,7 +8,7 @@ Routes:
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError
 
-from app.schema import ChatRequest, ChatResponse, HealthResponse
+from app.schema.chat_schema import ChatRequest, ChatResponse, HealthResponse
 from app.services.chat_services import chat_message
 from app.log import get_logger
 
@@ -19,23 +19,6 @@ router = APIRouter(prefix="/api", tags=["chat"])
 
 @router.post("/chat", response_model=ChatResponse)
 async def handle_chat(request: ChatRequest) -> ChatResponse:
-    """
-    Xử lý tin nhắn chat.
-
-    Request:
-        {
-            "message": "Tôi muốn ứng tuyển vị trí backend developer",
-            "session_id": "optional-session-id" (nếu None → server tạo UUID)
-        }
-
-    Response:
-        {
-            "response": "Xin chào! Tôi sẽ giúp bạn...",
-            "intent": "provide",
-            "session_id": "session-id-để-dùng-lần-sau",
-            "current_phase": "interview"
-        }
-    """
     try:
         logger.info(f"[POST /chat] message='{request.message[:50]}...'")
         response = await chat_message(request)
