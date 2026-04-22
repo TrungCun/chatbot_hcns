@@ -57,6 +57,7 @@ class ChatService:
             # Handle response (có thể None từ subgraph)
             response_text = result.get("response") or "Không có phản hồi từ hệ thống"
             logger.info(f"[process_message] graph done | intent={result.get('intent')} | response_len={len(str(response_text))}")
+            logger.info(f"[process_message] state: {state}") # Log state để debug
 
             # --- Build response ---
             response = ChatResponse(

@@ -38,9 +38,10 @@ class ColoredFormatter(logging.Formatter):
 def setup_logging(level=logging.INFO):
     """Setup pretty logging configuration"""
 
-    # Create handler & formatter
+    # Create handler & formatter with UTF-8 encoding for Vietnamese support
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(level)
+    console_handler.encoding = 'utf-8'  # Support Vietnamese characters
     console_handler.setFormatter(ColoredFormatter())
 
     # Configure root logger

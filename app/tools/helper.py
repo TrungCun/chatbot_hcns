@@ -105,7 +105,7 @@ class HelperTools:
             return [{"error": str(e)}]
 
     @staticmethod
-     def clean_text(text: str) -> str:
+    def clean_text(text: str) -> str:
         """Clean extracted text by normalizing whitespace, removing noise, and fixing encoding issues."""
         if not text:
             return ""

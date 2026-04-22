@@ -10,6 +10,7 @@ WEIGHTS_DIR = Path(__file__).parent.parent / "weights"
 class Application:
     def __init__(self):
         self.models: Dict[str, Any] = {}
+        self.llm: Dict[str, Any] = {}
 
     def load_models(self) -> None:
         import torch
