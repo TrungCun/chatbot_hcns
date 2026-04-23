@@ -2,10 +2,10 @@ from typing import Literal
 
 from app.graph.state import AppState
 
-def route_by_intent(
+def route_by_user_intent(
     state: AppState,
 ) -> Literal["conversation_subgraph", "summary_subgraph"]:
-
+    """Route based on Level 1 Classification (ask/provide)."""
     intent = state.get("intent", "ask")
     if intent == "provide":
         return "summary_subgraph"
