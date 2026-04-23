@@ -16,19 +16,50 @@ def _make_llm() -> ChatOpenAI:
 def _parse_lines(text: str) -> List[str]:
     return [line.strip() for line in text.strip().splitlines() if line.strip()]
 
-async def analyze_query(state: ConversationState) -> dict:
-    logger.info(f"[analyze_query] question='{state['message']}'")
+async def classify_conversation_domain(state: ConversationState) -> dict:
+    """Level 2 Classification: Determine conversation domain for 'ask' intent.
+    Returns: domain = 'job' | 'company'
+
+    Only called if intent = 'ask'. Routes questions to appropriate handler:
+    - 'job': Use list_all_jobs tool (direct lookup, no RAG)
+    - 'company': Use RAG pipeline (full context retrieval)
+    """
+    message = state["message"]
+    logger.info(f"[classify_conversation_domain] message='{message}'")
+
+    llm = get_llm(stream=False)
+    chain = load_prompt("conversation/classify_domain") | llm | StrOutputParser()
+
+    result = await chain.ainvoke({"message": message})
+    domain = result.strip().lower()
+
+    # Fallback
+    if domain not in ("job", "company"):
+        domain = "company"  # Default to company (safe choice)
+
+    logger.info(f"[classify_conversation_domain] domain='{domain}'")
+    return {"domain": domain}
+
+async def classify_query_complexity(state: ConversationState) -> dict:
+    """Level 3 Classification: Determine RAG query complexity.
+    Returns: classify_query_complexity = 'simple' | 'complex' | 'factual'
+
+    - 'simple': Single-step retrieval needed
+    - 'complex': Multi-step decomposition needed
+    - 'factual': Hypothetical document generation helpful
+    """
+    logger.info(f"[classify_query_complexity] question='{state['message']}'")
     llm = _make_llm()
     chain = load_prompt("conversation/analyze_query") | llm | StrOutputParser()
     result = await chain.ainvoke({"question": state["message"]})
-    query_type = result.strip().lower()
+    classify_query_complexity = result.strip().lower()
 
     # Fallback
-    if query_type not in ("simple", "complex", "factual"):
-        query_type = "simple"
+    if classify_query_complexity not in ("simple", "complex", "factual"):
+        classify_query_complexity = "simple"
 
-    logger.info(f"[analyze_query] query_type='{query_type}'")
-    return {"query_type": query_type}
+    logger.info(f"[classify_query_complexity] classify_query_complexity='{classify_query_complexity}'")
+    return {"classify_query_complexity": classify_query_complexity}
 
 
 async def rewrite_query(state: ConversationState) -> dict:
@@ -86,7 +117,12 @@ async def expand_queries(state: ConversationState) -> dict:
                 seen.add(variant)
 
     logger.info(f"[expand_queries] total final_queries={len(all_queries)}")
-    return {"final_queries": all_queries}
+    response_data = {"final_queries": all_queries}
+    import json
+    return {
+        "final_queries": all_queries,
+        "response": json.dumps(response_data, ensure_ascii=False)
+    }
 
 async def generate_response(state: ConversationState) -> dict:
     """Tổng hợp câu trả lời cuối cùng từ context đã retrieve → set response."""

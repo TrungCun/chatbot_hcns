@@ -5,9 +5,7 @@ from typing_extensions import TypedDict
 class AppState(TypedDict):
     message: str
 
-    intent: Literal["ask", "provide"]
-    current_phase: Literal["conversation", "summary"]
+    intent: Literal["ask", "provide"]  # Level 1: User intent classification
 
-    response: Optional[str]
-    
-    template: dict  # Shared across all subgraphs - bảo vệ dữ liệu extracted
+    template: dict
+    response: Optional[str] = None
