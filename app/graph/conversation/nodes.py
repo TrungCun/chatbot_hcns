@@ -125,8 +125,65 @@ async def expand_queries(state: ConversationState) -> dict:
     }
 
 async def generate_response(state: ConversationState) -> dict:
-    """Tổng hợp câu trả lời cuối cùng từ context đã retrieve → set response."""
-    import json
+    """Agent node: LLM decides which tools to use based on prompt.
 
-    logger.info(f"[generate_response] final state after subgraph:")
-    logger.info(f"{json.dumps(state, ensure_ascii=False, default=str, indent=2)}")
+    Tools are injected from registry, not hardcoded.
+    Tool usage is determined by prompt, not code.
+    """
+    import json
+    from langchain_core.messages import HumanMessage, ToolMessage
+    from app.model.llm import get_llm
+    from app.prompt.loader import load_prompt
+    from app.tools.registry import get_tools, execute_tool
+
+    logger.info(f"[generate_response] message='{state['message']}'")
+
+    # Load tools and prompt
+    tools = get_tools()
+    llm = get_llm(stream=False)
+    llm_with_tools = llm.bind_tools(tools)
+
+    agent_prompt = load_prompt("conversation/generate_response")
+
+    # Build prompt message
+    tools_description = "\n".join([f"- {t.name}: {t.description}" for t in tools])
+    prompt_value = agent_prompt.invoke({
+        "input": state["message"],
+        "tools_description": tools_description
+    })
+
+    # Extract message content
+    message_content = prompt_value.content if hasattr(prompt_value, 'content') else str(prompt_value)
+    messages = [HumanMessage(content=message_content)]
+
+    # Agent loop (max 3 iterations)
+    max_iterations = 3
+    for iteration in range(max_iterations):
+        logger.info(f"[generate_response] iteration {iteration + 1}")
+
+        # Call LLM
+        response = await llm_with_tools.ainvoke(messages)
+        messages.append(response)
+
+        # Check: có tool calls?
+        if not response.tool_calls:
+            logger.info("[generate_response] no tools, returning response")
+            return {"response": response.content}
+
+        # Execute tools
+        logger.info(f"[generate_response] executing {len(response.tool_calls)} tools")
+
+        for tool_call in response.tool_calls:
+            tool_name = tool_call["name"]
+            tool_input = tool_call.get("args", {})
+
+            logger.info(f"[generate_response] calling {tool_name}")
+            result = await execute_tool(tool_name, tool_input)
+
+            messages.append(ToolMessage(
+                tool_call_id=tool_call["id"],
+                content=json.dumps(result, ensure_ascii=False) if isinstance(result, dict) else str(result)
+            ))
+
+    # Fallback
+    return {"response": "Không thể xử lý câu hỏi này"}

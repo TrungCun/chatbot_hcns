@@ -1,5 +1,6 @@
 from langchain_core.tools import tool
 
+
 from app.services.job_services import JobService
 
 from app.log import get_logger
