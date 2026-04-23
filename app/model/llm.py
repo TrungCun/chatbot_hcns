@@ -19,7 +19,7 @@ def get_llm(stream: bool = False) -> ChatOpenAI:
         top_p=0.8,
         extra_body={
             "top_k": 20,
-            "min_p": 0.0,
+            "min_p": 0.0,           
             "chat_template_kwargs": {"enable_thinking": False},
         },
     )
