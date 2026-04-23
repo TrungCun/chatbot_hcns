@@ -8,6 +8,7 @@ from langchain_core.runnables import RunnableConfig
 from app.graph.builder import main_graph
 from app.graph.state import AppState
 from app.schema.chat_schema import ChatRequest, ChatResponse
+from app.schema.summary_schema import CVTemplate
 from app.log import get_logger
 
 logger = get_logger(__name__)
@@ -68,14 +69,7 @@ class ChatService:
                 "intent": "ask",
                 "current_phase": "conversation",
                 "response": None,
-                "template": {
-                    "name": None,
-                    "email": None,
-                    "phone": None,
-                    "education": None,
-                    "experience": None,
-                    "skills": [],
-                }
+                "template": CVTemplate().model_dump()
             }
             logger.info(f"[process_message] initialized new template")
 
@@ -94,9 +88,20 @@ class ChatService:
             logger.info(f"[process_message] updated template: {result_template}")
 
             # So sánh template để đảm bảo chỉ các trường có dữ liệu được cập nhật
-            for field_name in state.get("template", {}).keys():
-                old_value = state.get("template", {}).get(field_name)
-                new_value = result_template.get(field_name)
+            # Duyệt qua các key của CVTemplate.model_dump() để an toàn
+            template_keys = CVTemplate().model_dump().keys()
+            for field_name in template_keys:
+                old_val_data = state.get("template", {})
+                new_val_data = result_template
+
+                # result_template có thể là CVTemplate object hoặc dict
+                if isinstance(new_val_data, CVTemplate):
+                    new_value = getattr(new_val_data, field_name, None)
+                else:
+                    new_value = new_val_data.get(field_name) if isinstance(new_val_data, dict) else None
+
+                old_value = old_val_data.get(field_name) if isinstance(old_val_data, dict) else None
+
                 if old_value != new_value:
                     logger.info(f"[process_message] template field '{field_name}' changed: {old_value} → {new_value}")
 

@@ -27,38 +27,67 @@ async def extract_info(state: SummaryState) -> dict:
         logger.error(f"[extract_info] Failed to parse JSON: {result}. Error: {e}")
         parsed_info = {}
 
-    # Update template by updating only specific fields with extracted values
-    updated_template = state.get("template", {}).copy()
+    # Update template by updating specific segments
+    from app.schema.summary_schema import CVTemplate
 
-    # Only update fields that have non-null/non-empty values to avoid overwriting
-    for field_name, field_value in parsed_info.items():
-        if field_name in updated_template:
-            # Only update if the extracted value is not null and not empty
-            if field_value is not None and (not isinstance(field_value, (list, dict)) or len(field_value) > 0):
-                logger.info(f"[extract_info] updating field '{field_name}' with value: {field_value}")
-                updated_template[field_name] = field_value
-            else:
-                logger.info(f"[extract_info] skipping field '{field_name}' - empty/null value")
-        else:
-            logger.warning(f"[extract_info] field '{field_name}' not in template")
+    current_template_data = state.get("template")
+    if isinstance(current_template_data, CVTemplate):
+        current_template = current_template_data
+    elif isinstance(current_template_data, dict):
+        current_template = CVTemplate(**current_template_data)
+    else:
+        current_template = CVTemplate()
+
+    if "candidate_overview" in parsed_info and parsed_info["candidate_overview"]:
+        for k, v in parsed_info["candidate_overview"].items():
+            if v and hasattr(current_template.candidate_overview, k):
+                setattr(current_template.candidate_overview, k, v)
+
+    if "education_and_languages" in parsed_info and parsed_info["education_and_languages"]:
+        for k, v in parsed_info["education_and_languages"].items():
+            if v and hasattr(current_template.education_and_languages, k):
+                setattr(current_template.education_and_languages, k, v)
+
+    if "competency_framework" in parsed_info and parsed_info["competency_framework"]:
+        for k, v in parsed_info["competency_framework"].items():
+            if v and hasattr(current_template.competency_framework, k):
+                setattr(current_template.competency_framework, k, v)
+
+    if "professional_evidence" in parsed_info and isinstance(parsed_info["professional_evidence"], list):
+         current_template.professional_evidence = parsed_info["professional_evidence"]
 
     return {
-        "template": updated_template,
+        "template": current_template,
         "extracted_info": result
     }
 
 
 def summary(state: SummaryState) -> dict:
     logger.info("[summary] evaluating template completeness")
-    template = state.get("template", {})
+    from app.schema.summary_schema import CVTemplate
 
-    required_fields = ["name", "email", "phone", "education", "experience", "skills"]
+    template_data = state.get("template")
+    if isinstance(template_data, CVTemplate):
+        template = template_data
+    elif isinstance(template_data, dict):
+        template = CVTemplate(**template_data)
+    else:
+        return {"evaluation": "incomplete"}
+
     missing = []
+    # Check essential fields in candidate_overview
+    if not template.candidate_overview.full_name:
+        missing.append("họ tên")
+    if not template.candidate_overview.contact_info:
+        missing.append("thông tin liên hệ")
 
-    for field in required_fields:
-        value = template.get(field)
-        if value is None or value == "" or value == []:
-            missing.append(field)
+    # Check education
+    if not template.education_and_languages.highest_degree:
+        missing.append("bằng cấp/trình độ")
+
+    # Check experience
+    if not template.professional_evidence:
+        missing.append("kinh nghiệm làm việc")
 
     if missing:
         logger.info(f"[summary] incomplete - missing fields: {missing}")
@@ -70,9 +99,21 @@ def summary(state: SummaryState) -> dict:
 
 async def respond_complete(state: SummaryState) -> dict:
     logger.info("[respond_complete] generating summary response")
+    from app.schema.summary_schema import CVTemplate
+
     llm = _make_llm()
+    template_data = state.get("template")
+
+    if isinstance(template_data, CVTemplate):
+        template = template_data
+    elif isinstance(template_data, dict):
+        template = CVTemplate(**template_data)
+    else:
+        template = CVTemplate()
+
     chain = load_prompt("summary/finalize_summary") | llm | StrOutputParser()
-    summary_text = await chain.ainvoke({"template": state["template"]})
+    # Pass model_dump for prompt context
+    summary_text = await chain.ainvoke({"template": template.model_dump()})
 
     response = (
         f"{summary_text}\n\n"
@@ -85,21 +126,29 @@ async def respond_complete(state: SummaryState) -> dict:
 
 async def respond_incomplete(state: SummaryState) -> dict:
     logger.info("[respond_incomplete] generating missing-info question")
-    template = state.get("template", {})
+    from app.schema.summary_schema import CVTemplate
 
-    required_fields = ["name", "email", "phone", "education", "experience", "skills"]
-    missing = [
-        field for field in required_fields
-        if template.get(field) is None or template.get(field) == "" or template.get(field) == []
-    ]
+    template_data = state.get("template")
+    if isinstance(template_data, CVTemplate):
+        template = template_data
+    elif isinstance(template_data, dict):
+        template = CVTemplate(**template_data)
+    else:
+        template = CVTemplate()
+
+    missing = []
+    if not template.candidate_overview.full_name: missing.append("họ tên")
+    if not template.candidate_overview.contact_info: missing.append("thông tin liên hệ (email/SĐT)")
+    if not template.education_and_languages.highest_degree: missing.append("trình độ học vấn")
+    if not template.professional_evidence: missing.append("mô tả kinh nghiệm/dự án")
 
     # Ask about the first missing field
-    next_field = missing[0] if missing else "thông tin"
+    next_field = missing[0] if missing else "thông tin bổ sung"
 
     llm = _make_llm()
     chain = load_prompt("summary/ask_next_question") | llm | StrOutputParser()
     response = await chain.ainvoke({
-        "template": template,
+        "template": template.model_dump(),
         "missing_field": next_field,
     })
 
