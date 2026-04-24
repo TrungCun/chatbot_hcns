@@ -54,7 +54,11 @@ async def extract_info(state: SummaryState) -> dict:
                 setattr(current_template.competency_framework, k, v)
 
     if "professional_evidence" in parsed_info and isinstance(parsed_info["professional_evidence"], list):
-         current_template.professional_evidence = parsed_info["professional_evidence"]
+         from app.schema.summary_schema import ProfessionalEvidence
+         current_template.professional_evidence = [
+             ProfessionalEvidence(**item) if isinstance(item, dict) else item
+             for item in parsed_info["professional_evidence"]
+         ]
 
     return {
         "template": current_template,
@@ -154,3 +158,40 @@ async def respond_incomplete(state: SummaryState) -> dict:
 
     logger.info(f"[respond_incomplete] asking about field: {next_field}")
     return {"response": response}
+
+
+async def evaluation(state: SummaryState) -> dict:
+    logger.info("[evaluation] evaluating template and generating response")
+    from app.schema.summary_schema import CVTemplate
+
+    llm = _make_llm()
+    template_data = state.get("template")
+
+    if isinstance(template_data, CVTemplate):
+        template = template_data
+    elif isinstance(template_data, dict):
+        template = CVTemplate(**template_data)
+    else:
+        template = CVTemplate()
+
+    chain = load_prompt("summary/evaluation") | llm | StrOutputParser()
+    result = await chain.ainvoke({"template": json.dumps(template.model_dump(), ensure_ascii=False)})
+
+    try:
+        parsed_eval = json.loads(result.strip())
+        logger.info(f"[evaluation] parsed evaluation result")
+
+        # Chuẩn hóa dữ liệu template nếu có trong kết quả trả về
+        if "template" in parsed_eval:
+            from app.schema.summary_schema import CVTemplate
+            # Đảm bảo dữ liệu map đúng vào model Pydantic
+            if isinstance(parsed_eval["template"], dict):
+                parsed_eval["template"] = CVTemplate(**parsed_eval["template"])
+
+        logger.info(f"[evaluation] final evaluation state updates: {parsed_eval}")
+
+        # LangGraph sẽ tự động merge các trường trong parsed_eval vào State
+        return parsed_eval
+    except json.JSONDecodeError as e:
+        logger.error(f"[evaluation] Failed to parse JSON: {result}. Error: {e}")
+        return {"summary": "Không thể tạo đánh giá tự động tại thời điểm này."}
