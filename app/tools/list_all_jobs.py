@@ -1,20 +1,27 @@
 from langchain_core.tools import tool
-
+from app.prompt.loader import load_prompt
 
 from app.services.job_services import JobService
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
+# Load prompt từ file app/prompt/tools/list_all_jobs.md
+_list_all_jobs_prompt = load_prompt("tools/list_all_jobs")
+_description = _list_all_jobs_prompt.messages[0].prompt.template
 
-@tool
+@tool("list_all_jobs", description=_description)
 async def list_all_jobs() -> dict:
-    """Lấy danh sách tất cả vị trí tuyển dụng hiện có.
-    Dùng tool này khi người dùng hỏi về các vị trí tuyển dụng, công việc đang mở, hoặc cơ hội nghề nghiệp.
-    """
     logger.info("[list_all_jobs] fetching all jobs from service")
+    try:
+        result = await JobService.list_all()
 
-    result = await JobService.list_all()
-    logger.info(f"[list_all_jobs] returned {result.total} jobs")
+        if result.total == 0:
+            return "Hiện tại không có vị trí tuyển dụng nào đang mở."
 
-    return result.model_dump(mode="json")
+        logger.info(f"[list_all_jobs] returned {result.total} jobs")
+
+        return result.model_dump(mode="json")
+    except Exception as e:
+        logger.error(f"[list_all_jobs] Error: {e}", exc_info=True)
+        return "Hệ thống đang bận, không thể lấy danh sách công việc lúc này. Xin vui lòng thử lại sau."
