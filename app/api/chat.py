@@ -1,10 +1,3 @@
-"""
-Chat API endpoints.
-
-Routes:
-  POST /chat              → xử lý message, trả về response
-  GET  /health           → health check
-"""
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError
 
@@ -16,10 +9,10 @@ logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api", tags=["chat"])
 
-
 @router.post("/chat", response_model=ChatResponse)
 async def handle_chat(request: ChatRequest) -> ChatResponse:
     try:
+        logger.info(f"============START==============")
         logger.info(f"[POST /chat] message='{request.message[:50]}...'")
         response = await chat_message(request)
         logger.info(f"[POST /chat] response sent | intent={response.intent}")

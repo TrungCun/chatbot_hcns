@@ -8,14 +8,13 @@ from app.tools.redis import client as redis
 from app.log import get_logger
 logger = get_logger(__name__)
 
-
 _JOBS_HASH_KEY = "jobs"
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
 
 class JobService:
-
+    
     @staticmethod
     async def create(body: JobCreate) -> JobResponse:
         now = _now()

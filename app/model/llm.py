@@ -1,4 +1,5 @@
 import os
+from functools import lru_cache
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 
@@ -8,6 +9,7 @@ load_dotenv()
 from app.log import get_logger
 logger = get_logger(__name__)
 
+@lru_cache(maxsize=2)
 def get_llm(stream: bool = False) -> ChatOpenAI:
     return ChatOpenAI(
         base_url=os.getenv("LLM_BASE_URL"),
@@ -19,10 +21,14 @@ def get_llm(stream: bool = False) -> ChatOpenAI:
         top_p=0.8,
         extra_body={
             "top_k": 20,
-            "min_p": 0.0,           
+            "min_p": 0.0,
             "chat_template_kwargs": {"enable_thinking": False},
         },
     )
+
+# Singleton instances for production
+llm = get_llm(stream=False)
+llm_stream = get_llm(stream=True)
 
 
 if __name__ == "__main__":

@@ -3,8 +3,6 @@ import sys
 
 class ColoredFormatter(logging.Formatter):
     """Custom formatter with colors for different log levels"""
-
-    # ANSI color codes
     COLORS = {
         "DEBUG": "\033[36m",     # Cyan
         "INFO": "\033[32m",      # Green
@@ -49,6 +47,11 @@ def setup_logging(level=logging.INFO):
     root_logger.setLevel(level)
     root_logger.handlers.clear()
     root_logger.addHandler(console_handler)
+
+    # Disable noisy logs from 3rd party libraries
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)
+    logging.getLogger("openai").setLevel(logging.WARNING)
 
     # Configure uvicorn loggers to suppress duplicate messages
     for logger_name in ("uvicorn.access", "uvicorn.error", "uvicorn"):
