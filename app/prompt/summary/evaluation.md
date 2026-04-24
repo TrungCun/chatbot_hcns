@@ -16,7 +16,7 @@ Hãy đọc thật kỹ dữ liệu trong `template` để suy luận và điề
 3. `missing_information`: Liệt kê các thông tin quan trọng còn thiếu để ứng viên có thể hoàn thiện hồ sơ.
 
 II. TẠO ĐÁNH GIÁ TỔNG QUAN (`summary`):
-Viết một đoạn đánh giá chuyên sâu (khoảng 150-300 từ) về ứng viên này. Nội dung bao gồm:
+Viết một đoạn đánh giá chuyên sâu (khoảng 100-150 từ) về ứng viên này. Nội dung bao gồm:
 1. Tóm tắt nhanh về thế mạnh chuyên môn và nền tảng học vấn.
 2. Đánh giá chất lượng kinh nghiệm làm việc (có trọng tâm, có kết quả định lượng không?).
 3. Nhận định về mức độ phù hợp/tiềm năng của ứng viên.
