@@ -1,34 +1,26 @@
 import json
-from typing import List
 from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import ChatOpenAI
 
+from app.schema.summary_schema import CVTemplate
 from app.graph.summary.state import SummaryState
 from app.prompt.loader import load_prompt
-from app.model.llm import get_llm
+from app.model.llm import llm
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
-def _make_llm() -> ChatOpenAI:
-    return get_llm(stream=False)
-
 async def extract_info(state: SummaryState) -> dict:
     logger.info("[extract_info] extracting information from message")
-    llm = _make_llm()
     chain = load_prompt("summary/extract_info") | llm | StrOutputParser()
     result = await chain.ainvoke({"message": state["message"]})
 
-    # Parse JSON response
     try:
         parsed_info = json.loads(result.strip())
-        logger.info(f"[extract_info] extracted info={parsed_info}")
+        logger.info(f"[extract_info] extracted info:\n{json.dumps(parsed_info, indent=4, ensure_ascii=False)}")
     except json.JSONDecodeError as e:
         logger.error(f"[extract_info] Failed to parse JSON: {result}. Error: {e}")
         parsed_info = {}
 
-    # Update template by updating specific segments
-    from app.schema.summary_schema import CVTemplate
 
     current_template_data = state.get("template")
     if isinstance(current_template_data, CVTemplate):
@@ -105,7 +97,6 @@ async def respond_complete(state: SummaryState) -> dict:
     logger.info("[respond_complete] generating summary response")
     from app.schema.summary_schema import CVTemplate
 
-    llm = _make_llm()
     template_data = state.get("template")
 
     if isinstance(template_data, CVTemplate):
@@ -149,7 +140,6 @@ async def respond_incomplete(state: SummaryState) -> dict:
     # Ask about the first missing field
     next_field = missing[0] if missing else "thông tin bổ sung"
 
-    llm = _make_llm()
     chain = load_prompt("summary/ask_next_question") | llm | StrOutputParser()
     response = await chain.ainvoke({
         "template": template.model_dump(),
@@ -164,7 +154,6 @@ async def evaluation(state: SummaryState) -> dict:
     logger.info("[evaluation] evaluating template and generating response")
     from app.schema.summary_schema import CVTemplate
 
-    llm = _make_llm()
     template_data = state.get("template")
 
     if isinstance(template_data, CVTemplate):

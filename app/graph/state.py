@@ -7,7 +7,8 @@ from app.schema.summary_schema import CVTemplate
 class AppState(TypedDict):
     message: str
 
-    intent: Literal["ask", "provide"]  # Level 1: User intent classification
+    intent: Literal["ask", "provide"]
 
     template: CVTemplate = Field(default_factory=CVTemplate)
+    summary: Optional[str] = None
     response: Optional[str] = None

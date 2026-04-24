@@ -1,7 +1,7 @@
 from langgraph.graph import StateGraph, END
 
 from app.graph.summary.state import SummaryState
-from app.graph.summary.nodes import extract_info, summary, respond_complete, respond_incomplete
+from app.graph.summary.nodes import extract_info, summary, respond_complete, respond_incomplete, evaluation
 from app.graph.summary.edges import route_summary
 
 def build_summary_graph():
@@ -12,6 +12,7 @@ def build_summary_graph():
     workflow.add_node("summary", summary)
     workflow.add_node("respond_complete", respond_complete)
     workflow.add_node("respond_incomplete", respond_incomplete)
+    workflow.add_node("evaluation", evaluation)
 
     # Entry
     workflow.set_entry_point("extract_info")
@@ -29,7 +30,8 @@ def build_summary_graph():
         }
     )
 
-    workflow.add_edge("respond_complete", END)
+    workflow.add_edge("respond_complete", "evaluation")
+    workflow.add_edge("evaluation", END)
     workflow.add_edge("respond_incomplete", END)
 
     return workflow.compile()

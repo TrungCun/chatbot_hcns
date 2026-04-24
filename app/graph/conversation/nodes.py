@@ -1,33 +1,21 @@
 from typing import List
 from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import ChatOpenAI
 
 from app.graph.conversation.state import ConversationState
 from app.prompt.loader import load_prompt
-from app.model.llm import get_llm
+from app.model.llm import llm
 
 from app.log import get_logger
 logger = get_logger(__name__)
-
-def _make_llm() -> ChatOpenAI:
-    return get_llm(stream=False)
 
 
 def _parse_lines(text: str) -> List[str]:
     return [line.strip() for line in text.strip().splitlines() if line.strip()]
 
 async def classify_conversation_domain(state: ConversationState) -> dict:
-    """Level 2 Classification: Determine conversation domain for 'ask' intent.
-    Returns: domain = 'job' | 'company'
-
-    Only called if intent = 'ask'. Routes questions to appropriate handler:
-    - 'job': Use list_all_jobs tool (direct lookup, no RAG)
-    - 'company': Use RAG pipeline (full context retrieval)
-    """
     message = state["message"]
-    logger.info(f"[classify_conversation_domain] message='{message}'")
+    logger.info(f"[classify_conversation_domain] message='{message[:50]}...'")
 
-    llm = get_llm(stream=False)
     chain = load_prompt("conversation/classify_domain") | llm | StrOutputParser()
 
     result = await chain.ainvoke({"message": message})
@@ -49,7 +37,6 @@ async def classify_query_complexity(state: ConversationState) -> dict:
     - 'factual': Hypothetical document generation helpful
     """
     logger.info(f"[classify_query_complexity] question='{state['message']}'")
-    llm = _make_llm()
     chain = load_prompt("conversation/analyze_query") | llm | StrOutputParser()
     result = await chain.ainvoke({"question": state["message"]})
     classify_query_complexity = result.strip().lower()
@@ -64,7 +51,6 @@ async def classify_query_complexity(state: ConversationState) -> dict:
 
 async def rewrite_query(state: ConversationState) -> dict:
     logger.info("[rewrite_query] rewriting simple query")
-    llm = _make_llm()
     chain = load_prompt("conversation/rewrite_query") | llm | StrOutputParser()
     rewritten = await chain.ainvoke({"question": state["message"]})
     rewritten = rewritten.strip()
@@ -74,7 +60,6 @@ async def rewrite_query(state: ConversationState) -> dict:
 
 async def decompose_query(state: ConversationState) -> dict:
     logger.info("[decompose_query] decomposing complex query")
-    llm = _make_llm()
     chain = load_prompt("conversation/decompose_query") | llm | StrOutputParser()
     result = await chain.ainvoke({"question": state["message"]})
     sub_questions = _parse_lines(result)
@@ -88,7 +73,6 @@ async def decompose_query(state: ConversationState) -> dict:
 
 async def hyde_query(state: ConversationState) -> dict:
     logger.info("[hyde_query] generating hypothetical document")
-    llm = _make_llm()
     chain = load_prompt("conversation/hyde_query") | llm | StrOutputParser()
     hyde_doc = await chain.ainvoke({"question": state["message"]})
     hyde_doc = hyde_doc.strip()
@@ -99,7 +83,6 @@ async def hyde_query(state: ConversationState) -> dict:
 
 async def expand_queries(state: ConversationState) -> dict:
     logger.info(f"[expand_queries] expanding {len(state['final_queries'])} queries")
-    llm = _make_llm()
     chain = load_prompt("conversation/expand_queries") | llm | StrOutputParser()
 
     all_queries: List[str] = []
@@ -140,7 +123,7 @@ async def generate_response(state: ConversationState) -> dict:
 
     # Load tools and prompt
     tools = get_tools()
-    llm = get_llm(stream=False)
+    llm
     llm_with_tools = llm.bind_tools(tools)
 
     agent_prompt = load_prompt("conversation/generate_response")
