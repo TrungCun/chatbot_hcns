@@ -118,12 +118,12 @@ async def generate_response(state: ConversationState) -> dict:
     from app.model.llm import get_llm
     from app.prompt.loader import load_prompt
     from app.tools.registry import get_tools, execute_tool
+    from app.tools.multimodal import get_multimodal_messages
 
-    logger.info(f"[generate_response] message='{state['message']}'")
+    logger.info(f"[generate_response] message='{state['message']}', attachments={len(state.get('attachments', [])) if state.get('attachments') else 0}")
 
     # Load tools and prompt
     tools = get_tools()
-    llm
     llm_with_tools = llm.bind_tools(tools)
 
     agent_prompt = load_prompt("conversation/generate_response")
@@ -135,9 +135,9 @@ async def generate_response(state: ConversationState) -> dict:
         "tools_description": tools_description
     })
 
-    # Extract message content
+    # Extract message content and wrap in multimodal format
     message_content = prompt_value.content if hasattr(prompt_value, 'content') else str(prompt_value)
-    messages = [HumanMessage(content=message_content)]
+    messages = get_multimodal_messages(message_content, state.get("attachments"))
 
     # Agent loop (max 3 iterations)
     max_iterations = 3

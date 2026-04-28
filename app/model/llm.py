@@ -11,6 +11,7 @@ logger = get_logger(__name__)
 
 @lru_cache(maxsize=2)
 def get_llm(stream: bool = False) -> ChatOpenAI:
+    logger.info(f"Connecting to LLM: {os.getenv('LLM_BASE_URL')} with model: {os.getenv('LLM_MODEL')}")
     return ChatOpenAI(
         base_url=os.getenv("LLM_BASE_URL"),
         model=os.getenv("LLM_MODEL"),
@@ -18,6 +19,8 @@ def get_llm(stream: bool = False) -> ChatOpenAI:
         max_tokens=int(os.getenv("LLM_MAX_TOKENS", "2048")),
         api_key="not-required",
         streaming=stream,
+        timeout=60,
+        max_retries=1,
         top_p=0.8,
         extra_body={
             "top_k": 20,
