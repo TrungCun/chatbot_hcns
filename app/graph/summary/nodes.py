@@ -1,7 +1,7 @@
 import json
 from langchain_core.output_parsers import StrOutputParser
 
-from app.schema.summary_schema import CVTemplate
+from app.schema.summary_schema import CVTemplate, ProfessionalEvidence
 from app.graph.summary.state import SummaryState
 from app.prompt.loader import load_prompt
 from app.model.llm import llm
@@ -71,19 +71,18 @@ def summary(state: SummaryState) -> dict:
         return {"evaluation": "incomplete"}
 
     missing = []
-    # Check essential fields in candidate_overview
-    if not template.candidate_overview.full_name:
-        missing.append("họ tên")
+    # Critical: contact info to reach the candidate
     if not template.candidate_overview.contact_info:
-        missing.append("thông tin liên hệ")
+        missing.append("contact_info")
 
-    # Check education
-    if not template.education_and_languages.highest_degree:
-        missing.append("bằng cấp/trình độ")
-
-    # Check experience
-    if not template.professional_evidence:
-        missing.append("kinh nghiệm làm việc")
+    # Critical: at least one experience entry with meaningful description
+    has_detailed_evidence = any(
+        ev.context_and_tasks
+        for ev in template.professional_evidence
+        if isinstance(ev, ProfessionalEvidence)
+    )
+    if not has_detailed_evidence:
+        missing.append("experience_detail")
 
     if missing:
         logger.info(f"[summary] incomplete - missing fields: {missing}")
@@ -131,14 +130,20 @@ async def respond_incomplete(state: SummaryState) -> dict:
     else:
         template = CVTemplate()
 
-    missing = []
-    if not template.candidate_overview.full_name: missing.append("họ tên")
-    if not template.candidate_overview.contact_info: missing.append("thông tin liên hệ (email/SĐT)")
-    if not template.education_and_languages.highest_degree: missing.append("trình độ học vấn")
-    if not template.professional_evidence: missing.append("mô tả kinh nghiệm/dự án")
-
-    # Ask about the first missing field
-    next_field = missing[0] if missing else "thông tin bổ sung"
+    # Priority 1: contact info
+    if not template.candidate_overview.contact_info:
+        next_field = "contact_info"
+    else:
+        # Priority 2: detailed experience description
+        has_detailed_evidence = any(
+            ev.context_and_tasks
+            for ev in template.professional_evidence
+            if isinstance(ev, ProfessionalEvidence)
+        )
+        if not has_detailed_evidence:
+            next_field = "experience_detail"
+        else:
+            next_field = "experience_detail"  # fallback
 
     chain = load_prompt("summary/ask_next_question") | llm | StrOutputParser()
     response = await chain.ainvoke({
@@ -171,16 +176,15 @@ async def evaluation(state: SummaryState) -> dict:
         logger.info(f"[evaluation] parsed evaluation result")
 
         # Chuẩn hóa dữ liệu template nếu có trong kết quả trả về
-        if "template" in parsed_eval:
-            from app.schema.summary_schema import CVTemplate
-            # Đảm bảo dữ liệu map đúng vào model Pydantic
-            if isinstance(parsed_eval["template"], dict):
-                parsed_eval["template"] = CVTemplate(**parsed_eval["template"])
+        if "evaluator_insights" in parsed_eval:
+            template.evaluator_insights = parsed_eval["evaluator_insights"]
 
-        logger.info(f"[evaluation] final evaluation state updates: {parsed_eval}")
+        logger.info(f"[evaluation] final evaluation state updates ready")
 
-        # LangGraph sẽ tự động merge các trường trong parsed_eval vào State
-        return parsed_eval
+        return {
+            "template": template,
+            "summary": parsed_eval.get("summary", "")
+        }
     except json.JSONDecodeError as e:
         logger.error(f"[evaluation] Failed to parse JSON: {result}. Error: {e}")
         return {"summary": "Không thể tạo đánh giá tự động tại thời điểm này."}
