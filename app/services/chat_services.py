@@ -44,11 +44,15 @@ class ChatService:
 
             state: AppState = {
                 **previous_state_values,
+                 "session_id": session_id,
                 "message": request.message,
+                "attachments": request.attachments,
             }
         else:
             state: AppState = {
+                "session_id": session_id,
                 "message": request.message,
+                "attachments": request.attachments,
                 "intent": "ask",
                 "current_phase": "conversation",
                 "response": None,

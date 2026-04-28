@@ -2,7 +2,7 @@
 Pydantic schemas cho API chat và job positions.
 """
 from datetime import datetime
-from typing import Literal, Optional
+from typing import Literal, Optional, List
 from pydantic import BaseModel, Field
 
 
@@ -10,16 +10,30 @@ from pydantic import BaseModel, Field
 # Request / Response
 # ---------------------------------------------------------------------------
 
+class Attachment(BaseModel):
+    """
+    Schema cho các file đính kèm (ảnh hoặc tài liệu).
+    """
+    filename: str = Field(..., description="Tên file")
+    content_type: str = Field(..., description="MIME type của file (vd: image/png, application/pdf)")
+    content: str = Field(..., description="Nội dung file dưới dạng base64 string")
+
+
 class ChatRequest(BaseModel):
     """
     Request schema cho /chat endpoint.
 
     Fields:
         message: Tin nhắn từ user.
+        attachments: Danh sách các file đính kèm (base64).
         session_id: ID session để lưu state qua multiple turns.
                    Nếu không có → server tạo UUID mới.
     """
-    message: str = Field(..., min_length=1, max_length=2000, description="Tin nhắn từ user")
+    message: str = Field(..., min_length=1, max_length=100000, description="Tin nhắn từ user")
+    attachments: Optional[List[Attachment]] = Field(
+        default=None,
+        description="Danh sách các file đính kèm (ảnh hoặc tài liệu)"
+    )
     session_id: Optional[str] = Field(
         default=None,
         description="ID session để maintain conversation state. Nếu None, server tạo UUID mới"
