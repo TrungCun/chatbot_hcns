@@ -1,14 +1,12 @@
 from langchain_core.tools import tool
-from app.prompt.loader import load_prompt
+from app.prompt.loader import load_tool_description
 
 from app.services.job_services import JobService
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
-# Load prompt từ file app/prompt/tools/list_all_jobs.md
-_list_all_jobs_prompt = load_prompt("tools/list_all_jobs")
-_description = _list_all_jobs_prompt.messages[0].prompt.template
+_description = load_tool_description("tools/list_all_jobs")
 
 @tool("list_all_jobs", description=_description)
 async def list_all_jobs() -> dict:

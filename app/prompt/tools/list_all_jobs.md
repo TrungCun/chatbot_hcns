@@ -1,2 +1,5 @@
-Lấy danh sách tất cả vị trí tuyển dụng hiện có.
-Dùng tool này khi người dùng hỏi về các vị trí tuyển dụng, công việc đang mở, hoặc cơ hội nghề nghiệp.
+Use this tool to retrieve all currently open job positions from the recruitment system (Redis DB).
+
+Trigger when the user asks about: open positions, available jobs, hiring opportunities, "vị trí đang tuyển", "việc làm", or any question inquiring about current job listings.
+
+Returns: a structured list of job postings including title, department, and requirements. If no jobs are currently open, it returns an empty list.
