@@ -25,13 +25,13 @@ def build_summary_graph():
         "summary",
         route_summary,
         {
-            "complete": "respond_complete",
+            "complete": "evaluation",
             "incomplete": "respond_incomplete",
         }
     )
 
-    workflow.add_edge("respond_complete", "evaluation")
-    workflow.add_edge("evaluation", END)
+    workflow.add_edge("evaluation", "respond_complete")
+    workflow.add_edge("respond_complete", END)
     workflow.add_edge("respond_incomplete", END)
 
     return workflow.compile()

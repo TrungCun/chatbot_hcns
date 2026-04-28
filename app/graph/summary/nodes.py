@@ -5,14 +5,25 @@ from app.schema.summary_schema import CVTemplate, ProfessionalEvidence
 from app.graph.summary.state import SummaryState
 from app.prompt.loader import load_prompt
 from app.model.llm import llm
+from app.tools.multimodal import get_multimodal_messages
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
 async def extract_info(state: SummaryState) -> dict:
-    logger.info("[extract_info] extracting information from message")
-    chain = load_prompt("summary/extract_info") | llm | StrOutputParser()
-    result = await chain.ainvoke({"message": state["message"]})
+    logger.info(f"[extract_info] extracting information from message, attachments={len(state.get('attachments', [])) if state.get('attachments') else 0}")
+
+    prompt = load_prompt("summary/extract_info")
+
+    # 1. Format prompt
+    formatted_prompt = prompt.format(message=state["message"])
+
+    # 2. Tạo multimodal messages
+    messages = get_multimodal_messages(formatted_prompt, state.get("attachments"))
+
+    # 3. Gọi LLM trực tiếp để lấy content
+    response = await llm.ainvoke(messages)
+    result = response.content
 
     try:
         parsed_info = json.loads(result.strip())
@@ -93,10 +104,12 @@ def summary(state: SummaryState) -> dict:
 
 
 async def respond_complete(state: SummaryState) -> dict:
-    logger.info("[respond_complete] generating summary response")
+    logger.info("[respond_complete] finalizing process and persistent storage")
     from app.schema.summary_schema import CVTemplate
+    from app.services.candidate_services import CandidateService
 
     template_data = state.get("template")
+    summary_text_from_eval = state.get("summary", "")
 
     if isinstance(template_data, CVTemplate):
         template = template_data
@@ -105,17 +118,25 @@ async def respond_complete(state: SummaryState) -> dict:
     else:
         template = CVTemplate()
 
-    chain = load_prompt("summary/finalize_summary") | llm | StrOutputParser()
-    # Pass model_dump for prompt context
-    summary_text = await chain.ainvoke({"template": template.model_dump()})
+    # --- LƯU TRỮ VẬT LÝ VÀO REDIS ---
+    # Tại điểm này, template và summary đã được node evaluation chuẩn bị xong
+    session_id = state.get("session_id", "unknown")
 
-    response = (
-        f"{summary_text}\n\n"
-        "Cảm ơn bạn đã cung cấp đầy đủ thông tin. "
-        "Hồ sơ của bạn đã được ghi nhận thành công!"
+    # Thực hiện lưu trữ hồ sơ hoàn chỉnh (Persistent Storage)
+    db_success = await CandidateService.save_profile(
+        session_id=session_id,
+        template=template,
+        summary=summary_text_from_eval
     )
-    logger.info("[respond_complete] response generated")
-    return {"response": response}
+    # -------------------------
+
+    # Tạo câu trả lời xác nhận cuối cùng dựa trên dữ liệu đã lưu
+    chain = load_prompt("summary/finalize_summary") | llm | StrOutputParser()
+    confirmation_response = await chain.ainvoke({"template": template.model_dump()})
+
+    logger.info(f"[respond_complete] session_id={session_id} persist_success={db_success}")
+
+    return {"response": confirmation_response}
 
 
 async def respond_incomplete(state: SummaryState) -> dict:
