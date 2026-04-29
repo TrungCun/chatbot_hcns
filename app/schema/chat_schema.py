@@ -20,15 +20,6 @@ class Attachment(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    """
-    Request schema cho /chat endpoint.
-
-    Fields:
-        message: Tin nhắn từ user.
-        attachments: Danh sách các file đính kèm (base64).
-        session_id: ID session để lưu state qua multiple turns.
-                   Nếu không có → server tạo UUID mới.
-    """
     message: str = Field(..., min_length=1, max_length=100000, description="Tin nhắn từ user")
     attachments: Optional[List[Attachment]] = Field(
         default=None,
@@ -58,9 +49,14 @@ class ChatResponse(BaseModel):
         description="Phase hiện tại: conversation (RAG Q&A) | interview (thu thập thông tin)"
     )
 
+class FilePayload(BaseModel):
+    """Cấu trúc file độc lập, không phụ thuộc FastAPI"""
+    filename: str
+    content_type: str
+    content: bytes  # Dữ liệu nhị phân thô
 
-class HealthResponse(BaseModel):
-    """Health check response."""
-    status: str = Field("ok", description="Status của server")
-    version: str = Field("1.0.0", description="Version của API")
-
+class ChatServiceRequest(BaseModel):
+    """Dữ liệu chuẩn chỉ gửi xuống Service"""
+    message: Optional[str]
+    session_id: Optional[str]
+    files: List[FilePayload] = []
