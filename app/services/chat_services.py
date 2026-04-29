@@ -1,23 +1,79 @@
+import base64
+from typing import List, Tuple
 import uuid
 import json
 from langchain_core.runnables import RunnableConfig
 
 from app.graph.builder import main_graph
 from app.graph.state import AppState
-from app.schema.chat_schema import ChatRequest, ChatResponse
+from app.schema.chat_schema import ChatRequest, ChatResponse, Attachment, ChatServiceRequest
 from app.schema.summary_schema import CVTemplate
+from app.tools.pdf_handler import process_pdf_to_text
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
 
 class ChatService:
+    def __init__(self, redis_client=None):
+        self.redis = redis_client
+        self.graph = main_graph
 
-    @staticmethod
-    async def process_message(request: ChatRequest) -> ChatResponse:
+    async def _process_files(self, files: List) -> Tuple[str, List[Attachment]]:
+        attachments = []
+        extracted_texts = []
+
+        for file_payload in files:
+            file_content = file_payload.content
+            filename = file_payload.filename
+            content_type = file_payload.content_type
+
+            if content_type == "application/pdf" or filename.lower().endswith(".pdf"):
+                try:
+                    # 2. BẮT BUỘC phải có await ở đây
+                    text = await process_pdf_to_text(file_content, filename)
+
+                    # Kiểm tra nếu text là chuỗi thực sự mới thêm vào
+                    if isinstance(text, str):
+                        extracted_texts.append(text)
+
+                    logger.info(f"[ChatService] PDF '{filename}' extracted successfully.")
+                except Exception as e:
+                    logger.error(f"[ChatService] Failed to extract PDF {filename}: {e}")
+            else:
+                # Các file khác xử lý bình thường...
+                base64_content = base64.b64encode(file_content).decode("utf-8")
+                attachments.append(Attachment(
+                    filename=filename,
+                    content_type=content_type,
+                    content=base64_content
+                ))
+
+        # 3. Bây giờ join sẽ hoạt động vì extracted_texts đã là list các str
+        pdf_combined_text = "\n\n".join(extracted_texts) if extracted_texts else ""
+        return pdf_combined_text, attachments
+
+
+    async def process_message(self, request: ChatServiceRequest) -> ChatResponse:
+        # 1. Khởi tạo session_id
 
         session_id = request.session_id or str(uuid.uuid4())
         logger.info(f"[process_message] session_id={session_id}")
+
+        pdf_text, final_attachments = await self._process_files(request.files)
+
+        # Xây dựng nội dung tin nhắn cuối cùng
+        original_message = request.message.strip() if request.message else ""
+        if pdf_text:
+            if original_message:
+                final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{pdf_text}"
+            else:
+                final_message = f"[Tài liệu đính kèm]\n{pdf_text}"
+        else:
+            final_message = original_message
+
+        if not final_message and final_attachments:
+            final_message = "[Người dùng đã gửi tệp đính kèm]"
 
         config: RunnableConfig = {
             "configurable": {
@@ -27,7 +83,7 @@ class ChatService:
 
         previous_state_values = None
         try:
-            previous_state = main_graph.get_state(config)
+            previous_state = self.graph.get_state(config)
             if previous_state and previous_state.values:
                 previous_state_values = previous_state.values
                 logger.info(f"[process_message] loaded previous state from checkpoint")
@@ -37,42 +93,45 @@ class ChatService:
         if previous_state_values:
             previous_template = previous_state_values.get("template", {})
 
-            # Xử lý an toàn: Chuyển Pydantic Object thành Dict trước khi log
+            #logger
             template_to_log = previous_template.model_dump() if hasattr(previous_template, "model_dump") else previous_template
-
             logger.info(f"[process_message] preserving template from previous state:\n{json.dumps(template_to_log, indent=4, ensure_ascii=False)}")
 
             state: AppState = {
                 **previous_state_values,
-                 "session_id": session_id,
-                "message": request.message,
-                "attachments": request.attachments,
+                "session_id": session_id,
+                "message": final_message,
+                "attachments": final_attachments
             }
         else:
             state: AppState = {
                 "session_id": session_id,
-                "message": request.message,
-                "attachments": request.attachments,
+                "message": final_message,
+                "attachments": final_attachments,
                 "intent": "ask",
-                "current_phase": "conversation",
+                "template": CVTemplate().model_dump(),
+                "summary":  None,
                 "response": None,
-                "template": CVTemplate().model_dump()
             }
             logger.info(f"[process_message] initialized new template")
 
         try:
             current_temp = state.get('template', {})
-            temp_to_log = current_temp.model_dump() if hasattr(current_temp, "model_dump") else current_temp
 
+            # logger
+            temp_to_log = current_temp.model_dump() if hasattr(current_temp, "model_dump") else current_temp
             logger.info(f"[process_message] invoking main_graph with template:\n{json.dumps(temp_to_log, indent=4, ensure_ascii=False)}")
 
-            result = await main_graph.ainvoke(state, config)
 
-            response_text = result.get("response") or "không biết nói gì"
+            result = await self.graph.ainvoke(state, config)
+
+            response_text = result.get("response") or "ngại quá không biết nói gì"
 
             logger.info(f"[process_message] graph done | intent={result.get('intent')} | response_text='{response_text[:50]}...'")
 
             result_template = result.get("template", {})
+
+            # logger
             if hasattr(result_template, "model_dump"):
                 printable_template = result_template.model_dump()
             else:
@@ -114,6 +173,8 @@ class ChatService:
                 current_phase="conversation",
             )
 
+_service_instance = ChatService()
 
-async def chat_message(request: ChatRequest) -> ChatResponse:
-    return await ChatService.process_message(request)
+# Hàm này chỉ làm nhiệm vụ cung cấp Service, không đòi hỏi 'request'
+def get_chat_service() -> ChatService:
+    return _service_instance

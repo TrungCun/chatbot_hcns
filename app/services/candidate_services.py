@@ -3,7 +3,7 @@ from typing import Optional, List, Any
 import json
 
 from app.schema.summary_schema import CVTemplate
-from app.tools.redis import client as redis
+from app.tools.redis import redis_client as redis
 from app.log import get_logger
 
 logger = get_logger(__name__)
