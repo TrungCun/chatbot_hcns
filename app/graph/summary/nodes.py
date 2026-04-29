@@ -16,7 +16,7 @@ async def extract_info(state: SummaryState) -> dict:
     prompt = load_prompt("summary/extract_info")
 
     # 1. Format prompt
-    formatted_prompt = prompt.format(message=state["message"])
+    formatted_prompt = prompt.format(message=state.get("message", ""))
 
     # 2. Tạo multimodal messages
     messages = get_multimodal_messages(formatted_prompt, state.get("attachments"))
@@ -32,7 +32,7 @@ async def extract_info(state: SummaryState) -> dict:
         logger.error(f"[extract_info] Failed to parse JSON: {result}. Error: {e}")
         parsed_info = {}
 
-
+    # Lấy CV hiện tại từ State
     current_template_data = state.get("template")
     if isinstance(current_template_data, CVTemplate):
         current_template = current_template_data
@@ -41,31 +41,77 @@ async def extract_info(state: SummaryState) -> dict:
     else:
         current_template = CVTemplate()
 
-    if "candidate_overview" in parsed_info and parsed_info["candidate_overview"]:
-        for k, v in parsed_info["candidate_overview"].items():
-            if v and hasattr(current_template.candidate_overview, k):
-                setattr(current_template.candidate_overview, k, v)
+    # Helper function để gộp các flat dictionaries và list an toàn
+    def merge_attributes(target_obj, source_dict):
+        for k, v in source_dict.items():
+            if not v or not hasattr(target_obj, k):
+                continue
 
-    if "education_and_languages" in parsed_info and parsed_info["education_and_languages"]:
-        for k, v in parsed_info["education_and_languages"].items():
-            if v and hasattr(current_template.education_and_languages, k):
-                setattr(current_template.education_and_languages, k, v)
+            current_val = getattr(target_obj, k)
 
-    if "competency_framework" in parsed_info and parsed_info["competency_framework"]:
-        for k, v in parsed_info["competency_framework"].items():
-            if v and hasattr(current_template.competency_framework, k):
-                setattr(current_template.competency_framework, k, v)
+            # Xử lý nếu trường đó là List (ví dụ: core_skills, languages)
+            if isinstance(current_val, list) and isinstance(v, list):
+                # Nối danh sách và loại bỏ các phần tử trùng lặp
+                new_list = current_val.copy()
+                for item in v:
+                    if item not in new_list:
+                        new_list.append(item)
+                setattr(target_obj, k, new_list)
+            else:
+                # Xử lý chuỗi hoặc các giá trị đơn (ghi đè an toàn vì đã check if v)
+                setattr(target_obj, k, v)
 
-    if "professional_evidence" in parsed_info and isinstance(parsed_info["professional_evidence"], list):
-         from app.schema.summary_schema import ProfessionalEvidence
-         current_template.professional_evidence = [
-             ProfessionalEvidence(**item) if isinstance(item, dict) else item
-             for item in parsed_info["professional_evidence"]
-         ]
+    # 1. Update Candidate Overview
+    if parsed_info.get("candidate_overview"):
+        merge_attributes(current_template.candidate_overview, parsed_info["candidate_overview"])
 
+    # 2. Update Education & Languages
+    if parsed_info.get("education_and_languages"):
+        merge_attributes(current_template.education_and_languages, parsed_info["education_and_languages"])
+
+    # 3. Update Competency Framework
+    if parsed_info.get("competency_framework"):
+        merge_attributes(current_template.competency_framework, parsed_info["competency_framework"])
+
+    # 4. Update Professional Evidence (Xử lý riêng để gộp công ty/dự án chống ghi đè)
+    if parsed_info.get("professional_evidence") and isinstance(parsed_info["professional_evidence"], list):
+        for new_item in parsed_info["professional_evidence"]:
+            if not isinstance(new_item, dict):
+                continue
+
+            new_entity = new_item.get("entity_name", "")
+            if not new_entity:
+                continue
+
+            matched = False
+            for old_ev in current_template.professional_evidence:
+                old_entity = old_ev.entity_name or ""
+
+                # Cập nhật dự án cũ nếu trùng hoặc chứa tên nhau
+                if old_entity and new_entity and (old_entity.lower() in new_entity.lower() or new_entity.lower() in old_entity.lower()):
+                    for key, val in new_item.items():
+                        if val and hasattr(old_ev, key):
+                            current_val = getattr(old_ev, key)
+
+                            if isinstance(current_val, list) and isinstance(val, list):
+                                # Gộp danh sách kỹ năng áp dụng trong dự án
+                                combined_list = list(set(current_val + val))
+                                setattr(old_ev, key, combined_list)
+                            elif key in ["quantifiable_results", "context_and_tasks"] and current_val:
+                                # Nối thêm text mô tả hoặc số liệu thay vì ghi đè
+                                setattr(old_ev, key, f"{current_val}\n{val}")
+                            else:
+                                setattr(old_ev, key, val)
+                    matched = True
+                    break
+
+            # Nếu là kinh nghiệm mới tinh -> Add nguyên block
+            if not matched:
+                current_template.professional_evidence.append(ProfessionalEvidence(**new_item))
+
+    # Trả về duy nhất template đã được cập nhật an toàn
     return {
-        "template": current_template,
-        "extracted_info": result
+        "template": current_template
     }
 
 
@@ -138,7 +184,6 @@ async def respond_complete(state: SummaryState) -> dict:
 
     return {"response": confirmation_response}
 
-
 async def respond_incomplete(state: SummaryState) -> dict:
     logger.info("[respond_incomplete] generating missing-info question")
     from app.schema.summary_schema import CVTemplate
@@ -196,9 +241,13 @@ async def evaluation(state: SummaryState) -> dict:
         parsed_eval = json.loads(result.strip())
         logger.info(f"[evaluation] parsed evaluation result")
 
-        # Chuẩn hóa dữ liệu template nếu có trong kết quả trả về
+        # Chuẩn hóa dữ liệu an toàn qua Pydantic
         if "evaluator_insights" in parsed_eval:
-            template.evaluator_insights = parsed_eval["evaluator_insights"]
+            # Lấy class EvaluatorInsights từ schema của bạn (nhớ import)
+            from app.schema.summary_schema import EvaluatorInsights
+
+            # Khởi tạo an toàn object mới từ dict trả về
+            template.evaluator_insights = EvaluatorInsights(**parsed_eval["evaluator_insights"])
 
         logger.info(f"[evaluation] final evaluation state updates ready")
 
@@ -208,4 +257,8 @@ async def evaluation(state: SummaryState) -> dict:
         }
     except json.JSONDecodeError as e:
         logger.error(f"[evaluation] Failed to parse JSON: {result}. Error: {e}")
-        return {"summary": "Không thể tạo đánh giá tự động tại thời điểm này."}
+        # Trả về kèm template hiện tại để luồng không bị rớt dữ liệu
+        return {
+            "template": template,
+            "summary": "Không thể tạo đánh giá tự động tại thời điểm này do lỗi phân tích dữ liệu."
+        }
