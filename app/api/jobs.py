@@ -1,23 +1,28 @@
 from typing import Annotated
-from fastapi import APIRouter, Form, HTTPException, status
+from fastapi import APIRouter, Form, HTTPException, status, Depends, Body
 
 from app.schema.redis_schema import JobCreate, JobListResponse, JobResponse, JobUpdate
-from app.services.job_services import JobService
+from app.services.job_services import JobService, get_job_service
 
 from app.log import get_logger
 logger = get_logger(__name__)
 
-router = APIRouter(prefix="/api/jobs", tags=["jobs"])
-
+router = APIRouter(prefix="/api/jobs", tags=["Jobs"])
 
 @router.post("", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
-async def create_job(body: Annotated[JobCreate, Form()]) -> JobResponse:
-    return await JobService.create(body)
+async def create_job(
+    body: Annotated[JobCreate, Form()],
+    # body: Annotated[JobCreate, Body()],
+    service: JobService = Depends(get_job_service)
+    ) -> JobResponse:
+    return await service.create(body)
 
 
 @router.get("", response_model=JobListResponse, status_code=status.HTTP_200_OK)
-async def list_jobs() -> JobListResponse:
-    return await JobService.list_all()
+async def list_jobs(
+    service: JobService = Depends(get_job_service)
+    ) -> JobListResponse:
+    return await service.list_all()
 
 
 @router.get(
@@ -27,8 +32,11 @@ async def list_jobs() -> JobListResponse:
         responses={
             status.HTTP_404_NOT_FOUND: {"description": "Không tìm thấy Job với ID tương ứng"}
             })
-async def get_job(job_id: str) -> JobResponse:
-    job = await JobService.get(job_id)
+async def get_job(
+    job_id: str,
+    service: JobService = Depends(get_job_service)
+    ) -> JobResponse:
+    job = await service.get(job_id)
     if not job:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -43,9 +51,13 @@ async def get_job(job_id: str) -> JobResponse:
         responses={
             status.HTTP_404_NOT_FOUND: {"description": "Không tìm thấy Job để cập nhật"}
             })
-
-async def update_job(job_id: str, body: Annotated[JobUpdate, Form()]) -> JobResponse:
-    updated = await JobService.update(job_id, body)
+async def update_job(
+    job_id: str,
+    body: Annotated[JobUpdate, Form()],
+    # body: Annotated[JobUpdate, Body()],
+    service: JobService = Depends(get_job_service)
+    ) -> JobResponse:
+    updated = await service.update(job_id, body)
     if not updated:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -60,8 +72,11 @@ async def update_job(job_id: str, body: Annotated[JobUpdate, Form()]) -> JobResp
         responses={
             status.HTTP_404_NOT_FOUND: {"description": "Không tìm thấy Job để xóa"}
             })
-async def delete_job(job_id: str) -> None:
-    ok = await JobService.delete(job_id)
+async def delete_job(
+    job_id: str,
+    service: JobService = Depends(get_job_service)
+    ) -> None:
+    ok = await service.delete(job_id)
     if not ok:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
