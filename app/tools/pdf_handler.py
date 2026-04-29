@@ -1,27 +1,39 @@
-import fitz  # PyMuPDF
-import logging
-from typing import List
-from app.schema.chat_schema import Attachment
+import asyncio
+import fitz
 
-logger = logging.getLogger(__name__)
+from app.log import get_logger
+logger = get_logger(__name__)
 
-def process_pdf_to_text(file_content: bytes, filename: str) -> str:
-    """
-    Trích xuất text thuần từ file PDF.
-    """
-    text_content = ""
+def _extract_text_sync(file_content: bytes, filename: str, max_pages: int = 20) -> str:
+
+    text_content = f"--- Bắt đầu tài liệu: {filename} ---\n\n"
     try:
-        # Mở PDF từ bytes
         with fitz.open(stream=file_content, filetype="pdf") as doc:
-            text_content += f"--- Nội dung file PDF: {filename} ---\n"
-            for i in range(len(doc)):
+            total_pages = len(doc)
+
+            if total_pages > max_pages:
+                logger.warning(f"File {filename} ({total_pages} trang) vượt quá giới hạn. Chỉ đọc {max_pages} trang.")
+                pages_to_read = max_pages
+            else:
+                pages_to_read = total_pages
+
+            for i in range(pages_to_read):
                 page = doc[i]
-                page_text = page.get_text()
-                text_content += f"[Trang {i+1}]\n{page_text}\n"
 
-            logger.info(f"Extracted text from PDF '{filename}' ({len(doc)} pages).")
+                page_text = page.get_text("text", sort=True)
+
+                text_content += f"### [Trang {i+1}] ###\n{page_text.strip()}\n\n"
+
+        logger.info(f"Đã trích xuất thành công {pages_to_read}/{total_pages} trang từ '{filename}'.")
+        return text_content
+
+    except fitz.FileDataError:
+        logger.error(f"File PDF bị hỏng hoặc có mật khẩu bảo vệ: {filename}")
+        raise ValueError(f"Không thể đọc file '{filename}'. File có thể bị hỏng hoặc yêu cầu mật khẩu.")
     except Exception as e:
-        logger.error(f"Error extracting text from PDF {filename}: {str(e)}")
-        text_content = f"\n[Lỗi khi đọc file PDF {filename}]\n"
+        logger.error(f"Lỗi không xác định khi trích xuất PDF {filename}: {e}", exc_info=True)
+        raise RuntimeError(f"Lỗi hệ thống khi xử lý tài liệu '{filename}'.")
 
-    return text_content
+
+async def process_pdf_to_text(file_content: bytes, filename: str) -> str:
+    return await asyncio.to_thread(_extract_text_sync, file_content, filename)
