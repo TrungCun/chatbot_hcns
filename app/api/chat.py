@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException, Form, File, UploadFile, Depends
 from omegaconf import ValidationError
 
-from app.schema.chat_schema import ChatResponse, ChatServiceRequest, FilePayload
+from app.schema.chat_schema import ChatResponse, ChatRequest, FilePayload
 from app.services.chat_services import ChatService, get_chat_service
 
 from app.log import get_logger
@@ -30,7 +30,7 @@ async def handle_chat(
                     content=content
                 ))
 
-        service_request = ChatServiceRequest(
+        service_request = ChatRequest(
             message=message,
             session_id=session_id,
             files=file_payloads

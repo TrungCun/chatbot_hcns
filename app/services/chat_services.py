@@ -1,18 +1,17 @@
 import base64
-from typing import List, Tuple
 import uuid
 import json
+from typing import List, Tuple
 from langchain_core.runnables import RunnableConfig
 
 from app.graph.builder import main_graph
 from app.graph.state import AppState
-from app.schema.chat_schema import ChatRequest, ChatResponse, Attachment, ChatServiceRequest
+from app.schema.chat_schema import ChatRequest, ChatResponse, Attachment
 from app.schema.summary_schema import CVTemplate
 from app.tools.pdf_handler import process_pdf_to_text
 
 from app.log import get_logger
 logger = get_logger(__name__)
-
 
 class ChatService:
     def __init__(self, redis_client=None):
@@ -30,10 +29,8 @@ class ChatService:
 
             if content_type == "application/pdf" or filename.lower().endswith(".pdf"):
                 try:
-                    # 2. BẮT BUỘC phải có await ở đây
                     text = await process_pdf_to_text(file_content, filename)
 
-                    # Kiểm tra nếu text là chuỗi thực sự mới thêm vào
                     if isinstance(text, str):
                         extracted_texts.append(text)
 
@@ -41,34 +38,28 @@ class ChatService:
                 except Exception as e:
                     logger.error(f"[ChatService] Failed to extract PDF {filename}: {e}")
             else:
-                # Các file khác xử lý bình thường...
                 base64_content = base64.b64encode(file_content).decode("utf-8")
+                logger.info(f"[ChatService] File '{filename}' encoded to base64 successfully.")
                 attachments.append(Attachment(
                     filename=filename,
                     content_type=content_type,
                     content=base64_content
                 ))
 
-        # 3. Bây giờ join sẽ hoạt động vì extracted_texts đã là list các str
         pdf_combined_text = "\n\n".join(extracted_texts) if extracted_texts else ""
         return pdf_combined_text, attachments
 
 
-    async def process_message(self, request: ChatServiceRequest) -> ChatResponse:
-        # 1. Khởi tạo session_id
+    async def process_message(self, request: ChatRequest) -> ChatResponse:
 
         session_id = request.session_id or str(uuid.uuid4())
         logger.info(f"[process_message] session_id={session_id}")
 
         pdf_text, final_attachments = await self._process_files(request.files)
 
-        # Xây dựng nội dung tin nhắn cuối cùng
         original_message = request.message.strip() if request.message else ""
         if pdf_text:
-            if original_message:
-                final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{pdf_text}"
-            else:
-                final_message = f"[Tài liệu đính kèm]\n{pdf_text}"
+            final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{pdf_text}"
         else:
             final_message = original_message
 
@@ -139,27 +130,60 @@ class ChatService:
             logger.info(f"[process_message] updated template:\n{json.dumps(printable_template, indent=4, ensure_ascii=False)}")
 
 
+            # template_keys = CVTemplate.model_fields.keys()
+            # old_val_data = state.get("template", {})
+            # new_val_data = result_template
+
+            # for field_name in template_keys:
+            #     if isinstance(new_val_data, CVTemplate):
+            #         new_value = getattr(new_val_data, field_name, None)
+            #     else:
+            #         new_value = new_val_data.get(field_name) if isinstance(new_val_data, dict) else None
+
+            #     old_value = old_val_data.get(field_name) if isinstance(old_val_data, dict) else None
+
+            #     if old_value != new_value:
+            #         logger.info(f"[process_message] template field '{field_name}' changed:\n- CŨ : {old_value}\n- MỚI: {new_value}")
+
             template_keys = CVTemplate.model_fields.keys()
-            old_val_data = state.get("template", {})
-            new_val_data = result_template
 
+            # 1. Lấy dữ liệu CŨ (đã là dictionary)
+            old_val_dict = state.get("template", {})
+
+            # 2. Chuyển đổi toàn bộ dữ liệu MỚI thành dictionary (Deep dump)
+            if hasattr(result_template, "model_dump"):
+                new_val_dict = result_template.model_dump() # Pydantic v2
+            elif hasattr(result_template, "dict"):
+                new_val_dict = result_template.dict()       # Pydantic v1 (phòng hờ)
+            elif isinstance(result_template, dict):
+                new_val_dict = result_template
+            else:
+                new_val_dict = {}
+
+            # 3. Duyệt và so sánh
             for field_name in template_keys:
-                if isinstance(new_val_data, CVTemplate):
-                    new_value = getattr(new_val_data, field_name, None)
-                else:
-                    new_value = new_val_data.get(field_name) if isinstance(new_val_data, dict) else None
+                old_value = old_val_dict.get(field_name)
+                new_value = new_val_dict.get(field_name)
 
-                old_value = old_val_data.get(field_name) if isinstance(old_val_data, dict) else None
-
+                # Lúc này cả old_value và new_value đều là dict/list/string nguyên thủy, so sánh sẽ chuẩn xác
                 if old_value != new_value:
-                    logger.info(f"[process_message] template field '{field_name}' changed:\n- CŨ : {old_value}\n- MỚI: {new_value}")
+
+                    # Format log cho đẹp và dễ đọc (Pretty Print)
+                    old_str = json.dumps(old_value, ensure_ascii=False, indent=2) if isinstance(old_value, (dict, list)) else str(old_value)
+                    new_str = json.dumps(new_value, ensure_ascii=False, indent=2) if isinstance(new_value, (dict, list)) else str(new_value)
+
+                    logger.info(
+                        f"\n[process_message] template field '{field_name}' changed:\n"
+                        f"--- CŨ ---\n{old_str}\n"
+                        f"--- MỚI ---\n{new_str}\n"
+                        f"--------------------------------------------------"
+                    )
 
             # --- Build response ---
             response = ChatResponse(
                 response=response_text,
                 intent=result.get("intent", "ask"),
                 session_id=session_id,
-                current_phase=result.get("current_phase", "conversation"),
             )
             return response
 
@@ -170,11 +194,9 @@ class ChatService:
                 response=f"Lỗi hệ thống: {str(e)[:100]}",
                 intent="ask",
                 session_id=session_id,
-                current_phase="conversation",
             )
 
 _service_instance = ChatService()
 
-# Hàm này chỉ làm nhiệm vụ cung cấp Service, không đòi hỏi 'request'
 def get_chat_service() -> ChatService:
     return _service_instance

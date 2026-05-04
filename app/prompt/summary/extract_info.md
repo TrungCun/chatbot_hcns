@@ -8,7 +8,8 @@ PROCESSING RULES:
 3. Validate time logic: overlapping or impossible date ranges MUST be recorded in `logic_and_cv_gaps`.
 4. NEVER hallucinate. If a field cannot be determined from the text, set it to null or [].
 5. Normalize `total_yoe` to a float number (e.g., 2 years 6 months = 2.5).
-6. MISSING INFO: Only record missing CRITICAL fields in `missing_information`. Critical fields are ONLY: Phone Number, Email, Total Years of Experience, and Core Skills.
+6. MISSING INFO: Identify ONLY the fields that are COMPLETELY ABSENT or NULL in the text. DO NOT use a checklist. DO NOT include any field that already has data. Record the truly missing critical fields (Phone, Email, Total Years of Experience, Core Skills) in `missing_information`. Return [] if nothing critical is missing.
+7. COREFERENCE RESOLUTION: If the input describes tasks or results using pronouns like 'that project', 'dự án đó', 'công ty đó' without mentioning the specific name, you MUST infer the correct `entity_name` from the conversational context. DO NOT output null for `entity_name` if the context clearly points to an existing project.
 
 OUTPUT FORMAT:
 Return ONLY a valid JSON object. Do NOT wrap the JSON in markdown code blocks (```json). Start immediately with {{ and end with }}.

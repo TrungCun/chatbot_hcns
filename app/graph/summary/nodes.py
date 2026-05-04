@@ -15,13 +15,11 @@ async def extract_info(state: SummaryState) -> dict:
 
     prompt = load_prompt("summary/extract_info")
 
-    # 1. Format prompt
     formatted_prompt = prompt.format(message=state.get("message", ""))
 
-    # 2. Tạo multimodal messages
     messages = get_multimodal_messages(formatted_prompt, state.get("attachments"))
 
-    # 3. Gọi LLM trực tiếp để lấy content
+
     response = await llm.ainvoke(messages)
     result = response.content
 
@@ -32,7 +30,7 @@ async def extract_info(state: SummaryState) -> dict:
         logger.error(f"[extract_info] Failed to parse JSON: {result}. Error: {e}")
         parsed_info = {}
 
-    # Lấy CV hiện tại từ State
+
     current_template_data = state.get("template")
     if isinstance(current_template_data, CVTemplate):
         current_template = current_template_data
@@ -41,7 +39,7 @@ async def extract_info(state: SummaryState) -> dict:
     else:
         current_template = CVTemplate()
 
-    # Helper function để gộp các flat dictionaries và list an toàn
+
     def merge_attributes(target_obj, source_dict):
         for k, v in source_dict.items():
             if not v or not hasattr(target_obj, k):
@@ -73,7 +71,6 @@ async def extract_info(state: SummaryState) -> dict:
     if parsed_info.get("competency_framework"):
         merge_attributes(current_template.competency_framework, parsed_info["competency_framework"])
 
-    # 4. Update Professional Evidence (Xử lý riêng để gộp công ty/dự án chống ghi đè)
     if parsed_info.get("professional_evidence") and isinstance(parsed_info["professional_evidence"], list):
         for new_item in parsed_info["professional_evidence"]:
             if not isinstance(new_item, dict):
@@ -109,6 +106,9 @@ async def extract_info(state: SummaryState) -> dict:
             if not matched:
                 current_template.professional_evidence.append(ProfessionalEvidence(**new_item))
 
+    if parsed_info.get("evaluator_insights"):
+        merge_attributes(current_template.evaluator_insights, parsed_info["evaluator_insights"])
+
     # Trả về duy nhất template đã được cập nhật an toàn
     return {
         "template": current_template
@@ -117,7 +117,6 @@ async def extract_info(state: SummaryState) -> dict:
 
 def summary(state: SummaryState) -> dict:
     logger.info("[summary] evaluating template completeness")
-    from app.schema.summary_schema import CVTemplate
 
     template_data = state.get("template")
     if isinstance(template_data, CVTemplate):
@@ -151,7 +150,6 @@ def summary(state: SummaryState) -> dict:
 
 async def respond_complete(state: SummaryState) -> dict:
     logger.info("[respond_complete] finalizing process and persistent storage")
-    from app.schema.summary_schema import CVTemplate
     from app.services.candidate_services import CandidateService
 
     template_data = state.get("template")
@@ -164,8 +162,7 @@ async def respond_complete(state: SummaryState) -> dict:
     else:
         template = CVTemplate()
 
-    # --- LƯU TRỮ VẬT LÝ VÀO REDIS ---
-    # Tại điểm này, template và summary đã được node evaluation chuẩn bị xong
+
     session_id = state.get("session_id", "unknown")
 
     # Thực hiện lưu trữ hồ sơ hoàn chỉnh (Persistent Storage)
@@ -223,7 +220,6 @@ async def respond_incomplete(state: SummaryState) -> dict:
 
 async def evaluation(state: SummaryState) -> dict:
     logger.info("[evaluation] evaluating template and generating response")
-    from app.schema.summary_schema import CVTemplate
 
     template_data = state.get("template")
 
@@ -234,6 +230,20 @@ async def evaluation(state: SummaryState) -> dict:
     else:
         template = CVTemplate()
 
+    def merge_attributes(target_obj, source_dict):
+        for k, v in source_dict.items():
+            if not v or not hasattr(target_obj, k):
+                continue
+            current_val = getattr(target_obj, k)
+            if isinstance(current_val, list) and isinstance(v, list):
+                new_list = current_val.copy()
+                for item in v:
+                    if item not in new_list:
+                        new_list.append(item)
+                setattr(target_obj, k, new_list)
+            else:
+                setattr(target_obj, k, v)
+
     chain = load_prompt("summary/evaluation") | llm | StrOutputParser()
     result = await chain.ainvoke({"template": json.dumps(template.model_dump(), ensure_ascii=False)})
 
@@ -241,13 +251,13 @@ async def evaluation(state: SummaryState) -> dict:
         parsed_eval = json.loads(result.strip())
         logger.info(f"[evaluation] parsed evaluation result")
 
-        # Chuẩn hóa dữ liệu an toàn qua Pydantic
         if "evaluator_insights" in parsed_eval:
+            new_insights = parsed_eval["evaluator_insights"]
             # Lấy class EvaluatorInsights từ schema của bạn (nhớ import)
             from app.schema.summary_schema import EvaluatorInsights
 
             # Khởi tạo an toàn object mới từ dict trả về
-            template.evaluator_insights = EvaluatorInsights(**parsed_eval["evaluator_insights"])
+            merge_attributes(template.evaluator_insights, new_insights)
 
         logger.info(f"[evaluation] final evaluation state updates ready")
 

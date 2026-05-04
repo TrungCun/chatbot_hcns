@@ -1,2 +1,45 @@
-redis>=5.0
-pymupdf
+# Web Framework
+fastapi==0.136.0
+uvicorn==0.44.0
+python-multipart==0.0.26
+
+# Configuration & Validation
+pydantic==2.13.2
+pydantic-settings==2.13.1
+python-dotenv==1.2.2
+
+# LLM & LangChain
+langchain-core==1.3.0
+langchain-openai==1.1.14
+langgraph==1.1.8
+
+# Storage
+redis==7.4.0
+qdrant-client==1.17.1
+
+# Document Processing
+pymupdf==1.27.2.3
+pdfplumber==0.11.9
+pytesseract==0.3.13
+pdf2image==1.17.0
+python-docx==1.2.0
+openpyxl==3.1.5
+docling==2.90.0
+
+# Deep Learning & ML
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+transformers==4.46.3
+sentence-transformers==5.4.1
+FlagEmbedding==1.3.5
+
+# Image Processing
+pillow==12.2.0
+opencv-python==4.13.0.92
+
+# Configuration
+omegaconf==2.3.0
+
+# Utilities
+typing-extensions==4.15.0
+requests==2.33.1
