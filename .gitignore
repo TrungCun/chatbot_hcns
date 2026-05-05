@@ -38,3 +38,5 @@ Thumbs.db
 # Project-specific exclusions
 pdf/
 weights/
+doc/
+staging_chunks/
