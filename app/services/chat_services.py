@@ -127,7 +127,7 @@ class ChatService:
     async def stream_message(self, request: ChatRequest):
         """Async generator yielding SSE chunks for streaming response."""
         # Các node sinh response cuối cùng cho người dùng
-        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete"}
+        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete", "handle_chitchat"}
 
         user_id = request.user_id
         session_id = request.session_id
@@ -179,6 +179,7 @@ class ChatService:
         )
 
         try:
+            tokens_sent = False
             async for event in self.graph.astream_events(state, config, version="v2"):
                 event_name = event.get("event")
 
@@ -188,7 +189,18 @@ class ChatService:
                         continue
                     chunk = event.get("data", {}).get("chunk")
                     if chunk and hasattr(chunk, "content") and chunk.content:
+                        tokens_sent = True
                         yield f"data: {json.dumps({'type': 'token', 'content': chunk.content}, ensure_ascii=False)}\n\n"
+                
+                # FALLBACK: Nếu graph kết thúc mà chưa có token nào được stream (do rơi vào fallback tĩnh)
+                elif event_name == "on_chain_end" and not tokens_sent:
+                    # Kiểm tra xem đây có phải là kết thúc của graph chính không
+                    if not event.get("parent_task_id"):
+                        output = event.get("data", {}).get("output")
+                        if isinstance(output, dict) and output.get("response"):
+                            fallback_text = output["response"]
+                            yield f"data: {json.dumps({'type': 'token', 'content': fallback_text}, ensure_ascii=False)}\n\n"
+                            tokens_sent = True
 
             yield f"data: {json.dumps({'type': 'done', 'session_id': session_id}, ensure_ascii=False)}\n\n"
 

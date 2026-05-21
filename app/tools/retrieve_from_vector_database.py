@@ -13,7 +13,7 @@ _description = load_tool_description("tools/retrieve_from_vector_database")
 @tool("retrieve_from_vector_database", description=_description)
 async def retrieve_from_vector_database(
     prompt: str,
-    limit: int = 5,
+    limit: int = 20,
 ) -> List[Dict[str, Any]]:
     """
     Truy xuất tài liệu từ Qdrant sử dụng Hybrid Search (Dense + Sparse) + RRF.
