@@ -1,6 +1,5 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional
 
 _APP_DIR = Path(__file__).resolve().parent
 _REPO_ROOT = _APP_DIR.parent
@@ -34,6 +33,7 @@ class Settings(BaseSettings):
 
     # --- Embedding Configuration ---
     embedding_model_path: str = "weights/embeddinggemma-300m"
+    reranker_model_path: str = "weights/bge-reranker-v2-m3"
     sparse_model_name: str = "Qdrant/bm25"
     gpu_device: str = "1"
 

@@ -5,7 +5,7 @@ import time
 import os
 import requests
 
-STREAM_URL = "http://localhost:9060/api/chat/stream"
+STREAM_URL = "http://localhost:9070/api/chat/stream"
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -154,7 +154,7 @@ with gr.Blocks(title="Chatbot Hệ Thống Tuyển Dụng") as demo:
         # CỘT TRÁI (Bảng thông số)
         with gr.Column(scale=1):
             gr.Markdown("### Vài thứ linh tinh")
-            user_display = gr.Textbox(value="user_01", label="User ID", interactive=True)
+            user_display = gr.Textbox(value="1001", label="User ID", interactive=True)
             session_display = gr.Textbox(value=generate_uuid, label="Session ID", interactive=False)
             time_display = gr.Textbox(value="0.00 giây", label="Thời gian phản hồi", interactive=False)
             new_session_btn = gr.Button("Một câu chuyện mới", variant="primary")

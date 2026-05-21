@@ -1,8 +1,9 @@
 import os
-from app.config import settings
 from dotenv import load_dotenv
 load_dotenv()
-os.environ["CUDA_VISIBLE_DEVICES"] = settings.gpu_device
+
+from app.config import settings
+os.environ["CUDA_VISIBLE_DEVICES"] = str(settings.gpu_device)
 
 _gradio_tmp = os.path.join(os.path.expanduser("~"), ".cache", "gradio_tmp")
 os.makedirs(_gradio_tmp, exist_ok=True)
@@ -88,7 +89,7 @@ if __name__ == "__main__":
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=9060,
+        port=9070,
         reload=True,
         log_level="info",
     )

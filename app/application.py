@@ -2,7 +2,7 @@ import os
 import torch
 from typing import Any, Optional
 
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, CrossEncoder
 from langchain_qdrant import FastEmbedSparse
 
 from app.config import settings
@@ -48,6 +48,17 @@ class Application:
 
             logger.info(f"[APPLICATION] Initializing Sparse Embedder ({settings.sparse_model_name})...")
             self.models["sparse_embedder"] = FastEmbedSparse(model_name=settings.sparse_model_name)
+
+            rerank_path = settings.reranker_model_path
+            if not os.path.exists(rerank_path):
+                logger.error(f"[APPLICATION] Reranker model path not found: {rerank_path}")
+                raise FileNotFoundError(f"Missing weights at {rerank_path}")
+            logger.info(f"[APPLICATION] Loading Reranker from {rerank_path}...")
+            self.models["reranker"] = CrossEncoder(
+                rerank_path,
+                device=device,
+                trust_remote_code=True
+            )
 
             logger.info("[APPLICATION] All units standing by.")
 
