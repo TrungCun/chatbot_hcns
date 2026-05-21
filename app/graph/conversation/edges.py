@@ -18,16 +18,20 @@ def route_by_query_complexity(
 
 def route_by_conversation_domain(
     state: ConversationState,
-) -> Literal["generate_response", "classify_query_complexity"]:
+) -> Literal["generate_response", "classify_query_complexity", "handle_chitchat"]:
     """Route based on Level 2 Classification (job/company domain).
     Only used when intent='ask'.
 
     - 'job': Direct to generate_response to call list_all_jobs tool
     - 'company': Full RAG pipeline (classify complexity → expand queries → generate_response)
+    - 'chitchat': Direct to a lightweight node to respond contextually without tools
     """
-    domain = state.get("domain", "company")
-    if domain == "job":
-        return "generate_response"
-    return "classify_query_complexity"
-    return "classify_query_complexity"
-    return "conversation_subgraph"
+    domain = state.get("domain", "chitchat")
+    
+    routes = {
+        "job": "generate_response",
+        "company": "classify_query_complexity",
+        "chitchat": "handle_chitchat",
+    }
+
+    return routes.get(domain, "handle_chitchat")

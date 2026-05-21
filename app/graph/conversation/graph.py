@@ -5,11 +5,13 @@ from app.graph.conversation.edges import route_by_query_complexity, route_by_con
 from app.graph.conversation.nodes import (
     classify_conversation_domain,
     classify_query_complexity,
+    handle_chitchat,
     rewrite_query,
     decompose_query,
     hyde_query,
     expand_queries,
     retrieve_documents,
+    rerank_documents,
     generate_response
 )
 
@@ -19,11 +21,13 @@ def build_conversation_graph():
     # Nodes
     workflow.add_node("classify_conversation_domain", classify_conversation_domain)
     workflow.add_node("classify_query_complexity", classify_query_complexity)
+    workflow.add_node("handle_chitchat", handle_chitchat)
     workflow.add_node("rewrite_query", rewrite_query)
     workflow.add_node("decompose_query", decompose_query)
     workflow.add_node("hyde_query", hyde_query)
     # workflow.add_node("expand_queries", expand_queries)
     workflow.add_node("retrieve_documents", retrieve_documents)
+    workflow.add_node("rerank_documents", rerank_documents)
     workflow.add_node("generate_response", generate_response)
 
     # Entry
@@ -35,6 +39,7 @@ def build_conversation_graph():
         {
             "generate_response": "generate_response",  # Job path: direct to response
             "classify_query_complexity": "classify_query_complexity",  # Company path: RAG pipeline
+            "handle_chitchat": "handle_chitchat",  # Chitchat path: direct to chitchat handler
         },
     )
 
@@ -58,11 +63,13 @@ def build_conversation_graph():
     workflow.add_edge("decompose_query", "retrieve_documents")
     workflow.add_edge("hyde_query", "retrieve_documents")
 
-    workflow.add_edge("retrieve_documents", "generate_response")
+    workflow.add_edge("retrieve_documents", "rerank_documents")
+    workflow.add_edge("rerank_documents", "generate_response")
     
     # Both paths (job and company) end at generate_response → END
     workflow.add_edge("generate_response", END)
 
+    workflow.add_edge("handle_chitchat", END)
     return workflow.compile()
 
 conversation_graph = build_conversation_graph()

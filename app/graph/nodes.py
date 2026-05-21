@@ -61,8 +61,8 @@ async def update_context(state: AppState) -> Dict[str, Any]:
 
 async def classify_user_intent(state: AppState) -> dict:
     message = state["message"]
-    attachments = state.get("attachments")
     context = state.get("context") or "Chưa có bối cảnh hội thoại."
+    file_urls = state.get("file_urls") or []
     history = state.get("history", [])
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
     
@@ -77,7 +77,7 @@ async def classify_user_intent(state: AppState) -> dict:
         intent = response.content.strip().lower()
     except Exception as e:
         logger.error(f"[classify_user_intent] LLM Error: {e}")
-        intent = "provide" if attachments else "ask" # Fallback thông minh: có ảnh thì thường là cung cấp CV
+        intent = "provide" if file_urls else "ask" # Fallback thông minh: có ảnh thì thường là cung cấp CV
 
     # Fallback
     if intent not in ("ask", "provide"):
@@ -94,7 +94,6 @@ async def save_history(state: AppState) -> Dict[str, Any]:
     user_id = state.get("user_id", "default_user")
     session_id = state.get("session_id", "unknown_session")
     history = state.get("history", [])
-    context = state.get("context", "")
     file_urls = state.get("file_urls", [])
 
     # Chuẩn bị dữ liệu để lưu
