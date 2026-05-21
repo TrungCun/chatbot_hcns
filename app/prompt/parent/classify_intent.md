@@ -23,9 +23,9 @@ MUST phân loại latest_user_message, không phân loại dựa riêng vào con
 </INPUTS>
 
 <LABELS_DEFINITION>
-`ask`: dùng khi người dùng đang hỏi hoặc yêu cầu thông tin về công ty, vị trí, chính sách, lương, phúc lợi, quy trình tuyển dụng; OR chỉ chào hỏi, cảm ơn, xác nhận ngắn, tán gẫu, lạc đề; OR bất kỳ trường hợp nào không rõ là `provide`.
+`ask`: dùng khi người dùng đang hỏi hoặc yêu cầu thông tin về công ty, vị trí, chính sách, lương, phúc lợi, quy trình tuyển dụng; OR yêu cầu thông tin liên hệ của các bộ phận trong công ty; OR chỉ chào hỏi, cảm ơn, xác nhận ngắn, tán gẫu, lạc đề; OR bất kỳ trường hợp nào không rõ là `provide`.
 
-`provide`: dùng khi người dùng đang cung cấp thông tin mới liên quan đến ứng viên hoặc hồ sơ ứng tuyển, ví dụ: CV, file đính kèm, kinh nghiệm, kỹ năng, học vấn, mức lương mong muốn, địa điểm làm việc, thời gian sẵn sàng, thông tin liên hệ, câu trả lời phỏng vấn, OR câu trả lời cho câu hỏi thu thập thông tin của bot.
+`provide`: dùng khi người dùng đang cung cấp thông tin mới liên quan đến cá nhân ứng viên hoặc hồ sơ ứng tuyển của họ, ví dụ: CV, file đính kèm, kinh nghiệm, kỹ năng, học vấn, mức lương mong muốn, địa điểm làm việc, thời gian sẵn sàng, thông tin liên hệ của ứng viên, câu trả lời phỏng vấn, OR câu trả lời cho câu hỏi thu thập thông tin của bot.
 </LABELS_DEFINITION>
 
 <CLASSIFICATION_POLICY>
@@ -34,7 +34,7 @@ MUST phân loại latest_user_message, không phân loại dựa riêng vào con
 - IF tin nhắn mới nhất có file đính kèm, CV, resume, portfolio, chứng chỉ, bảng điểm, OR tài liệu ứng tuyển, THEN output `provide`.
 - IF tin nhắn mới nhất là câu trả lời ngắn AND conversation_context cho thấy bot vừa hỏi thông tin ứng viên, THEN output `provide`.
 - IF tin nhắn mới nhất chỉ là lời chào, cảm ơn, xác nhận ngắn, tán gẫu, OR lạc đề, THEN output `ask`.
-- IF tin nhắn mới nhất hỏi về công ty, vị trí, chính sách, lương, phúc lợi, quy trình, OR thông tin tuyển dụng mà không cung cấp thông tin ứng viên, THEN output `ask`.
+- IF tin nhắn mới nhất hỏi về công ty, vị trí, chính sách, lương, phúc lợi, quy trình, thông tin liên hệ của bộ phận HCNS, OR thông tin tuyển dụng mà không cung cấp thông tin cá nhân ứng viên, THEN output `ask`.
 - IF không chắc, THEN output `ask`.
 </CLASSIFICATION_POLICY>
 
@@ -78,6 +78,10 @@ OUTPUT: provide
 [Ví dụ 7 - Xác nhận ngắn sau khi được giải thích]
 Bối cảnh: Bot vừa giải thích quy trình ứng tuyển.
 User: Rõ rồi.
+OUTPUT: ask
+
+[Ví dụ 8 - Hỏi thông tin liên hệ của công ty/bộ phận]
+User: Cho mình xin thông tin liên hệ của bộ phận HCNS nhé.
 OUTPUT: ask
 </EXAMPLES>
 

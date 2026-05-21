@@ -9,17 +9,18 @@ class AppState(TypedDict):
     user_id: str
     session_id: str
     message: str
+    # Danh sách URL/Path của các file đã lưu 
+    file_urls: Optional[List[str]]
     history: Annotated[List[BaseMessage], add_messages]
+
     error: Optional[str]
     context: Optional[str] # tóm tắt đoạn chat
 
     intent: Literal["ask", "provide"]
 
+    current: Optional[str] # vị trí hiện tại uv đang quan tâm theo danh sách vị trí đang tuyển. 
     template: Dict[str, Any]
     response: Optional[str]
-    
-    # Danh sách URL/Path của các file đã lưu (để ghi history)
-    file_urls: Optional[List[str]]
 
 
 def create_initial_state(
