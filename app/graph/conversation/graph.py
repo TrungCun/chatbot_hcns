@@ -1,18 +1,16 @@
 from langgraph.graph import StateGraph, END
 
 from app.graph.conversation.state import ConversationState
-from app.graph.conversation.edges import route_by_query_complexity, route_by_conversation_domain
+from app.graph.conversation.edges import route_by_conversation_domain, route_after_validation
 from app.graph.conversation.nodes import (
     classify_conversation_domain,
-    classify_query_complexity,
     handle_chitchat,
+    handle_job_query,
     rewrite_query,
-    decompose_query,
-    hyde_query,
-    expand_queries,
     retrieve_documents,
     rerank_documents,
-    generate_response
+    generate_response,
+    validate_retrieval
 )
 
 def build_conversation_graph():
@@ -20,56 +18,50 @@ def build_conversation_graph():
 
     # Nodes
     workflow.add_node("classify_conversation_domain", classify_conversation_domain)
-    workflow.add_node("classify_query_complexity", classify_query_complexity)
     workflow.add_node("handle_chitchat", handle_chitchat)
+    workflow.add_node("handle_job_query", handle_job_query)
     workflow.add_node("rewrite_query", rewrite_query)
-    workflow.add_node("decompose_query", decompose_query)
-    workflow.add_node("hyde_query", hyde_query)
-    # workflow.add_node("expand_queries", expand_queries)
     workflow.add_node("retrieve_documents", retrieve_documents)
     workflow.add_node("rerank_documents", rerank_documents)
     workflow.add_node("generate_response", generate_response)
+    workflow.add_node("validate_retrieval", validate_retrieval)
 
     # Entry
     workflow.set_entry_point("classify_conversation_domain")
-    # Level 2 Routing: job vs company
+
+    # 1. Routing theo Domain
     workflow.add_conditional_edges(
         "classify_conversation_domain",
         route_by_conversation_domain,
         {
-            "generate_response": "generate_response",  # Job path: direct to response
-            "classify_query_complexity": "classify_query_complexity",  # Company path: RAG pipeline
-            "handle_chitchat": "handle_chitchat",  # Chitchat path: direct to chitchat handler
+            "handle_job_query": "validate_retrieval",  # Nhánh job đi check data trước
+            "rewrite_query": "rewrite_query",          # Nhánh company đi rewrite
+            "handle_chitchat": "handle_chitchat",      # Chitchat đi thẳng
         },
     )
 
-    # Level 3 Routing: simple/complex/factual (only for company questions)
-    workflow.add_conditional_edges(
-        "classify_query_complexity",
-        route_by_query_complexity,
-        {
-            "rewrite_query": "rewrite_query",
-            "decompose_query": "decompose_query",
-            "hyde_query": "hyde_query",
-        },
-    )
-
-    # workflow.add_edge("rewrite_query", "expand_queries")
-    # workflow.add_edge("decompose_query", "expand_queries")
-    # workflow.add_edge("hyde_query", "expand_queries")
-    # workflow.add_edge("expand_queries", "generate_response")
-    
+    # 2. Luồng Company RAG
     workflow.add_edge("rewrite_query", "retrieve_documents")
-    workflow.add_edge("decompose_query", "retrieve_documents")
-    workflow.add_edge("hyde_query", "retrieve_documents")
-
     workflow.add_edge("retrieve_documents", "rerank_documents")
-    workflow.add_edge("rerank_documents", "generate_response")
-    
-    # Both paths (job and company) end at generate_response → END
-    workflow.add_edge("generate_response", END)
+    workflow.add_edge("rerank_documents", "validate_retrieval")
 
+    # 3. Validation Loop (Tiền kiểm)
+    workflow.add_conditional_edges(
+        "validate_retrieval",
+        route_after_validation,
+        {
+            "rewrite_query": "rewrite_query",         # Thất bại: Loop lại để rewrite (max 1 lần)
+            "generate_response": "generate_response", # Thành công nhánh company
+            "handle_job_query": "handle_job_query"    # Thành công nhánh job
+        }
+    )
+
+    # 4. Final Response -> END (Giữ được streaming)
+    workflow.add_edge("handle_job_query", END)
+    workflow.add_edge("generate_response", END)
     workflow.add_edge("handle_chitchat", END)
+
+    return workflow.compile()
     return workflow.compile()
 
 conversation_graph = build_conversation_graph()
