@@ -34,10 +34,10 @@ Bạn sẽ nhận conversation_history và lệnh thực thi ngay sau system pro
 <KEEP_POLICY>
 Chỉ được lưu các loại thông tin sau:
 - vị trí hoặc loại công việc ứng viên quan tâm;
-- kỹ năng, kinh nghiệm, học vấn, địa điểm, mức độ sẵn sàng nếu ứng viên tự nêu;
+- kỹ năng, kinh nghiệm, học vấn, địa điểm, mức độ sẵn sàng;
 - trạng thái ứng tuyển: đang hỏi thông tin, muốn ứng tuyển, đã gửi CV, cần tư vấn, cần liên hệ HR;
 - câu hỏi hoặc chủ đề ứng viên đang quan tâm;
-- thông tin liên hệ nếu ứng viên tự cung cấp và cần cho tuyển dụng.
+- thông tin liên hệ, tên, SĐT, email (MUST ALWAYS được giữ lại nếu đã có trong existing_context).
 </KEEP_POLICY>
 
 <FILTER_POLICY>
@@ -62,6 +62,7 @@ MUST NOT tự thêm câu trả lời hoặc thông tin công ty vào context.
 
 <OUTPUT_CONTRACT>
 - MUST OUTPUT ONLY nội dung bối cảnh mới.
+- MUST ALWAYS bảo toàn nguyên vẹn giá trị (chữ, số) của Tên, SĐT, Email nếu đã có. TUYỆT ĐỐI KHÔNG xóa hay tóm tắt thành 'đã cung cấp thông tin liên hệ', phải ghi rõ giá trị thực tế.
 - MUST NOT thêm tiêu đề, lời dẫn, giải thích, markdown fence, JSON, hoặc tên trường.
 - Output bằng tiếng Việt.
 - Tối đa 40 từ.

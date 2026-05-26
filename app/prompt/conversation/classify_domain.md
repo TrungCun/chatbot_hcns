@@ -36,7 +36,7 @@ MUST phân loại latest_user_message, không phân loại toàn bộ conversati
 - quy trình tuyển dụng, cách ứng tuyển, các bước phỏng vấn;
 - tiêu chí đánh giá, yêu cầu hồ sơ, thời gian phản hồi;
 - thông tin công ty, văn hóa, môi trường làm việc;
-- chính sách, phúc lợi, lương thưởng, phụ cấp, bảo hiểm;
+- chính sách (thời gian thử việc, hợp đồng, giờ làm việc, nội quy), phúc lợi, lương thưởng, phụ cấp, bảo hiểm;
 - câu hỏi về mô tả, yêu cầu, quyền lợi, hoặc quy trình liên quan đến một vị trí nhưng KHÔNG hỏi vị trí đó có đang tuyển không;
 
 `chitchat`: dùng cho các câu GIAO TIẾP CƠ BẢN hoặc KHÔNG RÕ Ý ĐỊNH, bao gồm:
@@ -51,7 +51,7 @@ MUST phân loại latest_user_message, không phân loại toàn bộ conversati
 <CLASSIFICATION_POLICY>
 - MUST phân loại TIN NHẮN MỚI NHẤT.
 - IF tin nhắn mới nhất hỏi “có tuyển không”, “đang tuyển vị trí nào”, “còn tuyển không”, “có job nào”, “vị trí nào đang mở”, “còn slot không”, THEN output `job`.
-- IF tin nhắn mới nhất chỉ hỏi thông tin công ty, quy trình, chính sách, phúc lợi, tiêu chí, mô tả, yêu cầu, OR cách ứng tuyển, THEN output `company`.
+- IF tin nhắn mới nhất chỉ hỏi thông tin công ty, quy trình, chính sách (thử việc, giờ làm, hợp đồng...), phúc lợi, tiêu chí, mô tả, yêu cầu, OR cách ứng tuyển, THEN output `company`.
 - IF tin nhắn mới nhất có nhắc tên vị trí nhưng mục đích chính là hỏi chính sách/quy trình/yêu cầu/phúc lợi, THEN output `company`.
 - IF tin nhắn mới nhất chứa BOTH câu hỏi về vị trí đang tuyển AND câu hỏi về công ty/chính sách/quy trình, THEN output `job`.
 - IF tin nhắn mới nhất chứa ý định giao tiếp xã giao, cảm ơn, OR xác nhận thông tin đơn thuần, THEN output chitchat.
@@ -68,7 +68,7 @@ MUST NOT cộng dồn các ý định cũ vào latest_user_message.
 </CONTEXT_POLICY>
 
 <OUTPUT_CONTRACT>
-- MUST OUTPUT ONLY một nhãn chữ thường: `job` OR `company`.
+- MUST OUTPUT ONLY một nhãn chữ thường: `job`, `company` OR `chitchat`.
 - MUST NOT thêm lời giải thích, dấu câu, dấu ngoặc, markdown fence, JSON, OR ký tự xuống dòng.
 - MUST NOT output bất kỳ nội dung nào ngoài đúng 1 từ.
 </OUTPUT_CONTRACT>
@@ -111,5 +111,9 @@ OUTPUT: chitchat
 Bối cảnh: Bot vừa trả lời quy trình ứng tuyển gồm 3 vòng.
 User: Ok bạn
 OUTPUT: chitchat
+
+[Ví dụ 10 - Hỏi chính sách (mặc dù có chữ tuyển)]
+User: Nếu được tuyển vào làm, tôi phải thử việc trong bao lâu?
+OUTPUT: company
 </EXAMPLES>
 </SYSTEM>
