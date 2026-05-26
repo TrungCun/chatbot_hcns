@@ -27,6 +27,17 @@ class Settings(BaseSettings):
     redis_host: str = "localhost"
     redis_port: int = 6380
 
+    # --- MySQL Configurations ---
+    mysql_host: str = "10.0.99.112"
+    mysql_port: int = 3306
+    mysql_user: str = "chatbot"
+    mysql_password: str = "aipt2026chatBot"
+    mysql_database: str = "dbms"
+
+    @property
+    def mysql_url(self) -> str:
+        return f"mysql+pymysql://{self.mysql_user}:{self.mysql_password}@{self.mysql_host}:{self.mysql_port}/{self.mysql_database}"
+
     @property
     def redis_url(self) -> str:
         return f"redis://{self.redis_host}:{self.redis_port}/0"
