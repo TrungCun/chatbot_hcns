@@ -28,8 +28,8 @@ Nhiệm vụ của bạn: Bạn **MUST** phân tích văn bản thô của ứng
 <json_schema>
 {{
   "candidate_overview": {{
-    "full_name": "string | null - Họ và tên đầy đủ. BẮT BUỘC kiểm tra cả trong tin nhắn chat của người dùng (ví dụ: 'tên tôi là...') và trong tài liệu đính kèm.",
-    "contact_info": "string | null - Email, số điện thoại, hoặc link profile (LinkedIn, Portfolio). VD: '0912345678 | email@example.com'",
+    "full_name": "string | null - Họ và tên đầy đủ. BẮT BUỘC kiểm tra trong BỐI CẢNH, LỊCH SỬ HỘI THOẠI, tin nhắn hiện tại và tài liệu đính kèm.",
+    "contact_info": "string | null - Email, số điện thoại. BẮT BUỘC kiểm tra trong BỐI CẢNH, LỊCH SỬ HỘI THOẠI và tin nhắn hiện tại. VD: '0912345678 | email@example.com'",
     "current_title": "string | null - Chức danh hiện tại hoặc vị trí ứng tuyển. VD: 'AI Engineer' hoặc 'Thực tập sinh Backend'",
     "total_yoe": "float | null - Tổng số năm kinh nghiệm tính đến tháng 05/2026, xuất ra số thập phân. VD: 1.5. CHÚ Ý: Nếu ứng viên NÓI RÕ LÀ sinh viên/chưa có kinh nghiệm, để 0.0. Nếu văn bản KHÔNG ĐỀ CẬP kinh nghiệm, BẮT BUỘC để null.",
     "inferred_domain": "IT/Software | Sales/Marketing | Finance/Accounting | HR/Admin | Other | null - Chỉ được chọn 1 trong các giá trị này hoặc null nếu không rõ."

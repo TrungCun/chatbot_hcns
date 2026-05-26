@@ -18,7 +18,7 @@ async def extract_info(state: SummaryState) -> dict:
     context = state.get("context") or "Chưa có bối cảnh hội thoại."
     history = state.get("history", [])
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
-   
+
     try:
 
         prompt = load_prompt("summary/extract_info")
@@ -33,25 +33,25 @@ async def extract_info(state: SummaryState) -> dict:
     except Exception as e:
         logger.error(f"[EXTRACT INFO] LLM Error: {e}")
         return {}
-    
+
     # logger.info(f"[DEBUG TYPE] response is type: {type(response)} | result is type: {type(result)}")
 
     try:
         # convert từ str sang obj
         result_obj = CVTemplate.model_validate_json(result)
         # convert về dict, chỉ lấy những trường có dữ liệu (exclude_unset) để tránh ghi đè template bằng null hoặc empty string
-        parsed_info = result_obj.model_dump(exclude_unset=True) 
+        parsed_info = result_obj.model_dump(exclude_unset=True)
         logger.info(f"[EXTRACT INFO] extractedddddd info:\n{json.dumps(parsed_info, indent=4, ensure_ascii=False)}")
     except Exception as e:
         logger.error(f"[EXTRACT INFO] LLM trả về dữ liệu lỗi: {e}")
         parsed_info = {}
 
     logger.info(f"[EXTRACT INFO] type: {type(parsed_info)}")
-    
+
     current_template = CVTemplate.model_validate(state.get("template", {}))
     logger.info(f"[EXTRACT INFO] current_template:\n{current_template.model_dump_json(indent=4)}")
 
-        
+
     def deduplicate_list(lst):
         """Lọc trùng list không phân biệt hoa thường, giữ format của phần tử đầu tiên"""
         seen = set()
@@ -72,7 +72,7 @@ async def extract_info(state: SummaryState) -> dict:
         for section_key, new_section_value in parsed_info.items():
             if new_section_value is None:
                 continue
-                
+
             old_section_value = updated_data.get(section_key)
 
             if isinstance(new_section_value, dict):
@@ -95,8 +95,8 @@ async def extract_info(state: SummaryState) -> dict:
                             continue
 
                         match_item = next(
-                            (item for item in updated_data[section_key] 
-                            if item.get("entity_name") == entity_name), 
+                            (item for item in updated_data[section_key]
+                            if item.get("entity_name") == entity_name),
                             None
                         )
 
@@ -123,12 +123,12 @@ def summary(state: SummaryState) -> dict:
     template_data = state.get("template")
     if not template_data:
         return {"evaluation": "incomplete"}
-    
+
     template = template_data if isinstance(template_data, CVTemplate) else CVTemplate(**template_data)
 
-    # 1. KHỞI TẠO MẢNG MISSING TRỐNG TỪ ĐẦU 
+    # 1. KHỞI TẠO MẢNG MISSING TRỐNG TỪ ĐẦU
     missing = []
-    
+
     if not template.candidate_overview.contact_info:
         missing.append("contact_info")
 
@@ -146,8 +146,8 @@ def summary(state: SummaryState) -> dict:
             # Có tên công ty nhưng mô tả quá sơ sài hoặc trống rỗng
             missing.append("work_description")
     else:
-        pass 
-    
+        pass
+
     template.missing_information = missing
 
     if missing:
@@ -177,7 +177,7 @@ async def evaluation(state: SummaryState) -> dict:
     facts_string = json.dumps(input_facts, ensure_ascii=False, indent=2)
 
     chain = load_prompt("summary/evaluation") | llm | StrOutputParser()
-    
+
     result = await chain.ainvoke({
         "context": f"DỮ LIỆU HỒ SƠ ỨNG VIÊN:\n{facts_string}",
         "history": [], # Không cần history cho node phân tích tĩnh này
@@ -186,15 +186,15 @@ async def evaluation(state: SummaryState) -> dict:
 
     try:
         parsed_eval = json.loads(result.strip())
-        
+
         # 2. Dynamic Update - Schema-Driven
         # Pydantic sẽ tự lọc các trường thừa và ép kiểu dữ liệu
         new_insights = EvaluatorInsights(**parsed_eval)
         template.evaluator_insights = new_insights
-        
+
         # 3. Dọn dẹp trạng thái nợ nần
         template.missing_information = []
-        
+
         logger.info(f"[evaluation] Successfully mapped insights for {template.candidate_overview.full_name}")
 
     except Exception as e:
@@ -236,21 +236,12 @@ async def respond_complete(state: SummaryState) -> dict:
     )
     # --------------------------------------------------------
 
-    safe_template_for_user = template.model_dump(
-        exclude={"evaluator_insights", "missing_information"}
-    )
-
-    facts_json = json.dumps(safe_template_for_user, ensure_ascii=False, indent=2)
-    message = state.get("message", "")
-    history = state.get("history", [])
-    filtered_history = [m for m in history if m.type in ["human", "ai"]]
-
     chain = load_prompt("summary/finalize_summary") | llm_stream | StrOutputParser()
 
     confirmation_response = await chain.ainvoke({
-        "context": facts_json,    # Đổ Facts vào context
-        "history": filtered_history,
-        "message": message        # Tin nhắn cuối cùng của ứng viên
+        "context": "{}", # Không cần context nữa vì prompt đã được đơn giản hóa
+        "history": [],
+        "message": state.get("message", "")
     })
     # --------------------------------------------------------
 
@@ -259,7 +250,7 @@ async def respond_complete(state: SummaryState) -> dict:
     return {
         "response": confirmation_response,
         "history": [AIMessage(content=confirmation_response)]
-        }
+    }
 
 import json
 
@@ -298,7 +289,7 @@ async def respond_incomplete(state: SummaryState) -> dict:
 
     # 4. GỌI LLM ĐỂ TẠO CÂU HỎI
     chain = load_prompt("summary/ask_next_question") | llm_stream | StrOutputParser()
-    
+
     response = await chain.ainvoke({
             "context": facts_json,
             "history": filtered_history,
@@ -314,3 +305,56 @@ async def respond_incomplete(state: SummaryState) -> dict:
         "history": [AIMessage(content=response)]
     }
 
+async def ask_confirmation(state: SummaryState) -> dict:
+    logger.info("[ask_confirmation] generating confirmation request")
+    template_data = state.get("template")
+    if isinstance(template_data, dict):
+        template = CVTemplate(**template_data)
+    else:
+        template = template_data or CVTemplate()
+
+    safe_template_for_user = template.model_dump(
+        exclude={"evaluator_insights", "missing_information"}
+    )
+    facts_json = json.dumps(safe_template_for_user, ensure_ascii=False, indent=2)
+    history = state.get("history", [])
+    filtered_history = [m for m in history if m.type in ["human", "ai"]]
+
+    chain = load_prompt("summary/ask_confirmation") | llm_stream | StrOutputParser()
+    
+    response = await chain.ainvoke({
+        "context": facts_json,
+        "history": filtered_history,
+        "message": state.get("message", "")
+    })
+
+    return {
+        "response": response,
+        "history": [AIMessage(content=response)],
+        "summary_status": "pending_confirmation"
+    }
+
+async def check_confirmation(state: SummaryState) -> dict:
+    logger.info("[check_confirmation] checking user confirmation intent")
+    message = state.get("message", "")
+    
+    chain = load_prompt("summary/check_confirmation") | llm | StrOutputParser()
+    result = await chain.ainvoke({
+        "message": message,
+        "history": []
+    })
+    
+    try:
+        parsed_intent = json.loads(result.strip())
+        intent = parsed_intent.get("intent", "modify")
+    except Exception as e:
+        logger.error(f"[check_confirmation] Parsing error: {e}")
+        intent = "modify" # Default to modify for safety if can't parse
+        
+    logger.info(f"[check_confirmation] intent determined: {intent}")
+    
+    if intent == "agree":
+        return {"summary_status": "confirmed"}
+    else:
+        # Nếu modify, quay lại trạng thái collecting để loop lại quá trình hỏi
+        return {"summary_status": "collecting"}
