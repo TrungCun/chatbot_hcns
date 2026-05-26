@@ -24,7 +24,12 @@ MAX_CHARS = 100_000
 
 class HelperTools:
     @staticmethod
-    def save_files_locally(files: List[FilePayload], user_id: str, session_id: str) -> List[str]:
+    def _save_file_sync(file_path: str, content: bytes):
+        with open(file_path, "wb") as f:
+            f.write(content)
+
+    @staticmethod
+    async def save_files_locally(files: List[FilePayload], user_id: str, session_id: str) -> List[str]:
         """
         Lưu danh sách file vào thư mục local theo cấu trúc: uploads/{user_id}/{session_id}/
         Trả về danh sách các đường dẫn (paths) của các file đã lưu.
@@ -32,8 +37,10 @@ class HelperTools:
         if not files:
             return []
             
-        # Đường dẫn cơ sở: uploads/user_xxx/session_yyy/
-        base_dir = os.path.join("uploads", str(user_id), str(session_id))
+        # Tránh lỗi path traversal
+        safe_user_id = re.sub(r'[^\w\.-]', '_', str(user_id))
+        safe_session_id = re.sub(r'[^\w\.-]', '_', str(session_id))
+        base_dir = os.path.join("uploads", safe_user_id, safe_session_id)
         
         try:
             os.makedirs(base_dir, exist_ok=True)
@@ -42,13 +49,13 @@ class HelperTools:
             for file_payload in files:
                 # Tránh các ký tự đặc biệt trong filename để an toàn cho filesystem
                 safe_filename = re.sub(r'[^\w\.-]', '_', file_payload.filename)
-                # Thêm timestamp vào filename để tránh trùng lặp nếu người dùng gửi 2 file cùng tên
+                # Thêm timestamp vào filename để tránh trùng lặp
                 timestamp = int(time.time())
                 final_filename = f"{timestamp}_{safe_filename}"
                 file_path = os.path.join(base_dir, final_filename)
                 
-                with open(file_path, "wb") as f:
-                    f.write(file_payload.content)
+                # Ghi file trong thread để không block Event Loop
+                await asyncio.to_thread(HelperTools._save_file_sync, file_path, file_payload.content)
                 
                 saved_paths.append(file_path)
                 logger.info(f"[HelperTools] Đã lưu file: {file_path}")
@@ -319,6 +326,20 @@ class HelperTools:
             return f"--- Lỗi khi trích xuất nội dung file {filename}: {str(e)} ---"
 
     @staticmethod
+    def _extract_image_sync(file_content: bytes) -> str:
+        img = Image.open(io.BytesIO(file_content))
+        return pytesseract.image_to_string(img, lang='vie+eng')
+
+    @staticmethod
+    def _extract_word_sync(file_content: bytes) -> str:
+        doc = docx.Document(io.BytesIO(file_content))
+        full_text = []
+        for para in doc.paragraphs:
+            if para.text.strip():
+                full_text.append(para.text)
+        return "\n".join(full_text)
+
+    @staticmethod
     async def process_files(files: List[FilePayload]) -> str:
         extracted_content = []
         
@@ -340,12 +361,8 @@ class HelperTools:
             # --- CASE: IMAGES (OCR via Tesseract) ---
             elif mime.startswith("image/"):
                 try:
-                    # Chuyển bytes sang PIL Image
-                    img = Image.open(io.BytesIO(file.content))
-                    
-                    # Chạy OCR - sử dụng tiếng Việt và tiếng Anh (+ vie + eng)
-                    # Lưu ý: Cần ensure tesseract-ocr-vie đã được cài trên OS
-                    text = pytesseract.image_to_string(img, lang='vie+eng')
+                    # Chạy OCR trong thread pool để không block Event Loop
+                    text = await asyncio.to_thread(HelperTools._extract_image_sync, file.content)
                     
                     if text.strip():
                         extracted_content.append(f"--- Nội dung trích xuất từ hình ảnh: {file.filename} ---\n{text}")
@@ -356,13 +373,8 @@ class HelperTools:
             # --- CASE: WORD (DOCX) ---
             elif "word" in mime or file.filename.lower().endswith((".doc", ".docx")):
                 try:
-                    doc = docx.Document(io.BytesIO(file.content))
-                    full_text = []
-                    for para in doc.paragraphs:
-                        if para.text.strip():
-                            full_text.append(para.text)
-
-                    content = "\n".join(full_text)
+                    # Xử lý Word trong thread pool
+                    content = await asyncio.to_thread(HelperTools._extract_word_sync, file.content)
                     if content.strip():
                         extracted_content.append(f"--- Nội dung file Word: {file.filename} ---\n{content}")
                         logger.info(f"[HELPER / PROCESS FILES] Word file '{file.filename}' processed.")

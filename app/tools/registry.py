@@ -3,6 +3,7 @@ from langchain_core.tools import BaseTool
 
 from app.tools.list_all_jobs import list_all_jobs
 from app.tools.retrieve_from_vector_database import retrieve_from_vector_database
+from app.tools.check_jobs import check_jobs
 
 from app.log import get_logger
 logger = get_logger(__name__)
@@ -10,6 +11,7 @@ logger = get_logger(__name__)
 TOOLS_REGISTRY: Dict[str, BaseTool] = {
     "list_all_jobs": list_all_jobs,
     "retrieve_from_vector_database": retrieve_from_vector_database,
+    "check_jobs": check_jobs,
 }
 
 def get_tools() -> List[BaseTool]:
