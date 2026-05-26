@@ -32,7 +32,7 @@ class ChatService:
             # 1. Trích xuất text cho LLM
             file_text = await HelperTools.process_files(request.files)
             # 2. Lưu file vật lý để lưu history
-            file_urls = HelperTools.save_files_locally(request.files, user_id, session_id)
+            file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
         except Exception as e:
             logger.error(f"[CHAT SERVICE / PROCESS MESSAGE] file processing error: {e}", exc_info=True)
             return ChatResponse(
@@ -142,7 +142,7 @@ class ChatService:
             # 1. Trích xuất text cho LLM
             file_text = await HelperTools.process_files(request.files)
             # 2. Lưu file vật lý để lưu history
-            file_urls = HelperTools.save_files_locally(request.files, user_id, session_id)
+            file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
         except Exception as e:
             logger.error(f"[CHAT SERVICE / STREAM MESSAGE] file processing error: {e}", exc_info=True)
             yield f"data: {json.dumps({'type': 'error', 'detail': 'Lỗi xử lý file'}, ensure_ascii=False)}\n\n"

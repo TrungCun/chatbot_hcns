@@ -18,7 +18,6 @@ def _parse_lines(text: str) -> List[str]:
 
 async def classify_conversation_domain(state: ConversationState) -> dict:
     message = state["message"]
-    attachments = state.get("attachments")
     context = state.get("context") or "Chưa có bối cảnh hội thoại."
     history = state.get("history", [])
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
@@ -112,10 +111,10 @@ async def validate_retrieval(state: ConversationState) -> dict:
             "history": filtered_history,
             "retrieved_data": retrieved_data[:8000]
         })
-        
+
         validation = "pass" if "pass" in result.strip().lower() else "fail"
         logger.info(f"[validate_retrieval] domain={domain}, result={validation}, attempt={loop_count + 1}")
-        
+
         return {
             "validation_result": validation,
             "loop_count": loop_count + 1 if validation == "fail" else loop_count
@@ -135,15 +134,30 @@ async def handle_job_query(state: ConversationState) -> dict:
     logger.info(f"[handle_job_query] processing job query: '{message}'")
 
     try:
-        # 1. Gọi Tool lấy danh sách jobs thực tế
-        jobs_result = await execute_tool("list_all_jobs", {})
+        # 1. LLM sinh câu SQL từ câu hỏi người dùng
+        sql_prompt = load_prompt("conversation/generate_sql_job")
+        sql_chain = sql_prompt | llm | StrOutputParser()
+        sql_query = await sql_chain.ainvoke({
+            "message": message,
+            "context": context,
+            "history": filtered_history,
+        })
+        sql_query = sql_query.strip()
+        logger.info(f"[handle_job_query] generated SQL: {sql_query}")
+
+        # 2. Validate chỉ cho phép SELECT
+        if not sql_query.upper().lstrip().startswith("SELECT"):
+            logger.warning("[handle_job_query] Invalid SQL generated, using fallback")
+            sql_query = "SELECT rc.id, rc.name, rc.jd_job_description, rc.jd_salary_range, rr.quantity FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 LIMIT 10"
+
+        # 3. Gọi tool check_jobs với SQL đã sinh
+        jobs_result = await execute_tool("check_jobs", {"query": sql_query})
         jobs_data = json.dumps(jobs_result, ensure_ascii=False, indent=2) if isinstance(jobs_result, (dict, list)) else str(jobs_result)
 
-        # 2. Load prompt chuyên dụng cho tuyển dụng
-        prompt_template = load_prompt("conversation/handle_job")
-        chain = prompt_template | llm_stream | StrOutputParser()
+        # 4. LLM sinh phản hồi dựa trên kết quả trả về
+        response_prompt = load_prompt("conversation/handle_job")
+        chain = response_prompt | llm_stream | StrOutputParser()
 
-        # 3. LLM sinh phản hồi dựa trên data jobs
         response = ""
         async for chunk in chain.astream({
             "message": message,

@@ -34,7 +34,7 @@ def build_conversation_graph():
         "classify_conversation_domain",
         route_by_conversation_domain,
         {
-            "handle_job_query": "validate_retrieval",  # Nhánh job đi check data trước
+            "handle_job_query": "handle_job_query",    # Nhánh job xử lý trực tiếp
             "rewrite_query": "rewrite_query",          # Nhánh company đi rewrite
             "handle_chitchat": "handle_chitchat",      # Chitchat đi thẳng
         },
@@ -61,7 +61,6 @@ def build_conversation_graph():
     workflow.add_edge("generate_response", END)
     workflow.add_edge("handle_chitchat", END)
 
-    return workflow.compile()
     return workflow.compile()
 
 conversation_graph = build_conversation_graph()
