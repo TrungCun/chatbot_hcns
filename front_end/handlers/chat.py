@@ -1,14 +1,10 @@
-import gradio as gr
-import uuid
 import json
 import time
 import os
 import requests
-
-STREAM_URL = "http://localhost:9070/api/chat/stream"
-
-def generate_uuid():
-    return str(uuid.uuid4())
+import gradio as gr
+from front_end.config import STREAM_URL
+from front_end.utils.helpers import generate_uuid
 
 def respond(message, chat_history, session_id, user_id):
     start_time = time.time()
@@ -143,51 +139,3 @@ def respond(message, chat_history, session_id, user_id):
 
     ttft_display = f"{first_token_time - start_time:.2f}s" if first_token_time else "N/A"
     yield {"text": "", "files": []}, chat_history, new_session_id, user_id, ttft_display
-
-
-# ==========================================
-# GIAO DIỆN
-# ==========================================
-with gr.Blocks(title="Chatbot Hệ Thống Tuyển Dụng") as demo:
-    with gr.Row():
-
-        # CỘT TRÁI (Bảng thông số)
-        with gr.Column(scale=1):
-            gr.Markdown("### Vài thứ linh tinh")
-            user_display = gr.Textbox(value="1001", label="User ID", interactive=True)
-            session_display = gr.Textbox(value=generate_uuid, label="Session ID", interactive=False)
-            time_display = gr.Textbox(value="0.00 giây", label="Thời gian phản hồi", interactive=False)
-            new_session_btn = gr.Button("Một câu chuyện mới", variant="primary")
-
-        # CỘT PHẢI (Khung Chatbot)
-        with gr.Column(scale=3):
-            gr.Markdown("### Đôi lời tâm sự")
-            
-            # KHÔNG CÓ type="messages", Gradio 5 tự động áp dụng chuẩn mới nhất
-            chatbot = gr.Chatbot(height=550)
-
-            chat_input = gr.MultimodalTextbox(
-                file_types=["image", ".pdf", ".docx", ".doc", ".txt"],
-                file_count="multiple",
-                placeholder="Nói gì đi cậu",
-                container=False
-            )
-
-    # Khai báo sự kiện
-    chat_input.submit(
-        fn=respond,
-        inputs=[chat_input, chatbot, session_display, user_display],
-        outputs=[chat_input, chatbot, session_display, user_display, time_display]
-    )
-
-    def reset_session(user_id):
-        return user_id, generate_uuid(), [], "0.00 giây"
-
-    new_session_btn.click(
-        fn=reset_session,
-        inputs=[user_display],
-        outputs=[user_display, session_display, chatbot, time_display]
-    )
-
-if __name__ == "__main__":
-    demo.launch(theme=gr.themes.Soft())

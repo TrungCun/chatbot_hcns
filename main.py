@@ -20,8 +20,9 @@ from app.routers.jobs import router as jobs_router
 from app.model.llm import get_llm
 from app.config import settings
 from app.tools.redis import close_redis, init_redis
+from app.tools.mysql import close_mysql, init_mysql
 from app.application import application
-from fe import demo as gradio_demo
+from front_end.main import demo as gradio_demo, css_content
 
 from app.log import get_logger, setup_logging
 setup_logging()
@@ -48,6 +49,7 @@ async def lifespan(app: FastAPI):
         logger.info("[LIFESPAN] LLM Health Check successful")
 
         await init_redis()
+        init_mysql()
         logger.info("============== App Started =================")
         logger.info("===============================================================")
     except Exception as e:
@@ -58,6 +60,7 @@ async def lifespan(app: FastAPI):
 
     #  Shutdown
     await close_redis()
+    close_mysql()
     application.cleanup_models()
     logger.info("============== App Shutting Down =================")
     logger.info("===============================================================")
@@ -83,7 +86,13 @@ app.include_router(
 )
 
 # Mount Gradio UI at /ui
-app = gr.mount_gradio_app(app, gradio_demo, path="/ui")
+app = gr.mount_gradio_app(
+    app, 
+    gradio_demo, 
+    path="/ui", 
+    theme=gr.themes.Default(), 
+    head=f"<style>{css_content}</style>"
+)
 
 if __name__ == "__main__":
     uvicorn.run(
