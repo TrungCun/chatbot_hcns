@@ -12,11 +12,13 @@ logger = get_logger(__name__)
 
 router = APIRouter(prefix="/api/chat", tags=["Chat"])
 
-# Chat endpoint for handling N8N requests. 
+# Chat endpoint for handling N8N requests.
 @router.post("/", response_model=ChatResponse)
 async def handle_chat(
     user_id: Optional[str] = Form(None),
     session_id: Optional[str] = Form(None),
+    user_info: Optional[str] = Form(None),
+    job_context: Optional[str] = Form(None),
     message: Optional[str] = Form(None),
     files: Optional[list[UploadFile]] = File(None),
 
@@ -33,6 +35,7 @@ async def handle_chat(
         message = HelperTools.sanitize_n8n_value(message)
         session_id = HelperTools.sanitize_n8n_value(session_id)
         user_id = HelperTools.sanitize_n8n_value(user_id)
+        user_info = HelperTools.sanitize_n8n_value(user_info)
 
         # Return for case missing user_id or session_id
         if not user_id or not session_id:
@@ -56,8 +59,8 @@ async def handle_chat(
                 for file in files:
                     content = await file.read()
                     file_payloads.append(HelperTools.normalize_file(
-                        content=content, 
-                        filename=file.filename, 
+                        content=content,
+                        filename=file.filename,
                         content_type=file.content_type
                     ))
             except Exception as e:
@@ -69,8 +72,8 @@ async def handle_chat(
             try:
                 content = HelperTools.decode_n8n_base64(n8n_file_data)
                 file_payloads.append(HelperTools.normalize_file(
-                    content=content, 
-                    filename=n8n_file_name or "n8n_file", 
+                    content=content,
+                    filename=n8n_file_name or "n8n_file",
                     content_type=n8n_mime_type
                 ))
             except Exception as e:
@@ -81,6 +84,8 @@ async def handle_chat(
         service_request = ChatRequest(
             user_id=user_id,
             session_id=session_id,
+            user_info=user_info,
+            job_context=job_context,
             message=message,
             files=file_payloads
         )
@@ -89,7 +94,7 @@ async def handle_chat(
     except ValidationError as e:
         logger.error(f"[POST /chat] Pydantic validation error: {e}")
         raise HTTPException(
-            status_code=422, 
+            status_code=422,
             detail="Định dạng dữ liệu gửi lên không hợp lệ. Vui lòng kiểm tra lại."
         )
 
@@ -98,11 +103,13 @@ async def handle_chat(
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)[:100]}")
 
 
-# Streaming endpoint for chat responses. 
+# Streaming endpoint for chat responses.
 @router.post("/stream")
 async def handle_chat_stream(
     user_id: Optional[str] = Form(None),
     session_id: Optional[str] = Form(None),
+    user_info: Optional[str] = Form(None),
+    job_context: Optional[str] = Form(None),
     message: Optional[str] = Form(None),
     files: Optional[list[UploadFile]] = File(None),
     service: ChatService = Depends(get_chat_service)
@@ -143,6 +150,8 @@ async def handle_chat_stream(
         service_request = ChatRequest(
             user_id=user_id,
             session_id=session_id,
+            user_info=user_info,
+            job_context=job_context,
             message=message,
             files=file_payloads
         )

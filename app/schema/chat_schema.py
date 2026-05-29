@@ -9,6 +9,8 @@ class FilePayload(BaseModel):
 class ChatRequest(BaseModel):
     user_id: Optional[str] = None
     session_id: Optional[str] = None
+    user_info: Optional[str] = None
+    job_context: Optional[str] = None
     message: Optional[str] = None
     files: List[FilePayload] = Field(default_factory=list)
 

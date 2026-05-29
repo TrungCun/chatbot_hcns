@@ -34,9 +34,10 @@ class ProfessionalEvidence(BaseModel):
 class CandidateOverview(BaseModel):
     full_name: Optional[str] = Field(default=None, description="Họ và tên đầy đủ của ứng viên.")
     contact_info: Optional[str] = Field(default=None, description="Email, số điện thoại, link profile.")
-    current_title: Optional[str] = Field(default=None, description="Chức danh hiện tại hoặc vị trí ứng tuyển.")
+    current_title: Optional[str] = Field(default=None, description="Chức danh hiện tại.")
+    applied_position: Optional[str] = Field(default=None, description="Vị trí mong muốn ứng tuyển.")
     total_yoe: Optional[float] = Field(
-        default=None, 
+        default=None,
         description="Tổng số năm kinh nghiệm làm việc thực tế tính ra số thập phân. VD: 1.5, 3.0."
     )
     inferred_domain: Optional[Literal['IT/Software', 'Sales/Marketing', 'Finance/Accounting', 'HR/Admin', 'Other']] = Field(
@@ -88,11 +89,10 @@ class CVTemplate(BaseModel):
     education_and_languages: EducationAndLanguages = Field(default_factory=EducationAndLanguages)
     competency_framework: CompetencyFramework = Field(default_factory=CompetencyFramework)
     professional_evidence: List[ProfessionalEvidence] = Field(default_factory=list)
- 
+
     evaluator_insights: EvaluatorInsights = Field(default_factory=EvaluatorInsights)
 
     missing_information: List[str] = Field(
         default_factory=list,
         description="Các thông tin quan trọng chưa được đề cập để hệ thống có thể chủ động hỏi thêm."
     )
-    

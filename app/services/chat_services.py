@@ -26,7 +26,7 @@ class ChatService:
             raise ValueError("Thiếu user_id hoặc session_id.")
 
         logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Received message: '{request.message}' with {len(request.files)} file(s) attached.")
-        
+
         file_urls = []
         try:
             # 1. Trích xuất text cho LLM
@@ -41,7 +41,7 @@ class ChatService:
                 session_id=session_id,
             )
 
-        original_message = request.message.strip() if request.message else ""
+        original_message = request.message.strip() if request.message and request.message != "None" else ""
         if file_text:
             if original_message:
                 final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{file_text}"
@@ -69,6 +69,8 @@ class ChatService:
             message=final_message,
             session_id=session_id,
             user_id=user_id,
+            user_info=request.user_info,
+            job_context=request.job_context,
             file_urls=file_urls,
             previous_state=previous_state_values
         )
@@ -76,7 +78,7 @@ class ChatService:
         try:
             current_temp = HelperTools.ensure_dict(state.get('template', {}))
             logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] invoking graph with template:\n{json.dumps(current_temp, indent=4, ensure_ascii=False)}")
-           
+
             result = await self.graph.ainvoke(state, config)
 
             response_text = result.get("response") or "ngại quá không biết nói gì"
@@ -134,7 +136,7 @@ class ChatService:
         # Check user id and session id
         if not user_id or not session_id:
             raise ValueError("Thiếu user_id hoặc session_id.")
-        
+
         logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Received message: '{request.message}' with {len(request.files)} file(s) attached.")
 
         file_urls = []
@@ -148,7 +150,7 @@ class ChatService:
             yield f"data: {json.dumps({'type': 'error', 'detail': 'Lỗi xử lý file'}, ensure_ascii=False)}\n\n"
             return
 
-        original_message = request.message.strip() if request.message else ""
+        original_message = request.message.strip() if request.message and request.message != "None" else ""
         if file_text:
             if original_message:
                 final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{file_text}"
@@ -174,6 +176,8 @@ class ChatService:
             message=final_message,
             session_id=session_id,
             user_id=user_id,
+            user_info=request.user_info,
+            job_context=request.job_context,
             file_urls=file_urls,
             previous_state=previous_state_values,
         )
@@ -191,7 +195,7 @@ class ChatService:
                     if chunk and hasattr(chunk, "content") and chunk.content:
                         tokens_sent = True
                         yield f"data: {json.dumps({'type': 'token', 'content': chunk.content}, ensure_ascii=False)}\n\n"
-                
+
                 # FALLBACK: Nếu graph kết thúc mà chưa có token nào được stream (do rơi vào fallback tĩnh)
                 elif event_name == "on_chain_end" and not tokens_sent:
                     # Kiểm tra xem đây có phải là kết thúc của graph chính không
