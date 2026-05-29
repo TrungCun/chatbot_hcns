@@ -29,19 +29,20 @@ with gr.Blocks(title="Chatbot Hệ Thống Tuyển Dụng") as demo:
     # 1. Render UI Components
     login_interface, name_input, phone_input, email_input, terms_checkbox, start_btn = render_login_form()
     chat_interface, user_display, session_display, time_display, chatbot, chat_input, jobs_radio, jobs_state, reset_btn = render_chat_interface(initial_choices, initial_jobs)
+    user_info_display = gr.State("")
 
     # 2. Attach Event Handlers
     # Chuyển trang từ form login sang khung chat và truyền dữ liệu
     start_btn.click(
         fn=start_chat_flow,
         inputs=[name_input, phone_input, email_input, terms_checkbox],
-        outputs=[login_interface, chat_interface, user_display, session_display, chatbot]
+        outputs=[login_interface, chat_interface, user_display, session_display, user_info_display, chatbot]
     )
 
     # Xử lý chat
     chat_input.submit(
         fn=respond,
-        inputs=[chat_input, chatbot, session_display, user_display],
+        inputs=[chat_input, chatbot, session_display, user_display, user_info_display, jobs_radio, jobs_state],
         outputs=[chat_input, chatbot, session_display, user_display, time_display]
     )
 

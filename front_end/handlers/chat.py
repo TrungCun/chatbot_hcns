@@ -6,7 +6,7 @@ import gradio as gr
 from front_end.config import STREAM_URL
 from front_end.utils.helpers import generate_uuid
 
-def respond(message, chat_history, session_id, user_id):
+def respond(message, chat_history, session_id, user_id, user_info="", selected_position_name=None, current_jobs=None):
     start_time = time.time()
 
     text_input = message.get("text", "")
@@ -57,7 +57,17 @@ def respond(message, chat_history, session_id, user_id):
     # ==========================================
     # 3. CHUẨN BỊ REQUEST
     # ==========================================
-    form_data = {"session_id": session_id, "user_id": user_id}
+    form_data = {"session_id": session_id, "user_id": user_id, "user_info": user_info}
+    if selected_position_name and current_jobs and not session_id.endswith("_000000"):
+        selected_job = next((job for job in current_jobs if job["position_name"] == selected_position_name), None)
+        if selected_job:
+            details = [
+                f"Vị trí: {selected_job.get('position_name', '')}",
+                f"Mức lương: {selected_job.get('salary_range', '')}",
+                f"Kinh nghiệm yêu cầu: {selected_job.get('min_experience_years', '')}"
+            ]
+            form_data["job_context"] = "\n".join(details)
+
     if text_input:
         form_data["message"] = text_input
 
