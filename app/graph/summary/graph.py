@@ -2,7 +2,7 @@ from langgraph.graph import StateGraph, END
 
 from app.graph.summary.state import SummaryState
 from app.graph.summary.nodes import extract_info, summary, respond_complete, respond_incomplete, evaluation, ask_confirmation, check_confirmation
-from app.graph.summary.edges import route_summary, route_check_confirmation
+from app.graph.summary.edges import route_summary, route_check_confirmation, route_entry
 
 def build_summary_graph():
     workflow = StateGraph(SummaryState)
@@ -17,7 +17,13 @@ def build_summary_graph():
     workflow.add_node("check_confirmation", check_confirmation)
 
     # Entry
-    workflow.set_entry_point("extract_info")
+    workflow.set_conditional_entry_point(
+        route_entry,
+        {
+            "check_confirmation": "check_confirmation",
+            "extract_info": "extract_info"
+        }
+    )
 
     # Edges
     workflow.add_edge("extract_info", "summary")
@@ -40,7 +46,7 @@ def build_summary_graph():
         route_check_confirmation,
         {
             "confirmed": "evaluation",
-            "modify": "ask_confirmation"
+            "modify": "extract_info"
         }
     )
 

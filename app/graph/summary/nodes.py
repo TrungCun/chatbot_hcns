@@ -6,6 +6,8 @@ from app.schema.summary_schema import CVTemplate, EvaluatorInsights
 from app.graph.summary.state import SummaryState
 from app.prompt.loader import load_prompt
 from app.model.llm import llm, llm_stream
+from app.tools.mysql import get_mysql_engine
+from sqlalchemy import text
 
 from app.log import get_logger
 logger = get_logger(__name__)
@@ -20,13 +22,30 @@ async def extract_info(state: SummaryState) -> dict:
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
 
     try:
+        engine = get_mysql_engine()
+        with engine.connect() as conn:
+            query = text("""
+                SELECT DISTINCT rc.name AS position_name
+                FROM recruitment_campaigns rc
+                WHERE rc.status = 1
+                AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+            """)
+            rows = conn.execute(query).fetchall()
+            job_titles = [row[0] for row in rows if row[0]]
+            available_jobs_str = ", ".join(job_titles) if job_titles else "Không có vị trí mở."
+    except Exception as e:
+        logger.error(f"[EXTRACT INFO] Lỗi lấy job từ MySQL: {e}")
+        available_jobs_str = "Không lấy được danh sách vị trí."
+
+    try:
 
         prompt = load_prompt("summary/extract_info")
         chain = prompt | llm
         response = await chain.ainvoke({
             "message": message,
             "context": context,
-            "history": filtered_history
+            "history": filtered_history,
+            "available_jobs": available_jobs_str
         })
 
         result = response.content
@@ -128,6 +147,9 @@ def summary(state: SummaryState) -> dict:
 
     # 1. KHỞI TẠO MẢNG MISSING TRỐNG TỪ ĐẦU
     missing = []
+
+    if not template.candidate_overview.applied_position:
+        missing.append("applied_position")
 
     if not template.candidate_overview.contact_info:
         missing.append("contact_info")
@@ -298,7 +320,7 @@ async def respond_incomplete(state: SummaryState) -> dict:
         })
 
     logger.info(f"[respond_incomplete] asking about field: {next_field}")
-    
+
     # Trả về câu hỏi để hiển thị cho ứng viên
     return {
         "response": response,
@@ -321,7 +343,7 @@ async def ask_confirmation(state: SummaryState) -> dict:
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
 
     chain = load_prompt("summary/ask_confirmation") | llm_stream | StrOutputParser()
-    
+
     response = await chain.ainvoke({
         "context": facts_json,
         "history": filtered_history,
@@ -337,22 +359,30 @@ async def ask_confirmation(state: SummaryState) -> dict:
 async def check_confirmation(state: SummaryState) -> dict:
     logger.info("[check_confirmation] checking user confirmation intent")
     message = state.get("message", "")
-    
+
     chain = load_prompt("summary/check_confirmation") | llm | StrOutputParser()
     result = await chain.ainvoke({
         "message": message,
         "history": []
     })
-    
+
     try:
-        parsed_intent = json.loads(result.strip())
+        clean_result = result.strip()
+        if clean_result.startswith("```json"):
+            clean_result = clean_result[7:]
+        elif clean_result.startswith("```"):
+            clean_result = clean_result[3:]
+        if clean_result.endswith("```"):
+            clean_result = clean_result[:-3]
+
+        parsed_intent = json.loads(clean_result.strip())
         intent = parsed_intent.get("intent", "modify")
     except Exception as e:
-        logger.error(f"[check_confirmation] Parsing error: {e}")
+        logger.error(f"[check_confirmation] Parsing error: {e}, raw result: {result}")
         intent = "modify" # Default to modify for safety if can't parse
-        
+
     logger.info(f"[check_confirmation] intent determined: {intent}")
-    
+
     if intent == "agree":
         return {"summary_status": "confirmed"}
     else:

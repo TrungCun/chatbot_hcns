@@ -18,7 +18,7 @@ async def update_context(state: AppState) -> Dict[str, Any]:
 
     if not history:
         return {}
-    
+
     KEEP_COUNT = 8
 
     logger.info(f"[update_context] CONTEXT cũ: '{existing_context}'")
@@ -33,22 +33,22 @@ async def update_context(state: AppState) -> Dict[str, Any]:
             "n": 3,
             "existing_context": existing_context,
             "history": filtered_history,
-            # Vì loader của bạn luôn chèn 1 block HumanMessage cuối cùng, 
+            # Vì loader của bạn luôn chèn 1 block HumanMessage cuối cùng,
             # ta dùng nó làm câu lệnh kích hoạt (Trigger) luôn cho sạch!
-            "message": "Dựa vào bối cảnh cũ và lịch sử chat trên, hãy nhả ra bản cập nhật bối cảnh mới." 
+            "message": "Dựa vào bối cảnh cũ và lịch sử chat trên, hãy nhả ra bản cập nhật bối cảnh mới."
         })
         new_context = response.content
         logger.info(f"[update_context] CONTEXT mới: '{new_context}'")
     except Exception as e:
         logger.error(f"[update_context] Lỗi khi gọi LLM: {e}")
         new_context = existing_context
-    
+
     delete_messages = []
     # Nếu tổng số tin nhắn hiện tại vượt mức cho phép
     if len(history) > KEEP_COUNT:
         # Xác định những tin nhắn cũ cần bị loại bỏ (tất cả các tin nằm trước phần KEEP_COUNT)
         messages_to_delete = history[:-KEEP_COUNT]
-        
+
         # Dùng RemoveMessage của LangGraph để đánh dấu xóa dựa trên ID
         delete_messages = [RemoveMessage(id=m.id) for m in messages_to_delete if m.id]
         logger.info(f"[update_context] Đã dọn {len(delete_messages)} tin nhắn cũ khỏi history.")
@@ -65,7 +65,7 @@ async def classify_user_intent(state: AppState) -> dict:
     file_urls = state.get("file_urls") or []
     history = state.get("history", [])
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
-    
+
     try:
         prompt = load_prompt("parent/classify_intent")
         chain = prompt | llm
@@ -118,7 +118,7 @@ async def save_history(state: AppState) -> Dict[str, Any]:
     # Tạo thư mục và lưu file
     dir_path = os.path.join("history", user_id)
     os.makedirs(dir_path, exist_ok=True)
-    
+
     file_path = os.path.join(dir_path, f"{session_id}.json")
     try:
         with open(file_path, "w", encoding="utf-8") as f:

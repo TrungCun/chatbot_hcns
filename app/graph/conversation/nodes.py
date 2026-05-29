@@ -93,35 +93,51 @@ async def validate_retrieval(state: ConversationState) -> dict:
         docs = state.get("retrieved_documents", [])
         retrieved_data = "\n\n".join(docs)
 
-    # Nếu đây là lần loop thứ 2, hoặc là chitchat, cho qua luôn
-    if loop_count >= 1 or domain == "chitchat" or not message:
+    # Bỏ qua cho nhánh chitchat hoặc tin nhắn rỗng
+    if domain == "chitchat" or not message:
         return {"validation_result": "pass"}
 
+    query_to_validate = state.get("rewritten_query") or message
+
+    validation = "pass"
     if not retrieved_data:
         logger.warning("[validate_retrieval] No data retrieved. Failing to trigger retry.")
-        return {"validation_result": "fail", "loop_count": loop_count + 1}
+        validation = "fail"
+    else:
+        try:
+            prompt_template = load_prompt("conversation/validate_retrieval")
+            chain = prompt_template | llm | StrOutputParser()
 
-    try:
-        prompt_template = load_prompt("conversation/validate_retrieval")
-        chain = prompt_template | llm | StrOutputParser()
+            result = await chain.ainvoke({
+                "message": query_to_validate,
+                "context": "",
+                "history": [],
+                "retrieved_data": retrieved_data[:8000]
+            })
 
-        result = await chain.ainvoke({
-            "message": message,
-            "context": context,
-            "history": filtered_history,
-            "retrieved_data": retrieved_data[:8000]
-        })
+            validation = "pass" if "pass" in result.strip().lower() else "fail"
+        except Exception as e:
+            logger.error(f"[validate_retrieval] Error: {e}")
+            validation = "pass"
 
-        validation = "pass" if "pass" in result.strip().lower() else "fail"
-        logger.info(f"[validate_retrieval] domain={domain}, result={validation}, attempt={loop_count + 1}")
+    logger.info(f"[validate_retrieval] domain={domain}, result={validation}, attempt={loop_count + 1}")
 
+    if validation == "fail":
+        if loop_count >= 1:
+            logger.warning("[validate_retrieval] Max loops reached and still failed. Clearing documents to force fallback.")
+            return {
+                "validation_result": "pass", # Ép pass để đi tiếp, thoát khỏi loop
+                "retrieved_documents": []    # Xóa sạch tài liệu để trigger Fallback msg
+            }
+        else:
+            return {
+                "validation_result": "fail",
+                "loop_count": loop_count + 1
+            }
+    else:
         return {
-            "validation_result": validation,
-            "loop_count": loop_count + 1 if validation == "fail" else loop_count
+            "validation_result": "pass"
         }
-    except Exception as e:
-        logger.error(f"[validate_retrieval] Error: {e}")
-        return {"validation_result": "pass"}
 
 async def handle_job_query(state: ConversationState) -> dict:
     from app.tools.registry import execute_tool
@@ -134,6 +150,25 @@ async def handle_job_query(state: ConversationState) -> dict:
     logger.info(f"[handle_job_query] processing job query: '{message}'")
 
     try:
+        # 0. Lấy danh sách vị trí đang mở để thêm vào prompt
+        open_jobs_query = """
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        """
+        open_jobs_result = await execute_tool("check_jobs", {"query": open_jobs_query})
+
+        open_jobs_list = []
+        if isinstance(open_jobs_result, list):
+            for row in open_jobs_result:
+                if isinstance(row, dict) and "name" in row:
+                    open_jobs_list.append(row["name"])
+
+        open_jobs_str = ", ".join(open_jobs_list) if open_jobs_list else "Không có vị trí nào đang mở"
+        logger.info(f"[handle_job_query] Open jobs for context: {open_jobs_str}")
+
         # 1. LLM sinh câu SQL từ câu hỏi người dùng
         sql_prompt = load_prompt("conversation/generate_sql_job")
         sql_chain = sql_prompt | llm | StrOutputParser()
@@ -141,8 +176,11 @@ async def handle_job_query(state: ConversationState) -> dict:
             "message": message,
             "context": context,
             "history": filtered_history,
+            "open_jobs": open_jobs_str,
         })
         sql_query = sql_query.strip()
+        import re
+        sql_query = re.sub(r'(LIMIT\s+\d+)\s+(GROUP\s+BY\s+[\w\.]+)', r'\2 \1', sql_query, flags=re.IGNORECASE)
         logger.info(f"[handle_job_query] generated SQL: {sql_query}")
 
         # 2. Validate chỉ cho phép SELECT
@@ -152,7 +190,7 @@ async def handle_job_query(state: ConversationState) -> dict:
 
         # 3. Gọi tool check_jobs với SQL đã sinh
         jobs_result = await execute_tool("check_jobs", {"query": sql_query})
-        jobs_data = json.dumps(jobs_result, ensure_ascii=False, indent=2) if isinstance(jobs_result, (dict, list)) else str(jobs_result)
+        jobs_data = json.dumps(jobs_result, ensure_ascii=False, indent=2, default=str) if isinstance(jobs_result, (dict, list)) else str(jobs_result)
 
         # 4. LLM sinh phản hồi dựa trên kết quả trả về
         response_prompt = load_prompt("conversation/handle_job")
@@ -301,7 +339,7 @@ async def rerank_documents(state: ConversationState) -> dict:
 
         # 1. Đặt ngưỡng tối thiểu (Score Threshold)
         # Bất kỳ tài liệu nào có điểm < 0.2 sẽ bị loại bỏ để tránh nhiễu
-        score_threshold = 0.2
+        score_threshold = -2.0
         filtered_results = [(doc, score) for doc, score in results if score >= score_threshold]
 
         # 2. Giới hạn trên (Cap)

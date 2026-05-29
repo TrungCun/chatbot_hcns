@@ -2,6 +2,12 @@ from typing import Literal
 
 from app.graph.summary.state import SummaryState
 
+def route_entry(state: SummaryState) -> str:
+    summary_status = state.get("summary_status", "collecting")
+    if summary_status == "pending_confirmation":
+        return "check_confirmation"
+    return "extract_info"
+
 def route_summary(state: SummaryState) -> str:
     evaluation = state.get("evaluation", "incomplete")
     summary_status = state.get("summary_status", "collecting")
@@ -21,3 +27,4 @@ def route_check_confirmation(state: SummaryState) -> str:
         return "confirmed"
     else:
         return "modify"
+
