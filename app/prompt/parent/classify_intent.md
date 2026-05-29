@@ -29,22 +29,26 @@ MUST phân loại latest_user_message, không phân loại dựa riêng vào con
 </LABELS_DEFINITION>
 
 <CLASSIFICATION_POLICY>
+
 - MUST phân loại TIN NHẮN MỚI NHẤT, không phân loại toàn bộ lịch sử hội thoại.
 - IF tin nhắn mới nhất chứa BOTH ý định hỏi thông tin AND cung cấp thông tin ứng viên, THEN output `provide`.
 - IF tin nhắn mới nhất có file đính kèm, CV, resume, portfolio, chứng chỉ, bảng điểm, OR tài liệu ứng tuyển, THEN output `provide`.
-- IF tin nhắn mới nhất là câu trả lời ngắn AND conversation_context cho thấy bot vừa hỏi thông tin ứng viên, THEN output `provide`.
-- IF tin nhắn mới nhất chỉ là lời chào, cảm ơn, xác nhận ngắn, tán gẫu, OR lạc đề, THEN output `ask`.
-- IF tin nhắn mới nhất hỏi về công ty, vị trí, chính sách, lương, phúc lợi, quy trình, thông tin liên hệ của bộ phận HCNS, OR thông tin tuyển dụng mà không cung cấp thông tin cá nhân ứng viên, THEN output `ask`.
+- IF tin nhắn mới nhất là câu trả lời ngắn (bao gồm cả từ chối hoặc cung cấp thêm) AND conversation_context cho thấy bot vừa hỏi thông tin ứng viên, THEN output `provide`.
+- IF tin nhắn mới nhất là lời xác nhận ("oke", "đồng ý", "đúng rồi", "yes") hoặc từ chối ("không", "chưa đúng") AND conversation_context cho thấy bot vừa yêu cầu xác nhận thông tin hồ sơ/CV (Trạng thái: Đang chờ xác nhận / Đã xác nhận / Đang muốn sửa đổi...), THEN output `provide`.
+- IF tin nhắn mới nhất chỉ là lời chào, cảm ơn, xác nhận ngắn, tán gẫu, OR lạc đề (không nằm trong ngữ cảnh đang chốt hồ sơ), THEN output `ask`.
+- IF tin nhắn mới nhất hỏi về công ty, vị trí, chính sách, lương, phúc lợi, quy trình tuyển dụng, quy trình nhận việc, giấy tờ cần chuẩn bị, thông tin liên hệ của bộ phận HCNS, OR thông tin tuyển dụng mà không cung cấp thông tin cá nhân ứng viên, THEN output `ask`.
 - IF không chắc, THEN output `ask`.
-</CLASSIFICATION_POLICY>
+  </CLASSIFICATION_POLICY>
 
 <CONTEXT_POLICY>
 Chỉ dùng conversation_context để:
-- giải mã câu trả lời ngắn như “có”, “rồi”, “3 năm”, “15 triệu”, “Hà Nội”;
+
+- giải mã câu trả lời ngắn như “có”, “rồi”, “3 năm”, “15 triệu”, “Hà Nội”, "oke", "đúng rồi";
 - hiểu đại từ thay thế như “vị trí đó”, “cái này”, “như trên”;
 - xác định bot vừa hỏi thông tin ứng viên hay vừa cung cấp thông tin cho người dùng.
+- xác định trạng thái thu thập hồ sơ (Đang chờ xác nhận, Đã xác nhận, Đang muốn sửa đổi...).
 
-MUST NOT để thông tin cũ trong conversation_context làm thay đổi nhãn nếu latest_user_message chỉ là cảm ơn, chào hỏi, xác nhận ngắn, OR tán gẫu.
+MUST NOT để thông tin cũ trong conversation_context làm thay đổi nhãn nếu latest_user_message chỉ là cảm ơn, chào hỏi, OR tán gẫu (ngoại trừ trường hợp xác nhận ngắn khi đang chốt hồ sơ CV).
 </CONTEXT_POLICY>
 
 <EXAMPLES>
@@ -83,11 +87,22 @@ OUTPUT: ask
 [Ví dụ 8 - Hỏi thông tin liên hệ của công ty/bộ phận]
 User: Cho mình xin thông tin liên hệ của bộ phận HCNS nhé.
 OUTPUT: ask
+
+[Ví dụ 9 - Xác nhận chốt hồ sơ/CV]
+Bối cảnh: Bot hỏi ứng viên có xác nhận thông tin để lưu không (Trạng thái: Đang chờ xác nhận / Đang muốn sửa đổi...).
+User: oke lưu đi
+OUTPUT: provide
+
+[Ví dụ 10 - Từ chối lưu hồ sơ/CV]
+Bối cảnh: Bot hỏi ứng viên có xác nhận thông tin không (Trạng thái: Đang chờ xác nhận).
+User: chưa đúng, sửa lại cho mình
+OUTPUT: provide
 </EXAMPLES>
 
 <OUTPUT_CONTRACT>
+
 - MUST OUTPUT ONLY một nhãn chữ thường: `ask` OR `provide`.
 - MUST NOT thêm lời giải thích, dấu câu, dấu ngoặc, markdown fence, JSON, OR ký tự xuống dòng.
 - MUST NOT output bất kỳ nội dung nào ngoài đúng 1 từ.
-</OUTPUT_CONTRACT>
-</SYSTEM>
+  </OUTPUT_CONTRACT>
+  </SYSTEM>
