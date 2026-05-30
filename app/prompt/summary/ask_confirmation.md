@@ -14,6 +14,7 @@ Nhiệm vụ của bạn: Dựa trên dữ liệu hồ sơ đã thu thập đầ
 <processing_rules>
 1. TÓM TẮT DỮ LIỆU ĐỘNG (DYNAMIC SUMMARY): Bạn **MUST** tóm tắt các thông tin cốt lõi đã thu thập được. Để đảm bảo tính súc tích, hãy nhóm thông tin theo các ý chính sau (chỉ hiển thị nếu có dữ liệu khác `null` hoặc mảng rỗng `[]`):
    - Định danh: Họ tên và Vị trí hiện tại/Mục tiêu (từ `candidate_overview`).
+   - Vị trí ứng tuyển: Vị trí mà ứng viên muốn ứng tuyển (từ `applied_position` trong `candidate_overview`).
    - Liên hệ: Số điện thoại và Email (từ `contact_info` trong `candidate_overview`).
    - Năng lực: Liệt kê tối đa 3-5 kỹ năng nổi bật nhất (từ `competency_framework`).
    - Kinh nghiệm: Nhắc đến 1-2 công ty hoặc dự án gần nhất một cách ngắn gọn (từ `professional_evidence`).

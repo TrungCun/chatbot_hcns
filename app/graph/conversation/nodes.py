@@ -250,7 +250,7 @@ async def retrieve_documents(state: ConversationState) -> dict:
 
     for q in queries:
         # Gọi trực tiếp logic của tool
-        results = await retrieve_from_vector_database.ainvoke({"prompt": q, "limit": 20})
+        results = await retrieve_from_vector_database.ainvoke({"prompt": q, "limit": 15})
         for doc in results:
             if isinstance(doc, dict) and "content" in doc:
                 content = doc["content"]
@@ -332,8 +332,8 @@ async def rerank_documents(state: ConversationState) -> dict:
         scores = rerank_model.predict(pairs)
 
         # Sắp xếp và lấy top K
-        # Mặc định lấy top 20 tài liệu chất lượng nhất sau khi rerank
-        top_k = 20
+        # Mặc định lấy top 15 tài liệu chất lượng nhất sau khi rerank
+        top_k = 15
 
         results = sorted(zip(documents, scores), key=lambda x: x[1], reverse=True)
 
@@ -343,7 +343,7 @@ async def rerank_documents(state: ConversationState) -> dict:
         filtered_results = [(doc, score) for doc, score in results if score >= score_threshold]
 
         # 2. Giới hạn trên (Cap)
-        limit_k = 20
+        limit_k = 15
 
         top_results = filtered_results[:limit_k]
         reranked_docs = [doc for doc, score in top_results]
