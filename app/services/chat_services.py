@@ -16,30 +16,18 @@ class ChatService:
         self.redis = redis_client
         self.graph = main_graph
 
-    async def process_message(self, request: ChatRequest) -> ChatResponse:
-        logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Startingggggggggggggggggggggg")
-
+    async def _prepare_chat_state(self, request: ChatRequest) -> tuple[dict, RunnableConfig]:
         user_id = request.user_id
         session_id = request.session_id
-        # Check user id and session id
         if not user_id or not session_id:
             raise ValueError("Thiếu user_id hoặc session_id.")
 
-        logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Received message: '{request.message}' with {len(request.files)} file(s) attached.")
+        logger.info(f"[CHAT SERVICE / PREPARE STATE] Received message: '{request.message}' with {len(request.files)} file(s) attached.")
 
-        file_urls = []
-        try:
-            # 1. Trích xuất text cho LLM
-            file_text = await HelperTools.process_files(request.files)
-            # 2. Lưu file vật lý để lưu history
-            file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
-        except Exception as e:
-            logger.error(f"[CHAT SERVICE / PROCESS MESSAGE] file processing error: {e}", exc_info=True)
-            return ChatResponse(
-                user_id=user_id,
-                response="Lỗi xử lý file, vui lòng kiểm tra lại định dạng file.",
-                session_id=session_id,
-            )
+        # 1. Trích xuất text cho LLM
+        file_text = await HelperTools.process_files(request.files)
+        # 2. Lưu file vật lý để lưu history
+        file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
 
         original_message = request.message.strip() if request.message and request.message != "None" else ""
         if file_text:
@@ -61,9 +49,9 @@ class ChatService:
             previous_state = self.graph.get_state(config)
             if previous_state and previous_state.values:
                 previous_state_values = previous_state.values
-                logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] tải state cũ từ checkpoint ")
+                logger.info(f"[CHAT SERVICE / PREPARE STATE] tải state cũ từ checkpoint ")
         except Exception as e:
-            logger.debug(f"[CHAT SERVICE / PROCESS MESSAGE] no previous checkpoint: {e}")
+            logger.debug(f"[CHAT SERVICE / PREPARE STATE] no previous checkpoint: {e}")
 
         state = create_initial_state(
             message=final_message,
@@ -74,6 +62,25 @@ class ChatService:
             file_urls=file_urls,
             previous_state=previous_state_values
         )
+
+        return state, config
+
+    async def process_message(self, request: ChatRequest) -> ChatResponse:
+        logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Starting process_message")
+        
+        user_id = request.user_id
+        session_id = request.session_id
+        try:
+            state, config = await self._prepare_chat_state(request)
+        except ValueError as e:
+            raise e
+        except Exception as e:
+            logger.error(f"[CHAT SERVICE / PROCESS MESSAGE] file processing error: {e}", exc_info=True)
+            return ChatResponse(
+                user_id=user_id,
+                response="Lỗi xử lý file, vui lòng kiểm tra lại định dạng file.",
+                session_id=session_id,
+            )
 
         try:
             current_temp = HelperTools.ensure_dict(state.get('template', {}))
@@ -134,54 +141,14 @@ class ChatService:
 
         user_id = request.user_id
         session_id = request.session_id
-        # Check user id and session id
-        if not user_id or not session_id:
-            raise ValueError("Thiếu user_id hoặc session_id.")
-
-        logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] Received message: '{request.message}' with {len(request.files)} file(s) attached.")
-
-        file_urls = []
         try:
-            # 1. Trích xuất text cho LLM
-            file_text = await HelperTools.process_files(request.files)
-            # 2. Lưu file vật lý để lưu history
-            file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
+            state, config = await self._prepare_chat_state(request)
+        except ValueError as e:
+            raise e
         except Exception as e:
             logger.error(f"[CHAT SERVICE / STREAM MESSAGE] file processing error: {e}", exc_info=True)
             yield f"data: {json.dumps({'type': 'error', 'detail': 'Lỗi xử lý file'}, ensure_ascii=False)}\n\n"
             return
-
-        original_message = request.message.strip() if request.message and request.message != "None" else ""
-        if file_text:
-            if original_message:
-                final_message = f"{original_message}\n\n[Tài liệu đính kèm]\n{file_text}"
-            else:
-                final_message = f"Tôi đã gửi tài liệu sau, hãy đọc và hỗ trợ tôi:\n\n{file_text}"
-        else:
-            final_message = original_message
-
-        config: RunnableConfig = {
-            "configurable": {
-                "thread_id": f"{user_id}_{session_id}"
-                }}
-
-        previous_state_values = None
-        try:
-            previous_state = self.graph.get_state(config)
-            if previous_state and previous_state.values:
-                previous_state_values = previous_state.values
-        except Exception as e:
-            logger.debug(f"[CHAT SERVICE / STREAM MESSAGE] no previous checkpoint: {e}")
-
-        state = create_initial_state(
-            message=final_message,
-            session_id=session_id,
-            user_id=user_id,
-            user_info=request.user_info,
-            job_context=request.job_context,
-            file_urls=file_urls,
-            previous_state=previous_state_values,
-        )
 
         try:
             tokens_sent = False
