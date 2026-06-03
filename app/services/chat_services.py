@@ -120,9 +120,10 @@ class ChatService:
         except Exception as e:
             logger.error(f"[CHAT SERVICE / PROCESS MESSAGE] error: {e}", exc_info=True)
             # Fallback
+            fallback_text = "Đang bận chút việc, chờ xíu nhé babe"
             return ChatResponse(
                 user_id=user_id,
-                response="Đang bận chút việc, chờ xíu nhé babe",
+                response=fallback_text,
                 session_id=session_id,
             )
 
