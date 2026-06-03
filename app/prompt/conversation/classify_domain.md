@@ -36,7 +36,6 @@ MUST phân loại latest_user_message, không phân loại toàn bộ conversati
 
 `company`: dùng cho các câu hỏi mang TÍNH CHẤT NGHIỆP VỤ nhưng không hỏi về một vị trí đang tuyển cụ thể, bao gồm:
 
-- quy trình tuyển dụng chung, cách ứng tuyển, các bước phỏng vấn;
 - tiêu chí đánh giá, yêu cầu hồ sơ chung, thời gian phản hồi;
 - thông tin công ty, văn hóa, môi trường làm việc;
 - chính sách chung (thời gian thử việc, hợp đồng, giờ làm việc, nội quy), phúc lợi, lương thưởng, phụ cấp, bảo hiểm;
@@ -48,7 +47,7 @@ MUST phân loại latest_user_message, không phân loại toàn bộ conversati
 - xác nhận ngắn gọn (ok, vâng, dạ, đã hiểu, đồng ý);
 - tán gẫu, nói chuyện phím, lạc đề ngoài phạm vi tuyển dụng;
 - câu mở đầu mơ hồ chưa rõ mục đích (ví dụ: "cho mình hỏi chút", "bạn ơi", "shop cho hỏi");
-- hướng dẫn sử dụng hệ thống/bot (ví dụ: "gửi CV qua đâu ạ", "nộp CV như thế nào", "bạn là ai", "bạn làm được gì").
+- hướng dẫn sử dụng hệ thống/bot, quy trình tuyển dụng chung, cách ứng tuyển (ví dụ: "gửi CV qua đâu ạ", "nộp CV như thế nào", "quy trình ứng tuyển như thế nào", "bạn là ai", "bạn làm được gì").
   </LABELS_DEFINITION>
 
 <CLASSIFICATION_POLICY>
@@ -56,12 +55,12 @@ MUST phân loại latest_user_message, không phân loại toàn bộ conversati
 - MUST phân loại TIN NHẮN MỚI NHẤT.
 - IF tin nhắn mới nhất hỏi “có tuyển không”, “đang tuyển vị trí nào”, “còn tuyển không”, “có job nào”, “vị trí nào đang mở”, “còn slot không”, THEN output `job`.
 - IF tin nhắn mới nhất hỏi chi tiết cụ thể của một vị trí đang tuyển (ví dụ: "hạn cuối ứng tuyển", "mức lương", "mô tả công việc" của vị trí XYZ), THEN output `job`.
-- IF tin nhắn mới nhất chỉ hỏi thông tin công ty, quy trình, chính sách (thử việc, giờ làm, hợp đồng...), phúc lợi chung, tiêu chí, yêu cầu chung, OR cách ứng tuyển chung, THEN output `company`.
+- IF tin nhắn mới nhất chỉ hỏi thông tin công ty, chính sách (thử việc, giờ làm, hợp đồng...), phúc lợi chung, tiêu chí, yêu cầu chung, THEN output `company`.
 - IF tin nhắn mới nhất có nhắc tên vị trí nhưng mục đích chính là hỏi chính sách/quy trình/phúc lợi chung của công ty, KHÔNG liên quan đến đợt tuyển dụng cụ thể (ví dụ: "vào làm thì thử việc bao lâu"), THEN output `company`.
 - IF tin nhắn mới nhất chứa BOTH câu hỏi về vị trí đang tuyển AND câu hỏi về công ty/chính sách/quy trình, THEN output `job`.
 - IF tin nhắn mới nhất chứa tài liệu đính kèm (như ảnh JD, bài đăng tuyển dụng) kèm theo yêu cầu hỗ trợ chung chung, THEN dựa vào nội dung tài liệu: nếu tài liệu là thông tin tuyển dụng/JD thì output `job`, nếu là thông tin công ty/chính sách thì output `company`.
 - IF tin nhắn mới nhất chứa ý định giao tiếp xã giao, cảm ơn, OR xác nhận thông tin đơn thuần, THEN output chitchat.
-- IF tin nhắn mới nhất hỏi về cách sử dụng hệ thống, hướng dẫn nộp/gửi CV, hoặc chức năng của bot, THEN output chitchat.
+- IF tin nhắn mới nhất hỏi về cách sử dụng hệ thống, hướng dẫn nộp/gửi CV, quy trình ứng tuyển, cách ứng tuyển, các bước phỏng vấn, hoặc chức năng của bot, THEN output chitchat.
 - IF tin nhắn mới nhất quá ngắn hoặc mơ hồ chưa đủ dữ kiện, không có tài liệu đính kèm... THEN output chitchat.
   </CLASSIFICATION_POLICY>
 
@@ -92,9 +91,9 @@ Bối cảnh: Người dùng đang hỏi về vị trí Tester.
 User: Vị trí đó còn tuyển không?
 OUTPUT: job
 
-[Ví dụ 3 - Company]
+[Ví dụ 3 - Chitchat]
 User: Quy trình ứng tuyển gồm những bước nào?
-OUTPUT: company
+OUTPUT: chitchat
 
 [Ví dụ 4 - Hỏi chi tiết cụ thể của đợt tuyển dụng (Job)]
 User: Hạn cuối ứng tuyển vị trí Nhân viên Marketing là khi nào?

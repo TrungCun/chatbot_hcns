@@ -63,8 +63,8 @@ Bảng chính chứa các vị trí công việc đang mở tuyển (public ra b
 
 4. **Xử lý tìm kiếm Mức lương (jd_salary_range) và Kinh nghiệm (experience_level):**
    - Về Mức lương: `jd_salary_range` là kiểu chuỗi (TEXT). KHÔNG THỂ DÙNG CÁC TOÁN TỬ TOÁN HỌC (>, <, =).
-     + NẾU người dùng hỏi Mức lương CÓ TỪ KÈM THEO mang tính so sánh như "trên", "dưới", "hơn", "khoảng", "từ", "đến", "max", "tối đa" (VD: "trên 15 triệu", "max 20 triệu"): **TUYỆT ĐỐI KHÔNG ĐƯA ĐIỀU KIỆN LƯƠNG VÀO LỆNH SQL (KHÔNG DÙNG WHERE HAY LIKE VỚI LƯƠNG)**. Hãy bỏ qua điều kiện lương trong SQL, hệ thống sẽ tự đọc kết quả và so sánh sau.
-     + NẾU người dùng hỏi MỘT CON SỐ CỤ THỂ KHÔNG CÓ TỪ SO SÁNH (VD: "lương 15 triệu"): Dùng `rc.jd_salary_range LIKE '%15%'`.
+     - NẾU người dùng hỏi Mức lương CÓ TỪ KÈM THEO mang tính so sánh như "trên", "dưới", "hơn", "khoảng", "từ", "đến", "max", "tối đa" (VD: "trên 15 triệu", "max 20 triệu"): **TUYỆT ĐỐI KHÔNG ĐƯA ĐIỀU KIỆN LƯƠNG VÀO LỆNH SQL (KHÔNG DÙNG WHERE HAY LIKE VỚI LƯƠNG)**. Hãy bỏ qua điều kiện lương trong SQL, hệ thống sẽ tự đọc kết quả và so sánh sau.
+     - NẾU người dùng hỏi MỘT CON SỐ CỤ THỂ KHÔNG CÓ TỪ SO SÁNH (VD: "lương 15 triệu"): Dùng `rc.jd_salary_range LIKE '%15%'`.
    - Về Kinh nghiệm: `experience_level` là kiểu số nguyên (INT). NẾU người dùng hỏi "dưới 2 năm", "từ 3 năm", v.v...: **BẮT BUỘC** dùng toán tử toán học để lọc (VD: `rr.experience_level < 2`, `rr.experience_level >= 3`).
 
 5. **Cách SELECT dữ liệu bắt buộc:**
@@ -75,8 +75,8 @@ Bảng chính chứa các vị trí công việc đang mở tuyển (public ra b
    - Liên kết với đề xuất gốc: `JOIN recruitment_requests rr ON rc.request_id = rr.id`.
    - Lấy quy trình phỏng vấn: **PHẢI DÙNG `LEFT JOIN`** `recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id` để không làm mất các chiến dịch chưa thiết lập vòng phỏng vấn.
 
-7. **Tránh nhân bản dòng (Duplicate Rows):** Bảng `rounds` là quan hệ 1-N, do đó **BẮT BUỘC** phải dùng `GROUP_CONCAT` kết hợp `DISTINCT` và `GROUP BY` rc.id. Tuyệt đối không dùng ORDER BY một cột khác bên trong GROUP_CONCAT nếu đã có DISTINCT (vì MySQL sẽ báo lỗi).
-   - Ví dụ chuẩn: `GROUP_CONCAT(DISTINCT rcr.round_name SEPARATOR '; ') AS interview_rounds`
+7. **Xử lý danh sách các vòng phỏng vấn:** Bảng `rounds` là quan hệ 1-N, do đó **BẮT BUỘC** phải dùng `GROUP_CONCAT` và `GROUP BY` rc.id. Để hiển thị rõ số thứ tự vòng (như Vòng 1, Vòng 2), hãy nối chuỗi `round_number` và `round_name`, đồng thời sắp xếp theo `round_number`.
+   - Ví dụ chuẩn: `GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds`
 
 8. **Giới hạn kết quả:** Dùng `LIMIT 10` ở CUỐI CÙNG của câu lệnh. NẾU CÓ `GROUP BY`, TỪ KHÓA `LIMIT 10` BẮT BUỘC PHẢI ĐỨNG SAU `GROUP BY`. Cấu trúc đúng: `... GROUP BY rc.id LIMIT 10`. Tuyệt đối không được viết `LIMIT 10 GROUP BY rc.id`.
 

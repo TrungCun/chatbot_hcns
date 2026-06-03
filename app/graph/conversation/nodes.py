@@ -374,7 +374,7 @@ async def generate_response(state: ConversationState) -> dict:
     retrieved_docs = state.get("retrieved_documents", [])
     if not retrieved_docs:
         # Nếu không có tài liệu nào vượt qua được Reranker (đặc biệt cho domain 'company')
-        fallback_msg = "Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng Hành chính - Nhân sự để được giải đáp chính xác nhất nhé!"
+        fallback_msg = "Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!"
 
         logger.info("[generate_response] No documents found after rerank. Using fallback response.")
         return {
@@ -385,7 +385,7 @@ async def generate_response(state: ConversationState) -> dict:
     knowledge_context = "\n\n".join([f"--- Tài liệu {i+1} ---\n{doc}" for i, doc in enumerate(retrieved_docs)])
 
     # 1. Load RAG prompt
-    agent_prompt = load_prompt("conversation/generate_response_02")
+    agent_prompt = load_prompt("conversation/generate_response")
 
     try:
         # 2. Sử dụng llm_stream để sinh phản hồi dựa trên context trích xuất
