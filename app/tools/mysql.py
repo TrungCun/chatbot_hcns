@@ -24,7 +24,7 @@ def init_mysql() -> None:
         # Kiểm tra kết nối ngay khi khởi tạo
         with _engine.connect() as conn:
             conn.execute(text("SELECT 1"))
-        logger.info(f"Kết nối MySQL thành công tại {settings.mysql_host}:{settings.mysql_port}/{settings.mysql_database}")
+        logger.info(f"Kết nối MySQL thành công tại {settings.db_host}:{settings.db_port}/{settings.db_name}")
     except SQLAlchemyError as e:
         logger.error(f"Khởi tạo MySQL thất bại: {e}")
         raise e
