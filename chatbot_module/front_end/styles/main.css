@@ -1,0 +1,206 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Global Styles & Force Light Mode Variables */
+:root, body, .gradio-container, .dark, body.dark, .gradio-container.dark {
+    --body-text-color: #1e293b !important;
+    --body-text-color-subdued: #475569 !important;
+    --background-fill-primary: #ffffff !important;
+    --background-fill-secondary: #f4f7fe !important;
+    --border-color-primary: #cbd5e1 !important;
+    --checkbox-label-text-color: #1e293b !important;
+    --input-background-fill: #ffffff !important;
+    --block-background-fill: #ffffff !important;
+    --panel-background-fill: #ffffff !important;
+    --code-background-fill: #f8fafc !important;
+    --prose-text-color: #1e293b !important;
+    --color-accent: #0056b3 !important;
+    --color-background-primary: #ffffff !important;
+    --color-background-secondary: #f4f7fe !important;
+
+    font-family: 'Inter', sans-serif !important;
+    background: #f4f7fe !important; /* Nền xám nhạt/xanh nhạt chuẩn Enterprise */
+    color: #1e293b !important;
+    min-height: 100vh !important;
+}
+
+/* Sửa lỗi các đoạn code/blockquote bị nền đen trong markdown */
+.gradio-container pre, .gradio-container code, .gradio-container blockquote {
+    background-color: #f1f5f9 !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+    text-shadow: none !important;
+}
+
+/* Container Cards (thay thế cho Glassmorphism) */
+.login-container, .sidebar-panel {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 24px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03) !important;
+}
+
+.login-container {
+    max-width: 500px !important;
+    margin: 100px auto !important;
+}
+
+/* Loại bỏ viền thừa của Gradio */
+.form, .block, .panel {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Titles */
+.login-title h3, .sidebar-title h3 {
+    text-align: left !important;
+    color: #0f172a !important; /* Xanh đen đậm */
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+    font-size: 1.15rem !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    padding-bottom: 12px !important;
+    text-transform: uppercase !important;
+}
+
+/* Custom Textboxes */
+.custom-textbox textarea, .custom-textbox input {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #334155 !important;
+    border-radius: 6px !important;
+    transition: all 0.2s ease !important;
+    padding: 10px 12px !important;
+    box-shadow: none !important;
+}
+
+.custom-textbox textarea:focus, .custom-textbox input:focus {
+    border-color: #2563eb !important; /* Màu xanh AIPT */
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+    outline: none !important;
+}
+
+.custom-textbox label, .custom-textbox span {
+    color: #475569 !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    margin-bottom: 4px !important;
+}
+
+.custom-checkbox label, .custom-checkbox span {
+    color: #1e293b !important;
+    font-weight: 500 !important;
+}
+
+/* Buttons */
+.custom-btn {
+    background: #0056b3 !important; /* Màu xanh chuẩn AIPT */
+    border: none !important;
+    color: white !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    padding: 10px 20px !important;
+    transition: background-color 0.2s ease !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.custom-btn:hover {
+    background: #004494 !important; /* Xanh đậm hơn khi hover */
+    transform: none !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Chatbot Container */
+.chat-wrapper-box {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+    padding: 16px !important;
+}
+
+.custom-chatbot, .custom-chatbot > div, .custom-chatbot .bubble-wrap {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Chat Bubbles (Gradio 5 compatibility) */
+.custom-chatbot .message.user, .custom-chatbot .user-row .message {
+    background: #e6f7ff !important;
+    color: #0056b3 !important;
+    border-radius: 8px 8px 0 8px !important;
+    border: 1px solid #bae0ff !important;
+    box-shadow: none !important;
+}
+
+.custom-chatbot .message.bot, .custom-chatbot .bot-row .message {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+    border-radius: 8px 8px 8px 0 !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+/* Chat Input styling */
+.custom-chatinput, .custom-chatinput textarea, .custom-chatinput > div {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 12px !important;
+}
+
+/* Radio Buttons as Boxes */
+.jobs-radio {
+    margin-top: 10px !important;
+}
+
+.jobs-radio fieldset {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* HIDE THE ACTUAL RADIO CIRCLE */
+.jobs-radio input[type="radio"] {
+    display: none !important;
+}
+
+.jobs-radio label {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 12px 16px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    width: 100% !important;
+    display: block !important;
+    color: #475569 !important;
+    font-weight: 500 !important;
+    text-align: left !important;
+    box-shadow: none !important;
+}
+
+.jobs-radio label:hover {
+    background: #f8fafc !important;
+    border-color: #94a3b8 !important;
+    transform: none !important;
+}
+
+/* Selected state */
+.jobs-radio label:has(input:checked) {
+    background: #e6f7ff !important; /* Xanh nhạt */
+    border-color: #1890ff !important; /* Viền xanh sáng */
+    color: #0056b3 !important; /* Chữ xanh đậm */
+    box-shadow: none !important;
+    transform: none !important;
+    font-weight: 600 !important;
+}
+
+.jobs-radio label span.ml-2 {
+    margin-left: 0 !important;
+}
