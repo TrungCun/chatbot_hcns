@@ -18,8 +18,7 @@ def build_main_graph():
     workflow.add_node("save_history", save_history)
 
     # Entry point
-    workflow.set_entry_point("update_context")
-    workflow.add_edge("update_context", "classify_user_intent")
+    workflow.set_entry_point("classify_user_intent")
 
     # Routing 
     workflow.add_conditional_edges(
@@ -34,7 +33,12 @@ def build_main_graph():
     # END
     workflow.add_edge("conversation_subgraph", "save_history")
     workflow.add_edge("summary_subgraph", "save_history")
+    
+    workflow.add_edge("conversation_subgraph", "update_context")
+    workflow.add_edge("summary_subgraph", "update_context")
+    
     workflow.add_edge("save_history", END)
+    workflow.add_edge("update_context", END)
 
     return workflow.compile(
         checkpointer=MemorySaver()

@@ -62,6 +62,10 @@ async def update_context(state: AppState) -> Dict[str, Any]:
 async def classify_user_intent(state: AppState) -> dict:
     message = state["message"]
     context = state.get("context") or "Chưa có bối cảnh hội thoại."
+    
+    # Log context ở đầu mỗi tin nhắn để user dễ theo dõi
+    logger.info(f"[classify_user_intent] CURRENT CONTEXT: '{context}'")
+    
     file_urls = state.get("file_urls") or []
     history = state.get("history", [])
     filtered_history = [m for m in history if m.type in ["human", "ai"]]
@@ -89,42 +93,32 @@ async def classify_user_intent(state: AppState) -> dict:
 
 async def save_history(state: AppState) -> Dict[str, Any]:
     """
-    Node lưu lại lịch sử chat vào folder history/user_id/session_id.json
+    Node lưu lại danh sách file_urls vào folder history/user_id/session_id.json
+    (Không lưu history chat)
     """
     user_id = state.get("user_id", "default_user")
     session_id = state.get("session_id", "unknown_session")
-    history = state.get("history", [])
     file_urls = state.get("file_urls", [])
 
-    # Chuẩn bị dữ liệu để lưu
-    messages_data = []
-    for msg in history:
-        role = "user" if isinstance(msg, HumanMessage) else "assistant" if isinstance(msg, AIMessage) else "other"
-        # Bỏ qua các tin nhắn meta như RemoveMessage
-        if role != "other":
-            messages_data.append({
-                "role": role,
-                "content": str(msg.content)
-            })
+    if not file_urls:
+        return {}
 
     save_data = {
         "session_id": session_id,
-        "messages": messages_data,
         "file_urls": file_urls,
-        "updated_at": datetime.now().isoformat(),
-        "message_count": len(messages_data)
+        "updated_at": datetime.now().isoformat()
     }
 
     # Tạo thư mục và lưu file
-    dir_path = os.path.join("history", user_id)
+    dir_path = os.path.join("chatbot_module", "history", user_id)
     os.makedirs(dir_path, exist_ok=True)
 
     file_path = os.path.join(dir_path, f"{session_id}.json")
     try:
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(save_data, f, ensure_ascii=False, indent=2)
-        logger.info(f"[save_history] Saved history to {file_path}")
+        logger.info(f"[save_history] Saved file paths to {file_path}")
     except Exception as e:
-        logger.error(f"[save_history] Error saving history: {e}")
+        logger.error(f"[save_history] Error saving file paths: {e}")
 
     return {}

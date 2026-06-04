@@ -7,7 +7,7 @@ from langchain_core.output_parsers import StrOutputParser
 
 from bot_app.graph.conversation.state import ConversationState
 from bot_app.prompt.loader import load_prompt
-from bot_app.model.llm import llm, llm_stream
+from bot_app.model.llm import llm, llm_stream, llm_reasoning, llm_stream_reasoning
 
 from bot_app.application import application
 from bot_app.log import get_logger
@@ -171,7 +171,7 @@ async def handle_job_query(state: ConversationState) -> dict:
 
         # 1. LLM sinh câu SQL từ câu hỏi người dùng
         sql_prompt = load_prompt("conversation/generate_sql_job")
-        sql_chain = sql_prompt | llm | StrOutputParser()
+        sql_chain = sql_prompt | llm_reasoning | StrOutputParser()
         sql_query = await sql_chain.ainvoke({
             "message": message,
             "context": context,
@@ -339,7 +339,7 @@ async def rerank_documents(state: ConversationState) -> dict:
 
         # 1. Đặt ngưỡng tối thiểu (Score Threshold)
         # Bất kỳ tài liệu nào có điểm < 0.2 sẽ bị loại bỏ để tránh nhiễu
-        score_threshold = -2.0
+        score_threshold = 0.2
         filtered_results = [(doc, score) for doc, score in results if score >= score_threshold]
 
         # 2. Giới hạn trên (Cap)
@@ -388,8 +388,8 @@ async def generate_response(state: ConversationState) -> dict:
     agent_prompt = load_prompt("conversation/generate_response")
 
     try:
-        # 2. Sử dụng llm_stream để sinh phản hồi dựa trên context trích xuất
-        chain = agent_prompt | llm_stream | StrOutputParser()
+        # 2. Sử dụng llm_stream_reasoning để sinh phản hồi RAG an toàn và chuẩn xác
+        chain = agent_prompt | llm_stream_reasoning | StrOutputParser()
 
         response = ""
         async for chunk in chain.astream({
