@@ -171,7 +171,7 @@ async def handle_job_query(state: ConversationState) -> dict:
 
         # 1. LLM sinh câu SQL từ câu hỏi người dùng
         sql_prompt = load_prompt("conversation/generate_sql_job")
-        sql_chain = sql_prompt | llm_reasoning | StrOutputParser()
+        sql_chain = sql_prompt | llm | StrOutputParser()
         sql_query = await sql_chain.ainvoke({
             "message": message,
             "context": context,
@@ -388,8 +388,8 @@ async def generate_response(state: ConversationState) -> dict:
     agent_prompt = load_prompt("conversation/generate_response")
 
     try:
-        # 2. Sử dụng llm_stream_reasoning để sinh phản hồi RAG an toàn và chuẩn xác
-        chain = agent_prompt | llm_stream_reasoning | StrOutputParser()
+        # 2. Sử dụng llm_stream để sinh phản hồi RAG nhanh chóng
+        chain = agent_prompt | llm_stream | StrOutputParser()
 
         response = ""
         async for chunk in chain.astream({
