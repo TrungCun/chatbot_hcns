@@ -1,5 +1,6 @@
 import uuid
 import json
+import asyncio
 from langchain_core.runnables import RunnableConfig
 
 from bot_app.tools.helper import HelperTools
@@ -88,6 +89,9 @@ class ChatService:
 
             result = await self.graph.ainvoke(state, config)
 
+            # 🚀 Kích hoạt Resume đồ thị để chạy ngầm (update_context, save_history)
+            asyncio.create_task(self.graph.ainvoke(None, config))
+
             response_text = result.get("response") or "ngại quá không biết nói gì"
             logger.info(f"[CHAT SERVICE / PROCESS MESSAGE] graph done | intent={result.get('intent')} | response_text='{response_text[:50]}...'")
 
@@ -121,6 +125,7 @@ class ChatService:
                 user_id=user_id,
                 response=response_text,
                 session_id=session_id,
+                file_urls=result.get("file_urls", [])
             )
             return response
 
@@ -137,7 +142,7 @@ class ChatService:
     async def stream_message(self, request: ChatRequest):
         """Async generator yielding SSE chunks for streaming response."""
         # Các node sinh response cuối cùng cho người dùng
-        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete", "handle_chitchat"}
+        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete", "handle_chitchat", "handle_job_query"}
 
         user_id = request.user_id
         session_id = request.session_id
@@ -174,7 +179,11 @@ class ChatService:
                             yield f"data: {json.dumps({'type': 'token', 'content': fallback_text}, ensure_ascii=False)}\n\n"
                             tokens_sent = True
 
-            yield f"data: {json.dumps({'type': 'done', 'session_id': session_id}, ensure_ascii=False)}\n\n"
+            file_urls_out = state.get("file_urls", [])
+            yield f"data: {json.dumps({'type': 'done', 'session_id': session_id, 'file_urls': file_urls_out}, ensure_ascii=False)}\n\n"
+
+            # 🚀 Kích hoạt Resume đồ thị chạy ngầm sau khi chốt luồng Stream
+            asyncio.create_task(self.graph.ainvoke(None, config))
 
         except Exception as e:
             logger.error(f"[CHAT SERVICE / STREAM MESSAGE] error: {e}", exc_info=True)

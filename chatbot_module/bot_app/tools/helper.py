@@ -36,16 +36,16 @@ class HelperTools:
         """
         if not files:
             return []
-            
+
         # Tránh lỗi path traversal
         safe_user_id = re.sub(r'[^\w\.-]', '_', str(user_id))
         safe_session_id = re.sub(r'[^\w\.-]', '_', str(session_id))
-        base_dir = os.path.join("uploads", safe_user_id, safe_session_id)
-        
+        base_dir = os.path.join("chatbot_module", "uploads", safe_user_id, safe_session_id)
+
         try:
             os.makedirs(base_dir, exist_ok=True)
             saved_paths = []
-            
+
             for file_payload in files:
                 # Tránh các ký tự đặc biệt trong filename để an toàn cho filesystem
                 safe_filename = re.sub(r'[^\w\.-]', '_', file_payload.filename)
@@ -53,15 +53,15 @@ class HelperTools:
                 timestamp = int(time.time())
                 final_filename = f"{timestamp}_{safe_filename}"
                 file_path = os.path.join(base_dir, final_filename)
-                
+
                 # Ghi file trong thread để không block Event Loop
                 await asyncio.to_thread(HelperTools._save_file_sync, file_path, file_payload.content)
-                
+
                 saved_paths.append(file_path)
                 logger.info(f"[HelperTools] Đã lưu file: {file_path}")
-                
+
             return saved_paths
-            
+
         except Exception as e:
             logger.error(f"[HelperTools] Lỗi khi lưu file: {str(e)}", exc_info=True)
             # Tạm thời trả về list trống nếu lỗi, không làm crash service
@@ -103,7 +103,7 @@ class HelperTools:
             extension = kind.extension
             if not actual_filename.lower().endswith(f".{extension}"):
                 actual_filename = f"{actual_filename}.{extension}"
-        
+
         return FilePayload(
             filename=actual_filename,
             content_type=actual_content_type,
@@ -169,7 +169,7 @@ class HelperTools:
             results = []
             for doc_id in top_doc_ids:
                 doc = doc_lookup[doc_id]
-                
+
                 # Trả về cấu trúc core linh hoạt, không phụ thuộc vào metadata cụ thể
                 result_item = {
                     "id": doc.id,
@@ -248,34 +248,34 @@ class HelperTools:
     @staticmethod
     def ensure_dict(data: Any) -> Dict[str, Any]:
         """
-        Cơ chế ép kiểu tuyệt đối: Biến mọi input (Pydantic Object, JSON string, hoặc Dict) 
+        Cơ chế ép kiểu tuyệt đối: Biến mọi input (Pydantic Object, JSON string, hoặc Dict)
         về đúng chuẩn Dictionary tĩnh để thao tác an toàn.
         """
         if not data:
             return {}
-        
+
         # Nếu đã là dict thì trả về luôn
         if isinstance(data, dict):
             return data
-            
+
         # Nếu là Pydantic V2
         if hasattr(data, "model_dump"):
             return data.model_dump()
-            
+
         # Nếu là Pydantic V1 (dự phòng)
         if hasattr(data, "dict"):
             return data.dict()
-            
+
         # Fallback cho các object Python thông thường
         if hasattr(data, "__dict__"):
             return vars(data)
-            
+
         return {}
 
     @staticmethod
     def _extract_pdf_sync(file_content: bytes, filename: str, max_pages: int = 10) -> str:
         """
-        Trích xuất Text từ PDF. Nếu không tìm thấy text (nghi là file scan), 
+        Trích xuất Text từ PDF. Nếu không tìm thấy text (nghi là file scan),
         sẽ tự động fallback sang OCR từng trang bằng Tesseract.
         """
         text_parts = [f"--- Bắt đầu tài liệu: {filename} ---\n\n"]
@@ -289,7 +289,7 @@ class HelperTools:
 
                 native_text_found = False
                 temp_parts = []
-                
+
                 # Bước 1: Thử trích xuất text có sẵn (Native Text)
                 for i in range(pages_to_read):
                     page = doc[i]
@@ -302,20 +302,20 @@ class HelperTools:
                 if not native_text_found:
                     logger.info(f"[HELPER / PDF] File '{filename}' không có text. Đang thử chạy OCR (Tesseract)...")
                     temp_parts.append("[Nội dung trích xuất qua OCR do file là dạng ảnh quét]\n")
-                    
+
                     for i in range(pages_to_read):
                         page = doc[i]
                         # Render trang thành ảnh để OCR
                         pix = page.get_pixmap(matrix=fitz.Matrix(2, 2)) # Zoom 2x để tăng độ chính xác OCR
                         img = Image.open(io.BytesIO(pix.tobytes("png")))
-                        
+
                         ocr_text = pytesseract.image_to_string(img, lang='vie+eng').strip()
                         if ocr_text:
                             temp_parts.append(f"### [Trang {i+1} (OCR)] ###\n{ocr_text}\n\n")
-                
+
                 if not native_text_found and len(temp_parts) <= 1:
                     temp_parts.append("[Tài liệu không chứa văn bản có thể đọc được kể cả qua OCR]\n")
-                
+
                 text_parts.extend(temp_parts)
 
             logger.info(f"[HELPER / PDF] Đã trích xuất xong tài liệu '{filename}'.")
@@ -342,9 +342,9 @@ class HelperTools:
     @staticmethod
     async def process_files(files: List[FilePayload]) -> str:
         extracted_content = []
-        
+
         for file in files:
-            # Check type of file 
+            # Check type of file
             mime = file.content_type.lower()
 
             # --- CASE: PDF ---
@@ -357,19 +357,19 @@ class HelperTools:
                         logger.info(f"[HELPER / PROCESS FILES] PDF file '{file.filename}' processed.")
                 except Exception as e:
                     logger.error(f"[HELPER / PROCESS FILES] Error processing PDF '{file.filename}': {e}")
-            
+
             # --- CASE: IMAGES (OCR via Tesseract) ---
             elif mime.startswith("image/"):
                 try:
                     # Chạy OCR trong thread pool để không block Event Loop
                     text = await asyncio.to_thread(HelperTools._extract_image_sync, file.content)
-                    
+
                     if text.strip():
                         extracted_content.append(f"--- Nội dung trích xuất từ hình ảnh: {file.filename} ---\n{text}")
                         logger.info(f"[HELPER / PROCESS FILES] Image OCR success for '{file.filename}'.")
                 except Exception as e:
                     logger.error(f"[HELPER / PROCESS FILES] OCR failed for '{file.filename}': {e}")
-            
+
             # --- CASE: WORD (DOCX) ---
             elif "word" in mime or file.filename.lower().endswith((".doc", ".docx")):
                 try:
@@ -380,7 +380,7 @@ class HelperTools:
                         logger.info(f"[HELPER / PROCESS FILES] Word file '{file.filename}' processed.")
                 except Exception as e:
                     logger.error(f"[HELPER / PROCESS FILES] Failed to read Word file '{file.filename}': {e}")
-            
+
             # Process text file or csv
             elif "text/" in mime or mime == "application/csv":
                 try:

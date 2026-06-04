@@ -41,7 +41,8 @@ def build_main_graph():
     workflow.add_edge("update_context", END)
 
     return workflow.compile(
-        checkpointer=MemorySaver()
-        )
+        checkpointer=MemorySaver(),
+        interrupt_before=["update_context", "save_history"]
+    )
 
 main_graph = build_main_graph()

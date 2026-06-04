@@ -18,3 +18,4 @@ class ChatResponse(BaseModel):
     user_id: Optional[str] = None
     session_id: Optional[str] = None
     response: Optional[str]
+    file_urls: Optional[List[str]] = None
