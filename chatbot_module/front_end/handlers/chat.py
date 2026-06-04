@@ -52,7 +52,7 @@ def respond(message, chat_history, session_id, user_id, user_info="", selected_p
     })
 
     # yield lần 1: Dọn dẹp ô nhập liệu
-    yield {"text": "", "files": []}, chat_history, session_id, user_id, "Chờ xíu bé ơi"
+    yield {"text": "", "files": []}, chat_history, session_id, user_id, "Chờ xíu bé ơi", "Đang tính..."
 
     # ==========================================
     # 3. CHUẨN BỊ REQUEST
@@ -126,7 +126,7 @@ def respond(message, chat_history, session_id, user_id, user_info="", selected_p
                     bot_response += event.get("content", "")
                     chat_history[-1]["content"] = bot_response
                     ttft = f"{first_token_time - start_time:.2f}s"
-                    yield {"text": "", "files": []}, chat_history, session_id, user_id, ttft
+                    yield {"text": "", "files": []}, chat_history, session_id, user_id, ttft, f"Đang sinh ({time.time() - start_time:.2f}s)..."
 
                 elif event_type == "done":
                     new_session_id = event.get("session_id", session_id)
@@ -148,4 +148,5 @@ def respond(message, chat_history, session_id, user_id, user_info="", selected_p
         chat_history[-1]["content"] = "❌ Không nhận được phản hồi từ server."
 
     ttft_display = f"{first_token_time - start_time:.2f}s" if first_token_time else "N/A"
-    yield {"text": "", "files": []}, chat_history, new_session_id, user_id, ttft_display
+    total_time_display = f"{time.time() - start_time:.2f}s"
+    yield {"text": "", "files": []}, chat_history, new_session_id, user_id, ttft_display, total_time_display

@@ -13,7 +13,8 @@ def render_chat_interface(initial_choices=None, initial_jobs=None):
             gr.Markdown("### Thông tin phiên", elem_classes=["sidebar-title"])
             user_display = gr.Textbox(value="", label="User ID", interactive=False, elem_classes=["custom-textbox"])
             session_display = gr.Textbox(value="", label="Session ID", interactive=False, elem_classes=["custom-textbox"])
-            time_display = gr.Textbox(value="0.00 giây", label="Thời gian phản hồi", interactive=False, elem_classes=["custom-textbox"])
+            time_display = gr.Textbox(value="0.00s", label="Thời gian phản hồi", interactive=False, elem_classes=["custom-textbox"])
+            total_time_display = gr.Textbox(value="0.00s", label="Thời gian hoàn thành (Streaming xong)", interactive=False, elem_classes=["custom-textbox"])
             reset_btn = gr.Button("🔙 Trở lại Chat Chung", variant="secondary")
             
             gr.Markdown("### Vị trí đang tuyển", elem_classes=["sidebar-title"])
@@ -36,4 +37,4 @@ def render_chat_interface(initial_choices=None, initial_jobs=None):
                     elem_classes=["custom-chatinput"]
                 )
             
-    return chat_interface, user_display, session_display, time_display, chatbot, chat_input, jobs_radio, jobs_state, reset_btn
+    return chat_interface, user_display, session_display, time_display, total_time_display, chatbot, chat_input, jobs_radio, jobs_state, reset_btn

@@ -28,7 +28,7 @@ except Exception as e:
 with gr.Blocks(title="Chatbot Hệ Thống Tuyển Dụng") as demo:
     # 1. Render UI Components
     login_interface, name_input, phone_input, email_input, terms_checkbox, start_btn = render_login_form()
-    chat_interface, user_display, session_display, time_display, chatbot, chat_input, jobs_radio, jobs_state, reset_btn = render_chat_interface(initial_choices, initial_jobs)
+    chat_interface, user_display, session_display, time_display, total_time_display, chatbot, chat_input, jobs_radio, jobs_state, reset_btn = render_chat_interface(initial_choices, initial_jobs)
     user_info_display = gr.State("")
 
     # 2. Attach Event Handlers
@@ -43,7 +43,7 @@ with gr.Blocks(title="Chatbot Hệ Thống Tuyển Dụng") as demo:
     chat_input.submit(
         fn=respond,
         inputs=[chat_input, chatbot, session_display, user_display, user_info_display, jobs_radio, jobs_state],
-        outputs=[chat_input, chatbot, session_display, user_display, time_display]
+        outputs=[chat_input, chatbot, session_display, user_display, time_display, total_time_display]
     )
 
     # Xử lý khi chọn job

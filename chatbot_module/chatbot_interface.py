@@ -1,4 +1,11 @@
 import os
+import sys
+
+# Thêm đường dẫn của thư mục chatbot_module vào sys.path để Python có thể tìm thấy 'bot_app'
+_current_dir = os.path.dirname(os.path.abspath(__file__))
+if _current_dir not in sys.path:
+    sys.path.insert(0, _current_dir)
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -13,7 +20,7 @@ from typing import Optional, List
 from bot_app.application import application
 from bot_app.tools.redis import init_redis
 from bot_app.tools.mysql import init_mysql
-from bot_app.schema.chat_schema import ChatRequest
+from bot_app.schema.chat_schema import ChatRequest, ChatResponse
 from bot_app.services.chat_services import get_chat_service
 
 _chatbot_loop = None
@@ -30,24 +37,74 @@ def init_chatbot():
     Hàm sẽ tự động load model và kết nối database.
     """
     global _chatbot_loop, _thread
-    
+
     if _chatbot_loop is not None:
         return
-        
+
     print("[Chatbot Interface] Đang khởi tạo hệ thống AI...")
-    
+
     # 1. Khởi tạo các module đồng bộ
     application.load_models()
     init_mysql()
-    
+
     # 2. Tạo một Event Loop chạy ngầm để xử lý các hàm Async (bất đồng bộ) của Chatbot
     _chatbot_loop = asyncio.new_event_loop()
     _thread = threading.Thread(target=_start_background_loop, args=(_chatbot_loop,), daemon=True)
     _thread.start()
-    
+
     # 3. Khởi tạo kết nối Redis trên Loop chạy ngầm
     asyncio.run_coroutine_threadsafe(init_redis(), _chatbot_loop).result()
     print("[Chatbot Interface] Hệ thống AI đã sẵn sàng!")
+
+
+def _normalize_files_for_request(files: Optional[List]) -> list:
+    if not files:
+        return []
+    processed = []
+    for f in files:
+        if hasattr(f, "filename") and hasattr(f, "content_type") and hasattr(f, "content"):
+            processed.append(
+                {
+                    "filename": getattr(f, "filename"),
+                    "content_type": getattr(f, "content_type"),
+                    "content": getattr(f, "content"),
+                }
+            )
+        else:
+            processed.append(f)
+    return processed
+
+
+def get_chatbot_result(
+    user_id: str,
+    session_id: str,
+    message: str,
+    user_info: Optional[str] = None,
+    job_context: Optional[str] = None,
+    files: Optional[List] = None,
+    timeout: int = 90,
+) -> ChatResponse:
+    """
+    Gọi chatbot và trả về đủ ChatResponse (gồm file_urls do AI đã lưu local).
+    """
+    if _chatbot_loop is None:
+        raise RuntimeError("Chatbot chưa được khởi tạo! Hãy gọi init_chatbot() trước.")
+
+    request = ChatRequest(
+        user_id=user_id,
+        session_id=session_id,
+        user_info=user_info,
+        job_context=job_context,
+        message=message,
+        files=_normalize_files_for_request(files),
+    )
+
+    service = get_chat_service()
+    future = asyncio.run_coroutine_threadsafe(
+        service.process_message(request),
+        _chatbot_loop,
+    )
+    return future.result(timeout=timeout)
 
 
 def get_chatbot_response(
@@ -60,34 +117,18 @@ def get_chatbot_response(
     timeout: int = 90,
 ) -> str:
     """
-    HÀM LẤY CÂU TRẢ LỜI TỪ AI
-    Đồng nghiệp gọi hàm này mỗi khi user nhắn tin tới. Hàm này chạy đồng bộ (Sync) 
-    để tương thích hoàn toàn với Flask.
+    HÀM LẤY CÂU TRẢ LỜI TỪ AI (chỉ text).
     """
-    if _chatbot_loop is None:
-        raise RuntimeError("Chatbot chưa được khởi tạo! Hãy gọi init_chatbot() trước.")
-        
-    # Đóng gói dữ liệu thành chuẩn của bạn
-    request = ChatRequest(
-        user_id=user_id,
-        session_id=session_id,
-        user_info=user_info,
-        job_context=job_context,
-        message=message,
-        files=files or [],
-    )
-    
-    service = get_chat_service()
-    
-    # Gửi Request vào background loop của Chatbot và đợi kết quả
-    future = asyncio.run_coroutine_threadsafe(
-        service.process_message(request), 
-        _chatbot_loop
-    )
-    
     try:
-        # Chờ tối đa "timeout" giây để AI sinh xong câu trả lời
-        response_obj = future.result(timeout=timeout)
+        response_obj = get_chatbot_result(
+            user_id=user_id,
+            session_id=session_id,
+            message=message,
+            user_info=user_info,
+            job_context=job_context,
+            files=files,
+            timeout=timeout,
+        )
         return response_obj.response
     except Exception as e:
         print(f"[Chatbot Interface] Lỗi trong quá trình AI xử lý: {e}")
