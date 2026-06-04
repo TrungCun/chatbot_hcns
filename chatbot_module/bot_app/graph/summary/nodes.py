@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from bot_app.schema.summary_schema import CVTemplate, EvaluatorInsights
 from bot_app.graph.summary.state import SummaryState
 from bot_app.prompt.loader import load_prompt
-from bot_app.model.llm import llm, llm_stream, llm_reasoning
+from bot_app.model.llm import llm, llm_stream
 from bot_app.tools.mysql import get_mysql_engine
 from sqlalchemy import text
 
@@ -40,7 +40,7 @@ async def extract_info(state: SummaryState) -> dict:
     try:
 
         prompt = load_prompt("summary/extract_info")
-        chain = prompt | llm_reasoning
+        chain = prompt | llm
         response = await chain.ainvoke({
             "message": message,
             "context": context,
@@ -198,7 +198,7 @@ async def evaluation(state: SummaryState) -> dict:
 
     facts_string = json.dumps(input_facts, ensure_ascii=False, indent=2)
 
-    chain = load_prompt("summary/evaluation") | llm_reasoning | StrOutputParser()
+    chain = load_prompt("summary/evaluation") | llm | StrOutputParser()
 
     result = await chain.ainvoke({
         "context": f"DỮ LIỆU HỒ SƠ ỨNG VIÊN:\n{facts_string}",
