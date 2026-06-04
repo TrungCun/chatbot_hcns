@@ -8,8 +8,8 @@ from bot_app.config import settings
 logger = get_logger(__name__)
 
 
-@lru_cache(maxsize=2)
-def get_llm(stream: bool = False) -> ChatOpenAI:
+@lru_cache(maxsize=4)
+def get_llm(stream: bool = False, reasoning: bool = False) -> ChatOpenAI:
     return ChatOpenAI(
         base_url=settings.llm_base_url,
         model=settings.llm_model,
@@ -19,16 +19,20 @@ def get_llm(stream: bool = False) -> ChatOpenAI:
         streaming=stream,
         timeout=60,
         max_retries=2,
-        top_p=0.8,
+        top_p=0.95,
         extra_body={
-            "top_k": 20,
+            "top_k": 64,
             "min_p": 0.0,
-            "chat_template_kwargs": {"enable_thinking": False},
+            "chat_template_kwargs": {"enable_thinking": reasoning},
         }
     )
 
-llm = get_llm(stream=False)
-llm_stream = get_llm(stream=True)
+# 4 Phiên bản LLM được export để dùng cho các node
+llm = get_llm(stream=False, reasoning=False)
+llm_reasoning = get_llm(stream=False, reasoning=True)
+
+llm_stream = get_llm(stream=True, reasoning=False)
+llm_stream_reasoning = get_llm(stream=True, reasoning=True)
 
 if __name__ == "__main__":
     try:
