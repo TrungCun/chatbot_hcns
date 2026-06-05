@@ -22,6 +22,7 @@ from src.views.recruitment.chat_view import (
     _next_sequence_no,
     _normalize_candidate_payload,
     _resolve_campaign_id,
+    _resolve_session_source_id,
 )
 
 MSG_TYPE_FILE_UPLOAD = 3
@@ -36,7 +37,6 @@ DEFAULT_AI_REPLY = (
 
 MAX_FILE_BYTES = int(os.environ.get("RECRUITMENT_MAX_FILE_BYTES", 10 * 1024 * 1024))
 ALLOWED_EXTENSIONS = {".pdf", ".doc", ".docx"}
-DEFAULT_CV_SOURCE_ID = int(os.environ.get("DEFAULT_CV_SOURCE_ID", "1"))
 
 
 def _parse_bool(value, default=True):
@@ -64,8 +64,14 @@ def _parse_candidate_json():
 
 
 def _resolve_source_id():
-    source_id = request.form.get("source_id", type=int)
-    return source_id if source_id else DEFAULT_CV_SOURCE_ID
+    """Mặc định DEFAULT_CHAT_SOURCE_ID=10 (cùng luồng chat tuyển dụng)."""
+    raw = request.form.get("source_id")
+    if raw is not None and str(raw).strip() != "":
+        try:
+            return int(raw)
+        except (TypeError, ValueError):
+            pass
+    return _resolve_session_source_id()
 
 
 def _get_or_create_candidate(db_session, candidate_data, source_id=None):
@@ -329,7 +335,7 @@ class RecruitmentFileView:
         - candidate (JSON): fullName, email, phone (bắt buộc lần đầu)
         - session / campaign_id (bắt buộc — context AI / chiến dịch)
         - candidate_id (optional — nộp lại CV khi đã có ứng viên)
-        - source_id (optional, default DEFAULT_CV_SOURCE_ID)
+        - source_id (optional, default DEFAULT_CHAT_SOURCE_ID=10)
         - user_id, job_context, session_token, message, is_cv
         """
         db_session = db.session()
