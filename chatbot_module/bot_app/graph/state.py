@@ -3,7 +3,7 @@ from typing_extensions import TypedDict
 from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph.message import add_messages
 import re
-
+import json
 from bot_app.schema.summary_schema import CVTemplate
 
 class AppState(TypedDict):
@@ -28,6 +28,18 @@ class AppState(TypedDict):
 def extract_info_from_userinfo(user_info: str):
     if not user_info:
         return None, None, None
+
+    # Thử parse dưới dạng JSON (từ chat_view.py)
+    try:
+        data = json.loads(user_info)
+        if isinstance(data, dict):
+            name = data.get("fullName") or data.get("name")
+            phone = data.get("phone")
+            email = data.get("email")
+            return name, phone, email
+    except json.JSONDecodeError:
+        pass
+
     # Pattern: Tên (có thể chứa _) + "_" + SĐT (số, dấu +, dấu _) + "_" + Email (chứa @)
     match = re.match(r'^(.*?)_([+0-9_]{4,20})_(.*@.*)$', user_info)
     if match:
@@ -36,6 +48,22 @@ def extract_info_from_userinfo(user_info: str):
         email = match.group(3)
         return name, phone, email
     return None, None, None
+
+def shorten_job_context(job_context: str) -> str:
+    """Rút gọn job_context để tránh làm loãng context của LLM."""
+    if not job_context:
+        return ""
+    lines = job_context.split('\n')
+    short_lines = []
+    for line in lines:
+        lower_line = line.lower().strip()
+        if (lower_line.startswith("description:") or 
+            lower_line.startswith("requirements:") or 
+            lower_line.startswith("benefits:") or 
+            lower_line.startswith("working_time:")):
+            continue
+        short_lines.append(line)
+    return "\n".join(short_lines).strip()
 
 def create_initial_state(
     message: str,
@@ -55,7 +83,7 @@ def create_initial_state(
     else:
         initial_cv = CVTemplate()
         if job_context and not session_id.endswith("_000000"):
-            match = re.search(r"Vị trí:\s*(.*)", job_context)
+            match = re.search(r"(?:Vị trí|title):\s*(.*)", job_context, re.IGNORECASE)
             if match:
                 initial_cv.candidate_overview.applied_position = match.group(1).strip()
         base_template = initial_cv.model_dump()
@@ -68,7 +96,9 @@ def create_initial_state(
             if name and phone and email:
                 context_parts.append(f"Thông tin ứng viên: Tên {name}, SĐT {phone}, Email {email}.")
         if job_context and not session_id.endswith("_000000"):
-            context_parts.append(f"Vị trí ứng tuyển hiện tại:\n{job_context}")
+            short_job_context = shorten_job_context(job_context)
+            if short_job_context:
+                context_parts.append(f"Vị trí ứng tuyển hiện tại:\n{short_job_context}")
 
         if context_parts:
             initial_context = "\n\n".join(context_parts)

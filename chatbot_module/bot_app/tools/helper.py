@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 from qdrant_client.models import QueryResponse
 from bot_app.tools.embed import EmbedTools
 from bot_app.tools.qdrant import QdrantTools
-from bot_app.config import settings
+from bot_app.config import settings, _REPO_ROOT
 from bot_app.schema.chat_schema import FilePayload
 
 from bot_app.log import get_logger
@@ -40,7 +40,7 @@ class HelperTools:
         # Tránh lỗi path traversal
         safe_user_id = re.sub(r'[^\w\.-]', '_', str(user_id))
         safe_session_id = re.sub(r'[^\w\.-]', '_', str(session_id))
-        base_dir = os.path.join("chatbot_module", "uploads", safe_user_id, safe_session_id)
+        base_dir = os.path.join(_REPO_ROOT, "uploads", safe_user_id, safe_session_id)
 
         try:
             os.makedirs(base_dir, exist_ok=True)

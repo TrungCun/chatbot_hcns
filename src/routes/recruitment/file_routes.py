@@ -19,3 +19,9 @@ def upload_recruitment_file():
 def list_recruitment_files():
     """GET /api/recruitment/files?candidate_id=<id>"""
     return RecruitmentFileView.list_files()
+
+
+@file_bp.route("/download", methods=["GET"])
+def download_recruitment_file():
+    """GET /api/recruitment/files/download?candidate_id=<id>"""
+    return RecruitmentFileView.download_file()

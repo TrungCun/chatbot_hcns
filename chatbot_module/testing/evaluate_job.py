@@ -2,6 +2,7 @@ import asyncio
 import csv
 import logging
 import re
+import time
 from typing import List
 
 import os
@@ -10,9 +11,9 @@ import sys
 # Add project root to sys.path so 'app' can be imported
 sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
 
-from app.graph.builder import main_graph
-from app.graph.state import create_initial_state
-from app.model.llm import llm
+from bot_app.graph.builder import main_graph
+from bot_app.graph.state import create_initial_state
+from bot_app.model.llm import llm
 from langchain_core.messages import HumanMessage
 import uuid
 
@@ -88,8 +89,8 @@ REASON: Câu lệnh SQL đã sử dụng đúng LIKE '%15%' hoặc các điều 
 
 
 async def run_evaluation():
-    from app.application import application
-    from app.tools.mysql import init_mysql, close_mysql
+    from bot_app.application import application
+    from bot_app.tools.mysql import init_mysql, close_mysql
     
     print("Đang tải các models...")
     application.load_models()
@@ -98,9 +99,11 @@ async def run_evaluation():
     init_mysql()
     
     try:
-        questions = load_questions_from_md("scripts/job_questions.md")
+        base_dir = os.path.dirname(__file__)
+        md_path = os.path.join(base_dir, "qa_test_bank.md")
+        questions = load_questions_from_md(md_path)
         if not questions:
-            print("Không tìm thấy câu hỏi nào trong scripts/job_questions.md")
+            print(f"Không tìm thấy câu hỏi nào trong {md_path}")
             return
     
         results = []
@@ -127,6 +130,7 @@ async def run_evaluation():
                 response = "Không có câu trả lời"
                 domain = "unknown"
                 
+                start_time = time.time()
                 async for event in main_graph.astream_events(state, config, version="v2"):
                     if event.get("event") == "on_chain_end":
                         output = event.get("data", {}).get("output")
@@ -135,6 +139,8 @@ async def run_evaluation():
                                 domain = output["domain"]
                             if "response" in output:
                                 response = output["response"]
+                end_time = time.time()
+                response_time = end_time - start_time
                 
                 # Lọc các log quan trọng (SQL)
                 debug_logs = []
@@ -153,20 +159,21 @@ async def run_evaluation():
                 if domain == "job":
                     eval_result, eval_reason = await evaluate_job_response_with_llm(question, response, debug_info_str)
                 else:
-                    eval_reason = f"Không thuộc nhánh job (Nhánh hiện tại: {domain}). Đánh giá FAIL."
-                    eval_result = "FAIL"
+                    eval_reason = f"Không đánh giá vì không thuộc nhánh tìm việc (Nhánh hiện tại: {domain})."
+                    eval_result = "N/A"
                      
                 results.append({
                     "STT": i + 1,
                     "Chủ đề / Nhánh": domain,
                     "Câu hỏi": question,
                     "Câu trả lời": response,
+                    "Thời gian trả lời (s)": round(response_time, 2),
                     "Kết quả (PASS/FAIL)": eval_result,
                     "Lý do đánh giá": eval_reason,
                     "Debug Logs (SQL)": debug_info_str
                 })
                 
-                print(f"Hoàn thành câu {i+1}. Kết quả: {eval_result}")
+                print(f"Hoàn thành câu {i+1}. Kết quả: {eval_result} | Thời gian: {response_time:.2f}s")
                 
             except Exception as e:
                 print(f"Lỗi khi xử lý câu hỏi '{question}': {e}")
@@ -175,15 +182,42 @@ async def run_evaluation():
                     "Chủ đề / Nhánh": "error",
                     "Câu hỏi": question,
                     "Câu trả lời": f"Lỗi: {e}",
+                    "Thời gian trả lời (s)": 0,
                     "Kết quả (PASS/FAIL)": "ERROR",
                     "Lý do đánh giá": "Có lỗi hệ thống",
                     "Debug Logs (SQL)": ""
                 })
     
+        # Tính toán thống kê
+        total_questions = len(results)
+        pass_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "PASS")
+        fail_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "FAIL")
+        error_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "ERROR")
+        
+        accuracy = (pass_count / total_questions) * 100 if total_questions > 0 else 0
+        
+        valid_times = [r["Thời gian trả lời (s)"] for r in results if r.get("Thời gian trả lời (s)", 0) > 0]
+        avg_time = sum(valid_times) / len(valid_times) if valid_times else 0
+        max_time = max(valid_times) if valid_times else 0
+        min_time = min(valid_times) if valid_times else 0
+
+        print("\n" + "="*50)
+        print("BÁO CÁO THỐNG KÊ ĐÁNH GIÁ (JOB)")
+        print("="*50)
+        print(f"Tổng số câu hỏi       : {total_questions}")
+        print(f"Số câu PASS           : {pass_count}")
+        print(f"Số câu FAIL           : {fail_count}")
+        print(f"Số câu LỖI            : {error_count}")
+        print(f"Độ chính xác (PASS)   : {accuracy:.2f}%")
+        print(f"Thời gian TB          : {avg_time:.2f}s")
+        print(f"Thời gian Min         : {min_time:.2f}s")
+        print(f"Thời gian Max         : {max_time:.2f}s")
+        print("="*50)
+
         # Lưu kết quả ra file CSV
         output_file = "job_evaluation_report.csv"
         if results:
-            fieldnames = ["STT", "Chủ đề / Nhánh", "Câu hỏi", "Câu trả lời", "Kết quả (PASS/FAIL)", "Lý do đánh giá", "Debug Logs (SQL)"]
+            fieldnames = ["STT", "Chủ đề / Nhánh", "Câu hỏi", "Câu trả lời", "Thời gian trả lời (s)", "Kết quả (PASS/FAIL)", "Lý do đánh giá", "Debug Logs (SQL)"]
             with open(output_file, mode="w", encoding="utf-8-sig", newline="") as f:
                 writer = csv.DictWriter(f, fieldnames=fieldnames)
                 writer.writeheader()

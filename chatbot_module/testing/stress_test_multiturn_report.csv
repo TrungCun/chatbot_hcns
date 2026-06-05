@@ -1,0 +1,814 @@
+﻿Turn,Domain,Question,Response,Result,Reason,History Length,Context Used,Time (s)
+1,company,Cho mình hỏi thời gian thử việc ở công ty là bao lâu vậy ạ?,"Theo quy định của công ty, thời gian thử việc sẽ tùy thuộc vào từng vị trí công việc cụ thể. Đối với các chức danh nghề cần trình độ chuyên môn, kỹ thuật từ **cao đẳng trở lên**, thời gian thử việc tối đa là **60 ngày** (hoặc **2 tháng**). Đối với các chức danh nghề cần trình độ trung cấp, công nhân kỹ thuật hoặc nhân viên nghiệp vụ, thời gian thử việc không quá **30 ngày**. Ngoài ra, các vị trí nhân viên, trưởng nhóm, trưởng phòng cũng được quy định thử việc trong vòng **60 ngày**. Các trường hợp rút ngắn thời gian thử việc, thực tập hoặc học việc cần được thỏa thuận trước hoặc được sự phê duyệt từ Giám đốc.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã tổng hợp chính xác và đầy đủ các thông tin về thời gian thử việc từ nhiều tài liệu khác nhau (Tài liệu 1, Tài liệu 2, Tài liệu 3) mà không bịa đặt thông tin ngoài phạm vi tài liệu cung cấp.",2,Ứng viên đang hỏi về thời gian thử việc tại công ty.,8.07
+2,company,"Trong thời gian thử việc mình có được nhận 100% lương không, hay nhận 85% ạ?","Theo quy định của công ty, trong thời gian thử việc, người lao động được hưởng mức thu nhập tối thiểu là **85%** mức lương thỏa thuận chính thức. Tuy nhiên, mức thu nhập này có thể thay đổi nếu có thỏa thuận riêng biệt khác trong quá trình tiếp nhận thử việc. Lương thử việc được tính là tổng thu nhập bao gồm lương hợp đồng, lương hoàn thành hiệu quả công việc và các khoản hỗ trợ khác nếu có.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trích xuất chính xác và đầy đủ các ý quan trọng từ Tài liệu 1 và Tài liệu 2: mức lương tối thiểu là 85%, có ngoại lệ nếu có thỏa thuận riêng, và thành phần của lương thử việc. Câu trả lời không bịa đặt thông tin và trả lời đúng trọng tâm câu hỏi của người dùng.",4,Ứng viên đang hỏi về mức lương trong thời gian thử việc.,3.24
+3,company,"Thử việc bên mình có được đóng bảo hiểm (BHXH, BHYT) luôn không?","Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),6,"Ứng viên đang hỏi về thời gian thử việc, mức lương thử việc và việc đóng bảo hiểm trong thời gian thử việc.",3.33
+4,company,Mới vào thì công ty có quy trình training (đào tạo) người mới không hay là vào làm việc luôn?,"Tại AIPT, bạn sẽ không vào làm việc ngay lập tức mà sẽ trải qua một lộ trình đào tạo bài bản để nhanh chóng nắm bắt công việc và văn hóa công ty. Theo quy định về tiếp nhận và đào tạo, quy trình sẽ bắt đầu từ việc tìm hiểu nội quy, quy định và văn hóa doanh nghiệp, sau đó bạn sẽ thực hiện bài thu hoạch đào tạo hội nhập.
+
+Sau khi hoàn thành bài thu hoạch, **Bộ phận nhân sự** sẽ giới thiệu bạn với các thành viên trong phòng và bàn giao cho **Trưởng bộ phận** để tiến hành hướng dẫn công việc và đào tạo chuyên môn. Ngoài ra, công ty còn tổ chức các khóa đào tạo nội bộ tại nơi làm việc và áp dụng hình thức đào tạo tích lũy, nơi những nhân viên có kinh nghiệm sẽ hướng dẫn nhân viên mới thông qua công việc hàng ngày.",PASS,"RESULT: PASS
+REASON: Câu trả lời hoàn toàn dựa trên các tài liệu đã truy xuất, trả lời đúng trọng tâm câu hỏi và không bịa đặt thông tin. Cụ thể:
+- Thông tin về việc tìm hiểu nội quy và làm bài thu hoạch lấy từ Tài liệu 2, 6, 7.
+- Thông tin về việc bàn giao cho Trưởng bộ phận để hướng dẫn công việc lấy từ Tài liệu 2.
+- Thông tin về đào tạo nội bộ và đào tạo tích lũy lấy từ Tài liệu 3.
+- Thông tin về mục đích đào tạo để nắm bắt văn hóa lấy từ Tài liệu 5 và 13.",8,"Ứng viên đang hỏi về thời gian thử việc, mức lương thử việc, việc đóng bảo hiểm và quy trình đào tạo người mới.",4.52
+5,company,Đánh giá đạt thử việc thì dựa trên những tiêu chí nào vậy ạ?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về thời gian thử việc, mức lương thử việc, việc đóng bảo hiểm, quy trình đào tạo người mới và các tiêu chí đánh giá đạt thử việc.",3.81
+6,company,Công ty mình có lương tháng 13 không ạ?,"Theo quy chế lương thưởng và phúc lợi của công ty, AIPT **có** chế độ lương tháng 13. 
+
+Cụ thể, vào cuối năm sau khi có kết quả báo cáo tài chính, Công ty sẽ xác định phương án bổ sung thu nhập bao gồm lương tháng 13 hoặc các quyết định chi bổ sung thu nhập khác. Mức lương tháng 13 được tính theo công thức: **Trung bình tiền lương gộp trong năm * số ngày làm việc thực tế / 365 ngày**. Đối tượng được xét thưởng là toàn bộ CBNV có thời gian làm việc trong năm dương lịch tính đến ngày 31/12 và vẫn đang làm việc tại thời điểm chi thưởng.",FAIL,"RESULT: FAIL
+REASON: Chatbot đã bịa đặt thông tin (hallucination) khi đưa tên công ty là ""AIPT"" vào câu trả lời, trong khi trong các tài liệu được cung cấp không hề có thông tin về tên công ty này.",8,"Ứng viên đang hỏi về mức lương thử việc, việc đóng bảo hiểm, quy trình đào tạo người mới, tiêu chí đánh giá đạt thử việc và chế độ lương tháng 13.",3.52
+7,company,Bên mình review đánh giá tăng lương mấy lần 1 năm vậy?,Tài liệu hiện tại không đề cập đến thông tin về số lần review đánh giá tăng lương trong một năm. Bạn vui lòng liên hệ phòng tuyển dụng qua địa chỉ email **tuyendung@aipt.vn** để được hỗ trợ thông tin này.,PASS,"RESULT: PASS
+REASON: Chatbot đã trả lời trung thực và chính xác. Sau khi rà soát tất cả các tài liệu được cung cấp, không có thông tin nào quy định cụ thể về số lần review đánh giá tăng lương trong một năm (tài liệu chỉ đề cập đến việc xét nâng lương định kỳ/sớm hoặc điều chỉnh lương khi không đạt KPI, nhưng không nêu rõ tần suất/số lần cụ thể). Chatbot không bịa đặt thông tin và đã hướng dẫn người dùng tìm kiếm hỗ trợ thêm.",8,"Ứng viên đang hỏi về chế độ đóng bảo hiểm khi thử việc, quy trình đào tạo người mới, tiêu chí đánh giá đạt thử việc, lương tháng 13 và tần suất review tăng lương.",3.77
+8,company,"Ngoài lương cứng ra, công ty mình có phụ cấp ăn trưa, xăng xe hay gửi xe gì không?","Ngoài lương hợp đồng, cơ cấu thu nhập của người lao động tại AIPT còn bao gồm các khoản hỗ trợ khác tùy theo vị trí công việc.
+
+Theo quy chế lương thưởng, công ty có hỗ trợ **phụ cấp ăn trưa** và **phụ cấp xăng xe đi lại**. Trong đó, phụ cấp ăn trưa được tính là một phần trong tổng thu nhập (lương gross) và được chi trả linh hoạt bằng tiền mặt hoặc tổ chức bữa ăn giữa ca. Phụ cấp xăng xe được áp dụng cho các nhân sự hoặc bộ phận thường xuyên phải di chuyển bên ngoài để thực hiện công việc.
+
+Tài liệu hiện tại không đề cập đến thông tin về phụ cấp gửi xe.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trả lời đúng trọng tâm câu hỏi, cung cấp chính xác thông tin về phụ cấp ăn trưa và xăng xe dựa trên các tài liệu đã truy xuất (Tài liệu 1, 2, 3, 4, 5). Đồng thời, chatbot đã xử lý thông tin một cách trung thực khi xác nhận tài liệu không đề cập đến phụ cấp gửi xe, không bịa đặt thông tin.",8,"Ứng viên đang hỏi về quy trình đào tạo, tiêu chí đánh giá thử việc, lương tháng 13, tần suất review tăng lương và các khoản phụ cấp (ăn trưa, xăng xe, gửi xe).",4.52
+9,company,"Vào các dịp Lễ, Tết (30/4, 2/9...) thì công ty có thưởng không? Mức thưởng thường là bao nhiêu ạ?","Theo quy định về chế độ lương, thưởng và phúc lợi, công ty **có** chế độ thưởng vào các ngày **Lễ, Tết**.
+
+Tuy nhiên, tài liệu hiện tại không đề cập đến thông tin về mức thưởng cụ thể là bao nhiêu.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã xác nhận chính xác việc công ty có chế độ thưởng Lễ, Tết dựa trên Tài liệu 1 và Tài liệu 2. Đồng thời, chatbot đã trung thực khi thông báo rằng tài liệu không cung cấp thông tin về mức thưởng cụ thể, tránh được lỗi bịa đặt thông tin (hallucination).",8,"Ứng viên đang hỏi về tiêu chí đánh giá thử việc, lương tháng 13, tần suất review tăng lương, các khoản phụ cấp (ăn trưa, xăng xe, gửi xe) và chế độ thưởng vào các dịp Lễ, Tết.",3.19
+10,company,Công ty có chế độ khám sức khỏe định kỳ hay bảo hiểm sức khỏe nào khác ngoài BHXH không?,"Theo quy chế phúc lợi của công ty, AIPT có chế độ **thăm khám sức khỏe** hàng năm cho CBNV chính thức. Việc tham gia gói khám sức khỏe này sẽ do người sử dụng lao động quyết định tùy theo kết quả kinh doanh thực tế của công ty.
+
+Tài liệu hiện tại không đề cập đến thông tin về các loại bảo hiểm sức khỏe khác ngoài BHXH.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trích xuất chính xác thông tin về chế độ thăm khám sức khỏe từ Tài liệu 1 (áp dụng cho CBNV chính thức và phụ thuộc vào kết quả kinh doanh). Đồng thời, chatbot đã trung thực khi xác nhận tài liệu không đề cập đến các loại bảo hiểm sức khỏe khác, tránh việc bịa đặt thông tin (hallucination).",8,"Ứng viên đang hỏi về tần suất review tăng lương, các khoản phụ cấp (ăn trưa, xăng xe, gửi xe), chế độ thưởng Lễ/Tết và chế độ khám sức khỏe định kỳ hoặc bảo hiểm sức khỏe ngoài BHXH.",2.98
+11,company,"Cho mình hỏi các chế độ công đoàn như sinh nhật, ốm đau, hiếu hỉ bên mình quy định sao ạ?","Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về tần suất review tăng lương, các khoản phụ cấp (ăn trưa, xăng xe, gửi xe), chế độ thưởng Lễ/Tết, bảo hiểm sức khỏe và các chế độ công đoàn (sinh nhật, ốm đau, hiếu hỉ).",3.13
+12,company,Thời gian làm việc bên mình là từ mấy giờ đến mấy giờ vậy? Có phải làm Thứ 7 không?,"Theo quy định về giờ làm việc, thời gian làm việc bình thường của công ty là **8 giờ** một ngày và **44 giờ** một tuần. Cụ thể, giờ làm việc bắt đầu từ **8:15** đến **17:30**, trong đó thời gian nghỉ trưa từ **12:00** đến **13:15**.
+
+Về lịch làm việc trong tuần, nhân viên làm việc từ thứ Hai đến thứ Sáu và làm **thứ Bảy xen kẽ tuần làm tuần nghỉ**. Ngoài ra, công ty nghỉ chủ nhật hàng tuần.",PASS,"RESULT: PASS
+REASON: Câu trả lời cung cấp đầy đủ và chính xác các thông tin được truy xuất từ tài liệu 2 và tài liệu 3 (giờ bắt đầu, giờ kết thúc, thời gian nghỉ trưa, lịch làm việc thứ 7 xen kẽ và ngày nghỉ chủ nhật). Không có thông tin nào bị bịa đặt.",8,"Ứng viên đang hỏi về các chế độ phụ cấp (ăn trưa, xăng xe), thưởng Lễ/Tết, bảo hiểm sức khỏe, chế độ công đoàn và thời gian làm việc.",4.16
+13,company,"Công ty mình chấm công bằng vân tay, quẹt thẻ hay chấm công qua app trên điện thoại thế ạ?","Theo quy định chung, tất cả CBNV làm việc tại công ty phải thực hiện chấm công thông qua **Wifi công ty** trên **phần mềm chấm công** của công ty. Đối với nhân viên làm việc tại văn phòng, việc chấm công được thực hiện qua địa chỉ web: http://192.168.3.2:3012/.
+
+Riêng đối với nhân viên khối kinh doanh làm việc ngoài thị trường, hình thức chấm công là **check-in** và gửi định vị nơi được cử đến công tác cho người quản lý trực tiếp. Tài liệu hiện tại không đề cập đến việc chấm công bằng vân tay hay quẹt thẻ.",FAIL,"RESULT: FAIL
+
+REASON: Câu trả lời của chatbot có sự mâu thuẫn nghiêm trọng với tài liệu được cung cấp. Tài liệu 1 ghi rõ nhân viên làm việc tại văn phòng thực hiện ""chấm văn tay bằng máy chấm công"" (vân tay), nhưng chatbot lại khẳng định ""Tài liệu hiện tại không đề cập đến việc chấm công bằng vân tay"". Điều này vi phạm lỗi không sử dụng hết thông tin có sẵn và gây hiểu lầm cho người dùng.",8,"Ứng viên đang hỏi về các chế độ thưởng Lễ/Tết, khám sức khỏe, bảo hiểm, chế độ công đoàn, thời gian làm việc và hình thức chấm công.",3.9
+14,company,Nếu đi muộn hoặc về sớm thì bị trừ lương như thế nào?,"Theo quy định về chấm công, nếu bạn đến nơi làm việc muộn hoặc về sớm so với ca làm việc từ **10 phút** trở lên, bạn phải báo và được sự phê duyệt của **Trưởng bộ phận**. Thời gian đi muộn hoặc về sớm này sẽ được tính vào **phút việc riêng (PVR)** và không được tính công trong khoảng thời gian đó.
+
+Ngoài ra, tài liệu có nêu rõ nếu bạn đã chấm công đầy đủ nhưng trong ngày đó bạn làm việc riêng phục vụ cá nhân thì thời gian đó sẽ không được ghi nhận công để tính lương. Tài liệu hiện tại không đề cập đến các mức phạt tiền cụ thể hoặc công thức tính số tiền bị trừ lương cho các trường hợp vi phạm này.",PASS,"RESULT: PASS
+REASON: Câu trả lời trả lời đúng trọng tâm câu hỏi, thông tin về việc tính vào ""phút việc riêng (PVR)"" và ""không được tính công"" hoàn toàn dựa trên Tài liệu 1 và Tài liệu 7. Chatbot cũng rất trung thực khi xác nhận tài liệu không đề cập đến mức phạt tiền cụ thể, tránh được lỗi bịa đặt thông tin (hallucination).",8,"Ứng viên đang hỏi về các chế độ công đoàn (sinh nhật, ốm đau, hiếu hỉ), thời gian làm việc, lịch làm việc thứ 7, hình thức chấm công và quy định về việc đi muộn/về sớm.",4.62
+15,company,Đặc thù công việc nếu phải ra ngoài gặp khách hàng thì chấm công kiểu gì vậy ạ?,"Theo quy định về chấm công, nếu bạn đã chấm công vào công ty sau đó mới ra ngoài để xử lý công việc, bạn cần thực hiện chấm công **Gặp khách hàng** khi bắt đầu đi và khi trở về văn phòng, đồng thời phải có sự phê duyệt của **Trưởng bộ phận**. Hệ thống sẽ ghi nhận thông tin này trong mục **Duyệt gặp khách hàng**.
+
+Trong trường hợp bạn đi thẳng từ nhà đến địa điểm gặp khách hàng hoặc địa điểm xử lý công việc mà không qua công ty, bạn thực hiện chấm công gặp khách hàng khi lúc về công ty. Nếu công việc kéo dài quá thời gian quy định mà bạn không quay lại công ty để chấm công, bạn cần vào mục **Danh sách gặp khách hàng** để xác nhận lại thời gian thực tế và phải có sự phê duyệt của **Trưởng bộ phận**.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trích xuất chính xác và đầy đủ các quy trình chấm công khi đi gặp khách hàng từ Tài liệu 1, bao gồm cả hai trường hợp: đi từ công ty và đi thẳng từ nhà, cũng như cách xử lý khi công việc kéo dài quá giờ. Câu trả lời không bịa đặt thông tin ngoài tài liệu.",8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, lịch làm việc thứ 7, hình thức chấm công (vân tay/app/wifi) và quy định đi muộn/về sớm hoặc khi đi gặp khách hàng.",5.09
+16,company,Nếu mình phải làm thêm giờ (OT) thì công ty tính lương OT như thế nào? Có quy trình đăng ký phức tạp không?,"Theo quy định của công ty, lương làm thêm giờ được tính sau khi bạn kết thúc ca làm việc từ **30 phút** trở lên. Mức lương cụ thể được áp dụng như sau: đối với ngày làm việc trong tuần là **150%**, ngày nghỉ định kỳ (Chủ nhật) là **200%**, và ngày nghỉ Lễ, Tết là **300%** so với tiền công làm việc 1 giờ.
+
+Về quy trình, việc làm thêm giờ cần đáp ứng các điều kiện về tính cấp thiết của công việc, nằm ngoài kế hoạch đã xác nhận và phải được sự chỉ đạo, phê duyệt của **Ban giám đốc**. Bạn cần thực hiện tạo và được duyệt **Đơn làm thêm giờ** trên hệ thống trước khi thực hiện công việc, đồng thời phải đảm bảo có xác nhận chấm công trên hệ thống và ghi rõ kết quả làm việc trong thời gian đó. Lưu ý rằng nếu bạn chưa làm đủ tổng số giờ làm việc quy định trong tháng, thời gian làm thêm sẽ được dùng để bù đắp giờ công và không được tính lương làm thêm.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trả lời đầy đủ và chính xác cả hai ý của người dùng (cách tính lương và quy trình). Tất cả thông tin về mức % lương (150%, 200%, 300%), điều kiện về thời gian (30 phút), quy trình phê duyệt (Ban giám đốc, Đơn làm thêm giờ) và điều kiện về đủ giờ công trong tháng đều được trích xuất chính xác từ các tài liệu đã cung cấp (Tài liệu 1, 2, 7, 10). Không có thông tin nào bị bịa đặt.",8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, lịch làm việc thứ 7, hình thức chấm công, quy định đi muộn/về sớm, cách chấm công khi gặp khách hàng và quy định tính lương làm thêm giờ (OT).",5.67
+17,company,Bên mình có cho phép làm remote (làm từ xa) hoặc thời gian linh hoạt (flexitime) không?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, hình thức chấm công, quy định đi muộn/về sớm, cách chấm công khi gặp khách hàng, quy định tính lương OT và chính sách làm việc remote/linh hoạt.",4.36
+18,job,Vị trí này có hay phải đi công tác tỉnh không ạ?,"Vì bạn chưa nêu rõ mình đang quan tâm đến vị trí nào, nên tôi xin phép liệt kê các vị trí đang tuyển dụng tại AIPT để bạn dễ dàng lựa chọn nhé:
+
+*   **ID 1: Nhân viên FullStack Developer** (1 vị trí)
+    *   Lương: 14.000.000 - 18.000.000 VND
+    *   Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp AI, vận hành trên Linux/Docker.
+*   **ID 2: Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (1 vị trí)
+    *   Lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả: Tìm kiếm yêu cầu thiết bị an ninh quốc phòng, xây dựng hệ thống, demo và hỗ trợ khách hàng.
+*   **ID 3: Thực tập sinh Kinh doanh Dự án** (2 vị trí)
+    *   Lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả: Hỗ trợ báo giá, chăm sóc khách hàng, soạn thảo tài liệu sản phẩm và hoàn thiện hồ sơ dự án.
+*   **ID 4: Sales Admin** (3 vị trí)
+    *   Lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh, đấu thầu, thực hiện hợp đồng, quản lý hồ sơ dự án và các công việc hành chính phòng.
+*   **ID 5: Nhân viên Phát triển AI** (1 vị trí)
+    *   Lương: 12.000.000 - 18.000.000 VND
+    *   Mô tả: Phát triển chatbot LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI (LangGraph), tích hợp hệ thống.
+*   **ID 6: Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (3 vị trí)
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Nghiên cứu giải pháp công nghệ chuyên dụng, triển khai kỹ thuật, demo sản phẩm, lắp đặt thiết bị tại nhà khách hàng và hỗ trợ sau bán.
+*   **ID 7: Kỹ sư thiết kế UAV** (1 vị trí)
+    *   Lương: 15.000.000 - 25.000.000 VND
+    *   Mô tả: Thiết kế kết cấu UAV (SolidWorks/CATIA...), mô phỏng, tích hợp phần cứng (motor, flight controller...) và thử nghiệm.
+*   **ID 8: Nhân viên Kinh doanh Dự án** (1 vị trí)
+    *   Lương: 10.000.000 - 15.000.000 VND
+    *   Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật tư vấn giải pháp và chuẩn bị hồ sơ thầu.
+*   **ID 9: Nhân viên Mua hàng Quốc tế** (2 vị trí)
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Tìm kiếm nhà cung cấp quốc tế, đàm phán giá, thực hiện nghiệp vụ mua hàng dự án và quản lý quan hệ đối tác.
+
+Dựa trên dữ liệu mô tả công việc, các vị trí như **Chuyên viên Tư vấn Kỹ thuật (ID 6)** hoặc **Nhân viên Kinh doanh Dự án (ID 8)** có thể sẽ cần di chuyển để demo sản phẩm hoặc làm việc trực tiếp tại địa điểm của khách hàng.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhanh nhất nhé!",PASS,"RESULT: PASS
+REASON: Người dùng đặt một câu hỏi mang tính chất tham chiếu (""Vị trí này"" - chưa xác định rõ vị trí cụ thể nào). Chatbot đã xử lý rất thông minh bằng cách: 1. Nhận diện được sự thiếu hụt thông tin đầu vào; 2. Cung cấp danh sách các vị trí đang tuyển dụng để người dùng lựa chọn; 3. Quan trọng nhất, chatbot đã thực hiện phân tích logic dựa trên mô tả công việc (Job Description) của các vị trí để đưa ra dự đoán hợp lý về việc đi công tác (như ID 6 và ID 8), giúp giải quyết trực tiếp ý định tìm hiểu của người dùng thay vì chỉ trả lời máy móc là ""không biết"".",8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, hình thức chấm công, quy định đi muộn/về sớm, cách chấm công khi gặp khách hàng, quy định tính lương OT, chính sách làm việc remote/linh hoạt và khả năng đi công tác tỉnh.",10.78
+19,company,"Công tác phí bên mình tính như thế nào? Tiền ăn ở, đi lại công ty lo trọn gói hay mình tự chi rồi về thanh toán?","Theo quy định của công ty, công tác phí bao gồm các khoản chi phí như tiền vé tàu, xe, máy bay, tiền thuê phương tiện di chuyển, phụ cấp lưu trú, tiền thuê chỗ ở và các khoản phí khác theo thông lệ quốc tế nếu đi công tác nước ngoài. Ngoài ra, nhân viên còn được hưởng khoản hỗ trợ công tác là **100.000đ/ngày**.
+
+Về hình thức thanh toán, bạn cần thực hiện việc tự chi trả các chi phí hợp lý, hợp lệ và sau đó thực hiện thủ tục hoàn ứng/thanh toán dựa trên các hóa đơn, chứng từ đầy đủ. Các chứng từ cần thiết bao gồm hóa đơn thuế, hóa đơn giá trị gia tăng cho chi phí lưu trú, cũng như các hóa đơn về ăn uống, đi lại và mua vật tư hàng hóa để bộ phận kế toán có cơ sở kê khai. Đối với trường hợp đi công tác ngoại tỉnh trong ngày, công ty sẽ áp dụng mức trợ cấp sinh hoạt phí tùy theo số giờ làm việc thực tế thay vì phụ cấp sinh hoạt phí lưu trú.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trả lời đúng trọng tâm câu hỏi của người dùng. Chatbot đã liệt kê chính xác các loại chi phí được thanh toán (dựa trên Tài liệu 1, 4, 5), xác định đúng hình thức là nhân viên tự chi trả rồi thanh toán dựa trên hóa đơn chứng từ (dựa trên Tài liệu 2, 9, 12) và cung cấp thêm thông tin về mức hỗ trợ 100.000đ/ngày cũng như quy định đi công tác trong ngày (dựa trên Tài liệu 5, 6) một cách chính xác, không bịa đặt thông tin.",8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, chấm công, lương OT, chính sách làm việc remote, khả năng đi công tác tỉnh và cách thanh toán công tác phí.",6.16
+20,company,"Trước khi đi công tác mình có được tạm ứng tiền trước không, hay phải tự bỏ tiền túi ra trước?","Bạn hoàn toàn có thể thực hiện **tạm ứng** các chi phí công tác trước khi đi thay vì phải tự bỏ tiền túi ra trước. Theo quy định về hồ sơ tạm ứng, bạn cần thực hiện Đề xuất công tác trên hệ thống E-QT công tác và thực hiện tạm ứng các chi phí trên E-QT tạm ứng, thanh toán.
+
+Để đảm bảo việc tạm ứng được xử lý kịp thời, bạn cần lưu ý chuyển hồ sơ tạm ứng tới bộ phận kế toán trước **03 ngày làm việc**. Trong trường hợp kế hoạch công tác là đột xuất, thời gian xem xét tạm ứng tối thiểu phải là **01 ngày** trước ngày công tác. Ngoài ra, đối với trường hợp đi công tác nước ngoài, bạn cần có kế hoạch và dự toán chi phí trình Trưởng bộ phận và Giám đốc phê duyệt.",PASS,"RESULT: PASS
+REASON: Câu trả lời hoàn toàn dựa trên các tài liệu đã truy xuất: xác nhận được việc tạm ứng qua E-QT (Tài liệu 2), thời hạn nộp hồ sơ trước 03 ngày làm việc hoặc tối thiểu 01 ngày cho trường hợp đột xuất (Tài liệu 7), và yêu cầu về kế hoạch/dự toán đối với công tác nước ngoài (Tài liệu 3). Không có thông tin nào bị bịa đặt.",8,"Ứng viên đang hỏi về các chế độ công đoàn, thời gian làm việc, lương OT, chính sách làm việc remote, khả năng đi công tác tỉnh, cách thanh toán công tác phí và quy trình tạm ứng tiền công tác.",6.51
+21,company,Thủ tục hoàn ứng và thanh toán sau công tác có nhanh không ạ?,"Thời gian xử lý các thủ tục này được quy định cụ thể như sau:
+
+Đối với việc **hoàn ứng**, bạn cần thực hiện trong vòng **05 ngày** kể từ ngày kết thúc sự việc. Riêng trường hợp tạm ứng công tác, thời hạn hoàn ứng là trong vòng **05 ngày làm việc** kể từ khi đi công tác về.
+
+Đối với việc **thanh toán**, thời gian xử lý là **02 ngày** kể từ ngày bạn gửi yêu cầu đúng quy định.
+
+Để đảm bảo tiến độ, bạn cần lưu ý chuẩn bị đầy đủ hồ sơ theo quy định, bao gồm các hóa đơn tài chính hợp lệ, giấy đi đường hoặc các chứng từ liên quan khác tùy theo loại chi phí.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trích xuất chính xác và đầy đủ các mốc thời gian từ tài liệu: thời hạn hoàn ứng (05 ngày kể từ khi kết thúc sự việc - Tài liệu 2; 05 ngày làm việc kể từ khi đi công tác về - Tài liệu 3) và thời gian xử lý thanh toán (02 ngày kể từ ngày gửi yêu cầu đúng quy định - Tài liệu 6). Thông tin về hồ sơ cũng dựa trên các tài liệu được cung cấp.",8,"Ứng viên đang hỏi về chính sách làm việc remote, thời gian linh hoạt, việc đi công tác tỉnh, cách tính công tác phí, quy trình tạm ứng và thời gian hoàn ứng/thanh toán.",6.21
+22,company,Công ty mình có bắt buộc mặc đồng phục cả tuần không hay được mặc đồ tự do ạ?,"Theo quy định về mặc đồng phục hè, bạn không mặc đồng phục cả tuần mà sẽ mặc theo các ngày cụ thể như sau:
+
+Áo **Polo màu đen** được mặc vào **Thứ 2** hàng tuần, khi đi gặp gỡ khách hàng, đối tác hoặc các trường hợp đặc biệt theo thông báo từ Công ty. Áo **Polo màu xanh** được mặc vào **Thứ 6** hàng tuần, khi tham gia dã ngoại, nghỉ mát hoặc các trường hợp đặc biệt theo thông báo từ Công ty.
+
+Đối với các ngày còn lại, bạn có thể mặc trang phục tự do nhưng phải đảm bảo văn hóa trang phục tại công sở. Cụ thể, nam cần mặc áo sơ mi hoặc áo phông có cổ, quần tây (không mặc quần Jean) và mang giày. Nữ cần mặc trang phục công sở kín đáo, nghiêm túc, áo sơ mi hoặc áo phông có cổ, kết hợp với chân váy hoặc quần tây (không mặc quần Jean), không mặc áo sát nách hoặc váy quá ngắn, và giày gót không quá 7cm hoặc giày thể thao.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã tổng hợp chính xác và đầy đủ thông tin từ các tài liệu được cung cấp. Chatbot xác định đúng lịch mặc đồng phục (Thứ 2 và Thứ 6) từ Tài liệu 4 và 5, đồng thời suy luận đúng về việc mặc đồ tự do cho các ngày còn lại dựa trên quy định về ""Trang phục hàng ngày"" tại Tài liệu 2 và 3 mà không bịa đặt thông tin.",8,"Ứng viên đang hỏi về chính sách công tác phí (tạm ứng, hoàn ứng, thanh toán), quy định mặc đồng phục và trang phục công sở.",6.12
+23,company,Cho mình hỏi đồng phục công ty sẽ cấp phát hay nhân viên tự may/mua?,"Công ty trực tiếp may và **cấp phát** đồng phục cho nhân viên theo số lượng quy định. Việc lựa chọn mẫu mã sẽ được thực hiện phù hợp theo từng vị trí công việc và có thể được thực hiện theo định kỳ năm hoặc theo đợt.
+
+Trong trường hợp bạn có nhu cầu đăng ký may thêm ngoài số lượng công ty cấp phát theo quy định, bạn có thể đăng ký may thêm với **phòng HCNS** và sẽ hoàn trả theo chi phí thực tế may đo của bên phía nhà cung cấp.",PASS,"RESULT: PASS
+REASON: Câu trả lời hoàn toàn dựa trên thông tin từ tài liệu đã truy xuất. Cụ thể, thông tin về việc công ty trực tiếp may và cấp phát nằm ở Tài liệu 6, và thông tin về việc đăng ký may thêm ngoài số lượng quy định nằm ở Tài liệu 2. Chatbot không bịa đặt thông tin và trả lời đúng trọng tâm câu hỏi.",8,"Ứng viên đang hỏi về chính sách công tác phí (tạm ứng, hoàn ứng, thanh toán), quy định mặc đồng phục và hình thức cấp phát đồng phục.",4.83
+24,company,Văn hóa công ty mình thế nào ạ? Mọi người có hay tổ chức team building hay du lịch công ty hàng năm không?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về chính sách công tác phí (tạm ứng, hoàn ứng, thanh toán), quy định mặc đồng phục, hình thức cấp phát đồng phục và quan tâm đến văn hóa công ty, hoạt động team building/du lịch.",4.0
+25,company,Bên mình có quy tắc gì đặc biệt về trang phục hay tác phong làm việc không?,"Về trang phục, công ty có những quy định cụ thể để đảm bảo sự chuyên nghiệp và hình ảnh thương hiệu. Đối với đồng phục, bạn cần mặc đúng loại áo và thời gian quy định, đồng thời phải giữ gìn sạch sẽ, phẳng phiu và không được tự ý thay đổi thiết kế. Đối với trang phục hàng ngày, nam giới cần mặc áo sơ mi hoặc áo phông có cổ, quần âu và mang giày; nữ giới cần mặc trang phục công sở kín đáo, áo sơ mi hoặc áo phông có cổ, kết hợp chân váy hoặc quần âu (không mặc quần Jean), đồng thời lưu ý không mặc áo sát nách hoặc váy quá ngắn.
+
+Về tác phong làm việc, bạn cần lưu ý một số chuẩn mực hành vi sau:
+
+Tại nơi làm việc, bạn cần giữ gìn vệ sinh sạch sẽ, sắp xếp tài liệu gọn gàng, khoa học và duy trì thói quen rà soát tài liệu định kỳ. Trong giờ làm việc, bạn có thể ăn, uống nước giải khát nhưng phải đảm bảo vệ sinh, không kéo dài ảnh hưởng đến công việc và hạn chế tối đa việc ăn đồ mặn tại chỗ ngồi. Đối với việc nghỉ trưa, bạn có thể tranh thủ nghỉ tại chỗ làm việc nhưng phải sắp xếp hợp lý để đảm bảo mỹ quan và không ảnh hưởng đến không gian chung. Ngoài ra, khi tham gia các hoạt động tập thể, bạn không được uống rượu, bia quá chén vượt quá giới hạn làm ảnh hưởng đến sức khỏe và hình ảnh của công ty.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã tổng hợp đầy đủ và chính xác các quy định về trang phục (từ tài liệu 1, 2, 3, 4, 6, 7) và tác phong làm việc (từ tài liệu 2, 3, 10) có trong các tài liệu được cung cấp. Không có thông tin nào bị bịa đặt ngoài phạm vi tài liệu.",8,"Ứng viên đang hỏi về quy trình hoàn ứng, thanh toán công tác phí, quy định mặc đồng phục, hình thức cấp phát đồng phục, văn hóa công ty, hoạt động team building/du lịch và các quy tắc về trang phục, tác phong làm việc.",5.24
+26,company,"Công ty mình quản lý công việc qua phần mềm nào (Jira, Trello, Base...) hay qua Zalo/Email ạ?","Theo quy định về văn hóa báo cáo, công ty thực hiện việc báo cáo công việc định kỳ hàng tuần, hàng tháng qua **email**. Đối với các trường hợp nhân viên đi công tác hoặc làm việc ngoài văn phòng, việc báo cáo công việc hàng ngày sẽ được thực hiện qua **email** hoặc báo cáo nhanh qua nhóm trao đổi công việc trên **Telegram**.
+
+Tài liệu hiện tại không đề cập đến việc sử dụng các phần mềm quản lý dự án chuyên dụng như Jira, Trello hay Base.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trả lời đúng trọng tâm câu hỏi dựa trên thông tin có trong tài liệu 3 (về việc sử dụng email và Telegram để báo cáo công việc) và xác nhận chính xác rằng tài liệu không đề cập đến các phần mềm quản lý dự án như Jira, Trello hay Base mà người dùng đã nêu. Không có hiện tượng bịa đặt thông tin.",8,"Ứng viên đang hỏi về quy định đồng phục, hình thức cấp phát, văn hóa công ty, hoạt động team building, quy tắc trang phục, tác phong làm việc và công cụ quản lý công việc.",4.23
+27,company,"KPI của vị trí này được đánh giá theo ngày, tuần hay tháng?","Theo quy định của công ty, việc đánh giá KPI được thực hiện theo quy trình định kỳ **hàng tháng**.
+
+Tài liệu hiện tại không đề cập đến việc đánh giá KPI theo ngày hay theo tuần.",PASS,"RESULT: PASS
+REASON: Câu trả lời hoàn toàn chính xác và bám sát tài liệu. Tài liệu 1, 2, 3 và 4 đều khẳng định quy trình đánh giá KPI được thực hiện theo định kỳ ""hàng tháng"". Chatbot cũng đã xử lý tốt việc không tìm thấy thông tin về ""ngày"" hay ""tuần"" trong tài liệu để tránh việc bịa đặt thông tin.",8,"Ứng viên đang hỏi về quy định đồng phục, văn hóa công ty, team building, quy tắc trang phục, tác phong làm việc, công cụ quản lý công việc và chu kỳ đánh giá KPI.",3.61
+28,company,Quy trình làm việc và giao việc giữa các phòng ban có rõ ràng không ạ?,"Tại AIPT, quy trình làm việc và giao việc được xây dựng nhằm đảm bảo tính minh bạch, rõ ràng từ yêu cầu đến kết quả và thời gian hoàn thành. Theo quy trình giao việc, công tác chuyển giao được thực hiện từ Ban lãnh đạo tới CBNV, giữa các cấp quản lý với nhân viên, cũng như giữa các nhân viên trong và ngoài phòng ban.
+
+Về tinh thần phối hợp, các phòng ban luôn liên kết chặt chẽ với nhau, từ khâu nghiên cứu, phát triển giải pháp, phát triển thị trường cho đến triển khai dự án và vận hành hệ thống. Sự kết nối giữa các bộ phận **Kỹ thuật**, **Kinh doanh**, **Vận hành** và **Quản trị nội bộ** chính là nền tảng để đảm bảo chất lượng dịch vụ và hiệu quả hoạt động của công ty.",PASS,"RESULT: PASS
+REASON: Câu trả lời trả lời đúng trọng tâm câu hỏi, cung cấp thông tin chính xác và đầy đủ dựa trên các tài liệu đã truy xuất (Tài liệu 1 về tính minh bạch/rõ ràng của quy trình giao việc và Tài liệu 3 về tinh thần phối hợp giữa các phòng ban). Không có thông tin bịa đặt.",8,"Ứng viên đang hỏi về quy định đồng phục, văn hóa công ty, team building, quy tắc trang phục, tác phong làm việc, công cụ quản lý công việc, chu kỳ đánh giá KPI và quy trình phối hợp giữa các phòng ban.",4.78
+29,company,Một năm mình được bao nhiêu ngày phép năm vậy ạ? Phép không nghỉ hết có được thanh toán tiền không?,"Theo quy định tại Sổ tay nhân viên, chế độ nghỉ phép năm của công ty được áp dụng như sau:
+
+Đối với CBNV có hợp đồng lao động từ **12 tháng** trở lên, số ngày nghỉ phép năm là **12 ngày** cho 12 tháng làm việc chính thức. Nếu chưa làm việc đủ 12 tháng, số ngày phép sẽ được tính tương ứng với số tháng làm việc theo tỷ lệ **01 ngày phép/01 tháng**. Ngoài ra, cứ đủ **5 năm** làm việc liên tiếp cho công ty, bạn sẽ được tăng thêm **01 ngày** phép.
+
+Về việc thanh toán phép năm, nếu hết kỳ tính phép năm mà bạn chưa dùng hết, số ngày phép này sẽ được **quy ra tiền**. Trong trường hợp bạn nghỉ việc mà vẫn còn ngày phép chưa sử dụng hết, công ty cũng sẽ thanh toán bằng **tiền lương cơ bản** tương ứng và khoản này sẽ được chi trả cùng kỳ lương cuối cùng.",PASS,"RESULT: PASS
+REASON: Câu trả lời đã trả lời đầy đủ và chính xác cả hai ý của người dùng dựa trên các tài liệu được cung cấp: 1. Số ngày phép (12 ngày/năm, tính theo tháng nếu chưa đủ 12 tháng, và tăng thêm 1 ngày sau mỗi 5 năm làm việc - trích từ Tài liệu 6 và Tài liệu 4) và 2. Việc thanh toán phép dư (quy ra tiền khi hết kỳ hoặc khi nghỉ việc - trích từ Tài liệu 2, 3, 4 và Tài liệu 1). Không có thông tin nào bị bịa đặt.",8,"Ứng viên đang hỏi về quy định đồng phục, tác phong làm việc, công cụ quản lý công việc, chu kỳ đánh giá KPI, quy trình phối hợp giữa các phòng ban và chế độ nghỉ phép năm.",5.52
+30,company,Nếu hết hạn hợp đồng hoặc muốn xin nghỉ việc thì mình phải báo trước bao nhiêu ngày?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về quy định đồng phục, công cụ quản lý công việc, chu kỳ đánh giá KPI, quy trình phối hợp giữa các phòng ban, chế độ nghỉ phép năm và thời hạn báo trước khi nghỉ việc.",4.26
+31,job,Cho mình hỏi vị trí này phỏng vấn mấy vòng vậy ạ? Có bài test đầu vào không?,"Rất tiếc, hiện tại tôi chưa có thông tin cụ thể về số vòng phỏng vấn cũng như các bài kiểm tra đầu vào cho từng vị trí trong dữ liệu được cung cấp.
+
+Để có thông tin chính xác nhất về quy trình tuyển dụng cho vị trí bạn đang quan tâm, bạn vui lòng gửi CV để bộ phận chuyên môn xem xét và sẽ liên hệ hướng dẫn chi tiết cho bạn nhé.
+
+Dưới đây là danh sách các vị trí đang tuyển dụng tại AIPT để bạn tham khảo:
+
+*   **ID 1: Nhân viên FullStack Developer**
+    *   Số lượng: 1
+    *   Lương: 14.000.000 - 18.000.000 VND
+    *   Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp tính năng AI, quản lý ứng dụng trên Linux/Docker.
+*   **ID 2: Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 1
+    *   Lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả: Tìm kiếm yêu cầu thiết bị an ninh quốc phòng, xây dựng hệ thống, demo và hỗ trợ khách hàng.
+*   **ID 3: Thực tập sinh Kinh doanh Dự án**
+    *   Số lượng: 2
+    *   Lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả: Hỗ trợ báo giá, chăm sóc khách hàng, soạn thảo tài liệu sản phẩm và hoàn thiện hồ sơ dự án.
+*   **ID 4: Sales Admin**
+    *   Số lượng: 3
+    *   Lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh, đấu thầu, thực hiện hợp đồng, quản lý hồ sơ dự án và các công việc hành chính phòng.
+*   **ID 5: Nhân viên Phát triển AI**
+    *   Số lượng: 1
+    *   Lương: 12.000.000 - 18.000.000 VND
+    *   Mô tả: Phát triển chatbot LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI (LangGraph), tích hợp hệ thống.
+*   **ID 6: Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 3
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Nghiên cứu giải pháp công nghệ chuyên dụng, triển khai kỹ thuật, demo sản phẩm, lắp đặt và hỗ trợ kỹ thuật sau bán hàng.
+*   **ID 7: Kỹ sư thiết kế UAV**
+    *   Số lượng: 1
+    *   Lương: 15.000.000 - 25.000.000 VND
+    *   Mô tả: Thiết kế kết cấu UAV (SolidWorks/CATIA...), mô phỏng, tích hợp phần cứng (motor, flight controller...) và thử nghiệm.
+*   **ID 8: Nhân viên Kinh doanh Dự án**
+    *   Số lượng: 1
+    *   Lương: 10.000.000 - 15.000.000 VND
+    *   Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật tư vấn giải pháp và quản lý dự án/hợp đồng.
+*   **ID 9: Nhân viên Mua hàng Quốc tế**
+    *   Số lượng: 2
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Tìm kiếm nhà cung cấp, đàm phán giá, thực hiện nghiệp vụ mua hàng dự án và quản lý quan hệ đối tác quốc tế.
+
+Bạn hãy nộp CV trực tiếp vào khung chat này để được hỗ trợ nhanh nhất nhé!",PASS,"RESULT: PASS
+REASON: Người dùng đang hỏi về quy trình phỏng vấn (số vòng, bài test) cho một vị trí cụ thể nhưng không nêu rõ tên vị trí đó là gì. Chatbot đã xử lý rất thông minh bằng cách: 1. Thừa nhận không có thông tin cụ thể về quy trình phỏng vấn trong dữ liệu hiện tại (tránh việc bịa đặt thông tin - hallucination). 2. Đưa ra lời khuyên hợp lý (gửi CV để được tư vấn trực tiếp). 3. Cung cấp danh sách các vị trí đang tuyển dụng để người dùng có thể chọn lựa và xác định rõ vị trí họ đang quan tâm. Cách phản hồi này vừa trung thực, vừa mang tính hỗ trợ cao cho trải nghiệm người dùng.",8,"Ứng viên đang hỏi về quy trình phỏng vấn, số vòng phỏng vấn và bài test đầu vào.",9.33
+32,company,Team Marketing hiện tại đang có bao nhiêu nhân sự vậy ạ?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về quy trình phỏng vấn, số vòng phỏng vấn, bài test đầu vào và số lượng nhân sự team Marketing.",2.44
+33,company,Sản phẩm/dịch vụ chủ lực hiện tại mang lại doanh thu chính cho AIPT Group là gì vậy?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về số lượng nhân sự team Marketing, sản phẩm/dịch vụ chủ lực của công ty và quy trình phỏng vấn (số vòng, bài test).",4.57
+34,chitchat,Bạn là bot hay là người thật đang chat với mình vậy?,"Tôi là trợ lý chatbot tuyển dụng của AIPT được thiết kế để hỗ trợ bạn các thông tin về công ty, tư vấn vị trí tuyển dụng và tiếp nhận hồ sơ ứng tuyển.",N/A,Chit-chat (Bỏ qua),8,"Ứng viên đang hỏi về số lượng nhân sự team Marketing, sản phẩm/dịch vụ chủ lực của công ty, quy trình phỏng vấn (số vòng, bài test) và thời hạn báo trước khi nghỉ việc.",2.31
+35,company,Chị HR bên mình có khó tính không bạn?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về số lượng nhân sự team Marketing, sản phẩm/dịch vụ chủ lực, quy trình phỏng vấn (số vòng, bài test), tính cách HR và xác nhận danh tính chatbot.",2.56
+36,job,Hiện tại bên mình có công việc nào thu nhập khoảng 18 triệu không ạ?,"Chào bạn, hiện tại AIPT đang có các vị trí với mức thu nhập khởi điểm từ 18.000.000 VND (hoặc cao hơn tùy theo năng lực) như sau:
+
+*   **Nhân viên FullStack Developer**
+    *   Số lượng: 01
+    *   Mức lương: 14.000.000 - 18.000.000 VND (Thỏa thuận theo năng lực, có thể cao hơn + Thưởng hiệu quả công việc).
+    *   Mô tả: Tham gia phát triển website/mobile app (front-end & back-end), thiết kế RESTful APIs, tích hợp tính năng AI, vận hành trên môi trường Linux/Docker.
+
+*   **Nhân viên Phát triển AI**
+    *   Số lượng: 01
+    *   Mức lương: 12.000.000 - 18.000.000 VND (Thỏa thuận theo năng lực + Thưởng hiệu quả công việc).
+    *   Mô tả: Thiết kế/triển khai chatbot sử dụng LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI (LangGraph), tích hợp chatbot với các nền tảng khác.
+
+*   **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 03
+    *   Mức lương: 15.000.000 - 18.000.000 VND (Thỏa thuận theo năng lực + Thưởng hiệu quả công việc).
+    *   Mô tả: Nghiên cứu tài liệu kỹ thuật thiết bị chuyên dụng, triển khai cấu hình/đánh giá kỹ thuật, demo sản phẩm cho khách hàng, hỗ trợ lắp đặt và xử lý kỹ thuật sau bán hàng.
+
+*   **Nhân viên Mua hàng Quốc tế**
+    *   Số lượng: 02
+    *   Mức lương: 15.000.000 - 18.000.000 VND.
+    *   Mô tả: Tìm kiếm nguồn hàng/hãng phù hợp, đàm phán giá cả, quản lý hợp đồng và thủ tục nhập khẩu, phát triển mối quan hệ với đối tác quốc tế.
+
+Nếu bạn thấy phù hợp với vị trí nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic của câu trả lời mà Chatbot đã đưa ra so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm công việc có thu nhập ""khoảng 18 triệu"". Từ ""khoảng"" trong ngôn ngữ tự nhiên có thể hiểu là các công việc có mức lương tối đa chạm ngưỡng 18 triệu hoặc có dải lương bao quanh con số này.
+2. **Phản hồi của Chatbot:** Chatbot đã liệt kê 4 vị trí có mức lương kết thúc ở con số 18.000.000 VND (FullStack, AI, Presales, Mua hàng). 
+3. **Tính hợp lý:** 
+    * Chatbot đã hiểu đúng ngữ cảnh ""khoảng 18 triệu"" là tìm các công việc có mức trần hoặc dải lương liên quan đến con số này.
+    * Các thông tin về số lượng, mức lương và mô tả công việc được trình bày rõ ràng, chuyên nghiệp và trực tiếp giải quyết được nhu cầu của người dùng.
+    * Mặc dù không thấy SQL, nhưng dựa trên kết quả trả về, có thể suy luận hệ thống đã truy vấn đúng các bản ghi có `salary_max >= 18.000.000` hoặc tương đương.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định ""khoảng 18 triệu"" của người dùng và lọc ra các công việc có dải lương chạm ngưỡng 18.000.000 VND. Câu trả lời đầy đủ, chi tiết và đúng trọng tâm yêu cầu.",8,"Ứng viên đang hỏi về số lượng nhân sự team Marketing, sản phẩm chủ lực, tính cách HR, xác nhận danh tính chatbot và quan tâm các vị trí có thu nhập khoảng 18 triệu.",6.81
+37,job,Có vị trí nào đòi hỏi kinh nghiệm 3 năm trở lên không?,"Dựa trên dữ liệu tuyển dụng hiện tại, tất cả các vị trí đang mở tại AIPT đều yêu cầu mức kinh nghiệm là **3 năm**. Cụ thể như sau:
+
+* **Nhân viên FullStack Developer** (Số lượng: 1)
+    * Lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp AI, vận hành trên Linux/Docker.
+
+* **Sales Admin** (Số lượng: 3)
+    * Lương: 12.000.000 - 15.000.000 VND
+    * Mô tả: Hỗ trợ kinh doanh, đấu thầu, thực hiện hợp đồng và các công việc hành chính phòng kinh doanh.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (Số lượng: 3)
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Nghiên cứu tài liệu kỹ thuật, triển khai cấu hình, demo sản phẩm và hỗ trợ kỹ thuật sau bán hàng.
+
+* **Nhân viên Kinh doanh Dự án** (Số lượng: 1)
+    * Lương: 10.000.000 - 15.000.000 VND
+    * Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật tư vấn giải pháp và quản lý dự án.
+
+* **Nhân viên Mua hàng Quốc tế** (Số lượng: 2)
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm nguồn hàng/hãng, đàm phán giá, quản lý hợp đồng và thủ tục nhập khẩu.
+
+Nếu bạn có kinh nghiệm phù hợp, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhé!",FAIL,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (chứa câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic đối chiếu giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm các vị trí có kinh nghiệm $\ge 3$ năm.
+2. **Câu trả lời của chatbot:** Chatbot khẳng định *""tất cả các vị trí đang mở tại AIPT đều yêu cầu mức kinh nghiệm là 3 năm""* và liệt kê danh sách các công việc.
+3. **Vấn đề logic:** 
+    * Nếu thực tế trong cơ sở dữ liệu có những vị trí yêu cầu 1 năm hoặc 2 năm, mà chatbot lại trả lời ""tất cả đều là 3 năm"" thì chatbot đang bị lỗi logic (hallucination hoặc lọc sai).
+    * Tuy nhiên, xét về mặt trình bày, chatbot đã trả lời trực diện vào câu hỏi và cung cấp thông tin chi tiết. 
+    * **Điểm mấu chốt:** Để khẳng định là PASS hay FAIL, ta cần biết câu lệnh SQL có thực hiện lệnh `WHERE experience >= 3` hay không. Do thiếu SQL, tôi phải dựa vào tính hợp lý của câu trả lời. Câu trả lời của chatbot có vẻ ""quá tuyệt đối"" (khẳng định tất cả đều là 3 năm), điều này thường xảy ra khi AI lấy toàn bộ danh sách công việc hiện có mà không thực hiện bộ lọc (filter) chính xác theo điều kiện ""3 năm trở lên"", hoặc nó đang hiểu nhầm rằng tất cả dữ liệu hiện có đều thỏa mãn.
+
+Tuy nhiên, nếu giả định rằng dữ liệu thực tế đúng là tất cả các vị trí đều có kinh nghiệm $\ge 3$ năm, thì chatbot đã làm tốt. Nhưng thông thường, trong các bài kiểm tra chất lượng, việc chatbot khẳng định ""tất cả đều là..."" thay vì ""Dưới đây là các vị trí..."" cho thấy khả năng lọc dữ liệu có vấn đề.
+
+**Nếu không có SQL để kiểm chứng việc lọc, tôi sẽ đánh giá dựa trên sự thiếu hụt thông tin kiểm chứng:**
+
+RESULT: FAIL
+REASON: Không có thông tin SQL để kiểm chứng việc thực hiện điều kiện lọc `experience >= 3`. Ngoài ra, câu trả lời của chatbot mang tính khẳng định quá mức (""tất cả các vị trí... đều yêu cầu 3 năm""), điều này cho thấy dấu hiệu chatbot có thể đã lấy toàn bộ danh sách công việc mà không áp dụng bộ lọc kinh nghiệm, dẫn đến kết quả không chính xác nếu trong DB có vị trí khác mức 3 năm.",8,"Ứng viên đang hỏi về sản phẩm chủ lực, tính cách HR, xác nhận danh tính chatbot, quan tâm các vị trí thu nhập khoảng 18 triệu và các công việc yêu cầu trên 3 năm kinh nghiệm.",7.14
+38,job,Tìm giúp mình các cơ hội việc làm liên quan đến mảng sales.,"Chào bạn, dựa trên nhu cầu của bạn, AIPT hiện đang có các vị trí thuộc mảng Sales (Kinh doanh và Hỗ trợ kinh doanh) bao gồm cả các vị trí dành cho thực tập sinh và nhân viên có kinh nghiệm như sau:
+
+**1. Nhóm dành cho nhân viên có kinh nghiệm:**
+
+* **Nhân viên Kinh doanh Dự án**
+    * Số lượng: 01
+    * Lương: 10.000.000 - 15.000.000 VND + % hoa hồng doanh số.
+    * Mô tả: Lập kế hoạch bán hàng; chăm sóc khách hàng hiện tại và mở rộng khách hàng mới; phối hợp với bộ phận kỹ thuật để tư vấn/demo giải pháp; chuẩn bị hồ sơ chào giá/dự thầu; giám sát quá trình thực hiện dự án.
+
+* **Sales Admin**
+    * Số lượng: 03
+    * Lương: 12.000.000 - 15.000.000 VND.
+    * Mô tả: Soạn thảo báo giá; phối hợp triển khai dự án; nghiên cứu và chuẩn bị hồ sơ dự thầu; soạn thảo hợp đồng/phụ lục; quản lý tiến độ dự án và thu hồi công nợ; thực hiện các báo cáo theo yêu cầu.
+
+**2. Nhóm dành cho Thực tập sinh:**
+
+* **Thực tập sinh Kinh doanh Dự án**
+    * Số lượng: 02
+    * Lương: 3.000.000 - 5.000.000 VND.
+    * Mô tả: Hỗ trợ liên hệ khách hàng báo giá; chăm sóc khách hàng cũ; hỗ trợ soạn thảo tài liệu sản phẩm; chuẩn bị các buổi thuyết trình giới thiệu sản phẩm; hỗ trợ hoàn thiện hồ sơ dự án và hợp đồng.
+
+Nếu bạn quan tâm đến vị trí nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (chứa câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic đối chiếu giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm các công việc liên quan đến mảng ""sales"".
+2. **Câu trả lời của chatbot:** 
+   - Chatbot đã liệt kê các vị trí: ""Nhân viên Kinh doanh Dự án"", ""Sales Admin"", và ""Thực tập sinh Kinh doanh Dự án"".
+   - Các vị trí này đều thuộc mảng Sales (Kinh doanh) đúng như yêu cầu.
+   - Thông tin trình bày rõ ràng, phân loại theo kinh nghiệm (nhân viên và thực tập sinh), có đầy đủ các chi tiết cần thiết (số lượng, lương, mô tả).
+3. **Giả định về SQL:** Mặc dù không thấy câu lệnh SQL, nhưng dựa trên kết quả trả về, có thể suy luận rằng hệ thống đã thực hiện truy vấn tìm kiếm theo từ khóa ""sales"" hoặc ""kinh doanh"" trong cơ sở dữ liệu và trả về kết quả chính xác.
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm về mảng ""sales"" và cung cấp danh sách các công việc liên quan một cách chi tiết, phân loại hợp lý và đầy đủ thông tin.",8,"Ứng viên đang hỏi về tính cách HR, quan tâm các vị trí thu nhập khoảng 18 triệu, yêu cầu trên 3 năm kinh nghiệm và đang tìm kiếm cơ hội việc làm liên quan đến mảng sales.",7.66
+39,job,Công ty có văn phòng ở Hồ Chí Minh và đang tuyển dụng không?,"Hiện tại, tôi chưa có thông tin về địa điểm văn phòng của công ty trong dữ liệu được cung cấp. Tuy nhiên, tôi có thể gửi đến bạn danh sách các vị trí đang tuyển dụng tại AIPT để bạn tham khảo:
+
+* **Nhân viên FullStack Developer**
+    * Số lượng: 01
+    * Lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp AI, vận hành trên Linux/Docker.
+
+* **Nhân viên Phát triển AI**
+    * Số lượng: 01
+    * Lương: 12.000.000 - 18.000.000 VND
+    * Mô tả: Thiết kế/triển khai chatbot sử dụng LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI (LangGraph), tích hợp chatbot với các nền tảng khác.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Số lượng: 03
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Nghiên cứu tài liệu kỹ thuật thiết bị chuyên dụng, triển khai cấu hình/đánh giá kỹ thuật, demo sản phẩm cho khách hàng, hỗ trợ lắp đặt và xử lý kỹ thuật sau bán hàng.
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Số lượng: 02
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm nguồn hàng/hãng phù hợp, đàm phán giá cả, quản lý hợp đồng và thủ tục nhập khẩu, phát triển mối quan hệ với đối tác quốc tế.
+
+* **Sales Admin**
+    * Số lượng: 03
+    * Lương: 12.000.000 - 15.000.000 VND
+    * Mô tả: Hỗ trợ kinh doanh, đấu thầu, thực hiện hợp đồng và các công việc hành chính phòng kinh doanh.
+
+* **Nhân viên Kinh doanh Dự án**
+    * Số lượng: 01
+    * Lương: 10.000.000 - 15.000.000 VND
+    * Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật tư vấn giải pháp và quản lý dự án.
+
+* **Thực tập sinh Kinh doanh Dự án**
+    * Số lượng: 02
+    * Lương: 3.000.000 - 5.000.000 VND
+    * Mô tả: Hỗ trợ liên hệ khách hàng báo giá; chăm sóc khách hàng cũ; hỗ trợ soạn thảo tài liệu sản phẩm; chuẩn bị các buổi thuyết trình giới thiệu sản phẩm; hỗ trợ hoàn thiện hồ sơ dự án và hợp đồng.
+
+Nếu bạn quan tâm đến vị trí nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhé!",PASS,"**RESULT: PASS**
+
+**REASON:** Mặc dù không có thông tin SQL để kiểm tra logic truy vấn, nhưng dựa trên câu trả lời của chatbot, ta thấy AI đã xử lý câu hỏi theo hướng logic và trung thực. Người dùng hỏi một câu hỏi phức hợp gồm hai vế: (1) Địa điểm văn phòng tại Hồ Chí Minh và (2) Tình trạng tuyển dụng. Chatbot đã xác nhận không tìm thấy thông tin về địa điểm trong dữ liệu (tránh việc đoán mò sai sự thật) và ngay lập tức cung cấp thông tin về vế thứ hai (danh sách các vị trí đang tuyển dụng) để hỗ trợ người dùng. Đây là cách phản hồi thông minh và hữu ích trong tình huống thiếu dữ liệu một phần.",8,"Ứng viên quan tâm vị trí mảng sales, thu nhập khoảng 18 triệu, yêu cầu trên 3 năm kinh nghiệm và đang hỏi về địa điểm làm việc tại Hồ Chí Minh.",8.58
+40,job,Những vị trí nào yêu cầu ứng viên có khả năng ngoại ngữ (tiếng Anh) tốt?,"Dựa trên yêu cầu công việc, các vị trí sau đây tại AIPT đòi hỏi ứng viên phải có khả năng tiếng Anh tốt (đọc hiểu tài liệu kỹ thuật hoặc giao tiếp):
+
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Yêu cầu: Khả năng nghe, đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (tương ứng TOEIC 650+).
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Yêu cầu: Khả năng nghe, đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (tương ứng TOEIC 650+).
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Yêu cầu: Sử dụng tốt 4 kỹ năng tiếng Anh để làm việc với các nhà sản xuất và đối tác nước ngoài.
+
+* **Nhân viên Phát triển AI**
+    * Yêu cầu: Kỹ năng tiếng Anh đọc hiểu tốt.
+
+* **Nhân viên Kinh doanh Dự án**
+    * Yêu cầu: Có khả năng đọc hiểu tài liệu sản phẩm hoặc sử dụng tiếng Anh giao tiếp là một lợi thế.
+
+Nếu bạn có thế mạnh về ngoại ngữ, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn ứng tuyển vào các vị trí phù hợp nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên tính logic giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm các vị trí công việc có yêu cầu về tiếng Anh.
+2. **Câu trả lời của chatbot:** Chatbot đã liệt kê danh sách các vị trí cụ thể (Thực tập sinh Presales, Chuyên viên Presales, Nhân viên Mua hàng Quốc tế, Nhân viên Phát triển AI, Nhân viên Kinh doanh Dự án) và đi kèm với các mô tả chi tiết về yêu cầu ngoại ngữ tương ứng (TOEIC, đọc hiểu tài liệu, giao tiếp...).
+3. **Tính hợp lý:** Câu trả lời rất chi tiết, bám sát yêu cầu, không chỉ nêu tên vị trí mà còn giải thích tại sao vị trí đó cần tiếng Anh, giúp người dùng có thông tin đầy đủ nhất.
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Mặc dù không có câu lệnh SQL để kiểm tra, nhưng dựa trên nội dung phản hồi, chatbot đã trích xuất và tổng hợp chính xác các thông tin liên quan đến yêu cầu ngoại ngữ từ dữ liệu công việc. Câu trả lời đầy đủ, có cấu trúc rõ ràng và đáp ứng đúng mục đích tìm kiếm của người dùng.",8,"Ứng viên quan tâm mảng sales, thu nhập khoảng 18 triệu, yêu cầu trên 3 năm kinh nghiệm. Đang hỏi về địa điểm làm việc tại Hồ Chí Minh và các vị trí yêu cầu tiếng Anh tốt.",10.35
+41,job,"Mình đang tìm mức lương từ 10 đến 25 triệu, có job nào phù hợp không?","Với mức thu nhập mong muốn từ 10 đến 25 triệu VND, AIPT có rất nhiều vị trí phù hợp với bạn. Dưới đây là danh sách các công việc có dải lương nằm trong khoảng bạn tìm kiếm:
+
+* **Kỹ sư thiết kế UAV**
+    * Lương: 15.000.000 - 25.000.000 VND
+    * Mô tả: Thiết kế kết cấu UAV (frame, mounting, payload), tối ưu hóa vật liệu, mô phỏng và tích hợp phần cứng.
+
+* **Nhân viên FullStack Developer**
+    * Lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp AI và vận hành trên môi trường Linux/Docker.
+
+* **Nhân viên Phát triển AI**
+    * Lương: 12.000.000 - 18.000.000 VND
+    * Mô tả: Thiết kế chatbot sử dụng LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI phức tạp.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Nghiên cứu tài liệu kỹ thuật, triển khai cấu hình, demo sản phẩm và hỗ trợ kỹ thuật sau bán hàng.
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm nguồn hàng, đàm phán với nhà sản xuất, quản lý hợp đồng và thủ tục nhập khẩu quốc tế.
+
+* **Sales Admin**
+    * Lương: 12.000.000 - 15.000.000 VND
+    * Mô tả: Hỗ trợ kinh doanh, chuẩn bị hồ sơ thầu, soạn thảo hợp đồng và quản lý tiến độ dự án.
+
+* **Nhân viên Kinh doanh Dự án**
+    * Lương: 10.000.000 - 15.000.000 VND
+    * Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật tư vấn giải pháp và quản lý dự án.
+
+Bạn hãy xem qua các vị trí này, nếu thấy phù hợp với năng lực của mình, hãy nộp CV trực tiếp vào khung chat để tôi hỗ trợ bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi sẽ thực hiện đánh giá dựa trên tính logic giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1.  **Ý định người dùng:** Tìm kiếm công việc có mức lương trong khoảng từ 10.000.000 đến 25.000.000 VND.
+2.  **Kiểm tra kết quả chatbot:**
+    *   Kỹ sư thiết kế UAV: 15 - 25 triệu (Nằm trong khoảng) -> **Đúng**
+    *   FullStack Developer: 14 - 18 triệu (Nằm trong khoảng) -> **Đúng**
+    *   Nhân viên Phát triển AI: 12 - 18 triệu (Nằm trong khoảng) -> **Đúng**
+    *   Chuyên viên Tư vấn Kỹ thuật: 15 - 18 triệu (Nằm trong khoảng) -> **Đúng**
+    *   Nhân viên Mua hàng Quốc tế: 15 - 18 triệu (Nằm trong khoảng) -> **Đúng**
+    *   Sales Admin: 12 - 15 triệu (Nằm trong khoảng) -> **Đúng**
+    *   Nhân viên Kinh doanh Dự án: 10 - 15 triệu (Nằm trong khoảng) -> **Đúng**
+3.  **Kết luận:** Tất cả các công việc chatbot liệt kê đều có dải lương thỏa mãn điều kiện $\ge 10$ triệu và $\le 25$ triệu. Câu trả lời rất chuyên nghiệp, đầy đủ thông tin và đúng trọng tâm.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Mặc dù không có câu lệnh SQL để kiểm tra trực tiếp, nhưng dựa trên kết quả hiển thị, chatbot đã lọc và liệt kê chính xác các công việc có dải lương nằm hoàn toàn trong khoảng từ 10 đến 25 triệu VND theo yêu cầu của người dùng.",8,"Ứng viên quan tâm mảng sales, thu nhập 10-25 triệu, yêu cầu trên 3 năm kinh nghiệm. Đang hỏi về địa điểm làm việc tại Hồ Chí Minh, các vị trí cần tiếng Anh tốt và các công việc phù hợp mức lương.",10.56
+42,job,"Sinh viên mới tốt nghiệp, chưa có kinh nghiệm thực tế thì apply được những vị trí nào?","Chào bạn, nếu bạn là sinh viên mới tốt nghiệp và chưa có kinh nghiệm thực tế, AIPT có các vị trí rất phù hợp để bạn bắt đầu sự nghiệp và phát triển năng lực chuyên môn như sau:
+
+**1. Nhóm vị trí Thực tập sinh (Dành cho sinh viên năm cuối hoặc mới tốt nghiệp):**
+
+* **Thực tập sinh Kinh doanh Dự án**
+    * Số lượng: 02
+    * Lương: 3.000.000 - 5.000.000 VND
+    * Mô tả: Hỗ trợ liên hệ khách hàng báo giá, chăm sóc khách hàng cũ, hỗ trợ soạn thảo tài liệu sản phẩm và hoàn thiện hồ sơ dự án/hợp đồng.
+    * Yêu cầu: Sinh viên năm 4, chuẩn bị tốt nghiệp hoặc đã tốt nghiệp các ngành Kinh tế, Marketing, Quản trị kinh doanh, CNTT, Điện tử viễn thông... Có đam mê kinh doanh và kỹ năng tin học văn phòng cơ bản.
+
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Số lượng: 01
+    * Lương: 3.000.000 - 5.000.000 VND
+    * Mô tả: Tìm kiếm yêu cầu sản phẩm cho dự án an ninh quốc phòng, xây dựng hệ thống theo yêu cầu, demo và hỗ trợ khách hàng sử dụng sản phẩm.
+    * Yêu cầu: Không yêu cầu kinh nghiệm. Có kiến thức về mạng, viễn thông, sóng truyền. Tốt nghiệp/đang học các ngành CNTT, Tự động hóa, Điện, Điện tử Viễn thông... Có khả năng đọc hiểu tiếng Anh kỹ thuật (TOEIC 650+).
+
+**2. Nhóm vị trí dành cho nhân viên (Có thể chấp nhận ứng viên mới tốt nghiệp nếu đáp ứng tốt yêu cầu chuyên môn):**
+
+* **Nhân viên Phát triển AI**
+    * Lương: 12.000.000 - 18.000.000 VND
+    * Mô tả: Thiết kế/triển khai chatbot LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI.
+
+* **Nhân viên FullStack Developer**
+    * Lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app, thiết kế RESTful APIs, tích hợp AI, vận hành trên Linux/Docker.
+
+Nếu bạn cảm thấy mình phù hợp với định hướng nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn ứng tuyển nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (chứa câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic của câu trả lời mà chatbot đã đưa ra so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm các công việc phù hợp với đối tượng ""sinh viên mới tốt nghiệp"" và ""chưa có kinh nghiệm"".
+2. **Phản hồi của Chatbot:** 
+    - Chatbot đã phân loại thông minh thành 2 nhóm: Nhóm Thực tập sinh (rõ ràng dành cho người chưa có kinh nghiệm) và Nhóm nhân viên (có ghi chú là có thể chấp nhận người mới nếu đáp ứng chuyên môn).
+    - Các vị trí được liệt kê (Thực tập sinh Kinh doanh, Thực tập sinh Presales, Nhân viên AI, FullStack) đều có mô tả và yêu cầu tương ứng với đối tượng mục tiêu.
+    - Cách trình bày rõ ràng, đầy đủ thông tin (lương, mô tả, yêu cầu) và có lời kêu gọi hành động (CTA) phù hợp.
+3. **Giả định về SQL:** Mặc dù không thấy SQL, nhưng dựa trên nội dung trả lời, có thể thấy hệ thống đã truy vấn thành công các bản ghi có chứa từ khóa liên quan đến ""Thực tập sinh"" hoặc các vị trí không yêu cầu ""kinh nghiệm"" trong cơ sở dữ liệu.
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Chatbot hiểu đúng ý định của người dùng. Thay vì chỉ liệt kê danh sách thô, nó đã phân loại các vị trí thành nhóm ""Thực tập sinh"" (phù hợp nhất) và nhóm ""Nhân viên"" (có thể cân nhắc), giúp người dùng dễ dàng đưa ra quyết định. Thông tin phản hồi chi tiết, logic và bám sát thực tế yêu cầu của một sinh viên mới ra trường.",8,"Ứng viên quan tâm mảng sales, thu nhập 10-25 triệu. Đang hỏi về các vị trí yêu cầu tiếng Anh tốt, các công việc phù hợp cho sinh viên mới tốt nghiệp chưa có kinh nghiệm.",8.69
+43,job,Vị trí lập trình viên Frontend có yêu cầu kỹ năng gì đặc biệt không?,"Hiện tại, trong danh sách các vị trí đang tuyển dụng tại AIPT, chúng tôi không có vị trí chuyên biệt chỉ dành cho **Frontend Developer**. Tuy nhiên, chúng tôi có vị trí **Nhân viên FullStack Developer** có đảm nhiệm cả mảng Front-end.
+
+Đối với phần công việc Front-end trong vị trí FullStack này, bạn cần đáp ứng các kỹ năng đặc biệt sau:
+
+* **Ngôn ngữ & Framework:** Thành thạo JavaScript và có kinh nghiệm phát triển ứng dụng web với **ReactJS**.
+* **Thư viện UI:** Sử dụng thành thạo các thư viện UI phổ biến như **Ant Design, Material UI (MUI)** hoặc các thư viện tương đương.
+* **Phối hợp thiết kế:** Có khả năng phối hợp chặt chẽ với đội ngũ thiết kế UI/UX để chuyển đổi các bản thiết kế thành sản phẩm thực tế.
+* **Công cụ quản lý:** Làm việc thành thạo với **Git** để quản lý mã nguồn.
+
+Nếu bạn có nền tảng Front-end tốt và sẵn sàng học hỏi thêm về Back-end để đảm nhận vai trò FullStack, đây sẽ là cơ hội rất tốt.
+
+Bạn hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn kiểm tra mức độ phù hợp nhé!",PASS,"Vì bạn không cung cấp **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm các yêu cầu kỹ năng cụ thể cho vị trí ""Lập trình viên Frontend"".
+2. **Phản hồi của Chatbot:** 
+   - Chatbot đã thực hiện bước kiểm tra dữ liệu (truy vấn) và nhận thấy không có vị trí nào tên chính xác là ""Frontend Developer"".
+   - Thay vì trả lời ""Không có"", Chatbot đã thông minh hơn khi tìm kiếm các vị trí liên quan (FullStack Developer) có chứa mảng công việc Frontend.
+   - Chatbot trích xuất chính xác các kỹ năng (ReactJS, Ant Design, MUI, Git) từ dữ liệu để trả lời trực tiếp vào câu hỏi ""yêu cầu kỹ năng gì đặc biệt"".
+   - Câu trả lời có tính hỗ trợ cao (gợi ý nộp CV).
+
+**Đánh giá:**
+Mặc dù không thấy SQL, nhưng dựa trên nội dung câu trả lời, có thể khẳng định AI đã thực hiện truy vấn tìm kiếm theo từ khóa liên quan (fuzzy search hoặc mapping) và trích xuất thông tin đúng ngữ cảnh.
+
+RESULT: PASS
+REASON: Chatbot xử lý thông minh khi không chỉ trả lời ""không có"" mà còn tìm kiếm các vị trí tương đương (FullStack) để cung cấp thông tin kỹ năng liên quan đúng với nhu cầu của người dùng. Câu trả lời chi tiết, chính xác và có tính định hướng cao.",8,"Ứng viên là sinh viên mới tốt nghiệp, chưa có kinh nghiệm, thu nhập mong muốn 10-25 triệu. Đang quan tâm các vị trí yêu cầu tiếng Anh tốt, vị trí thực tập hoặc FullStack Developer (có mảng Frontend).",8.12
+44,job,Bên mình có chương trình tuyển thực tập (intern) không?,"Có bạn nhé, hiện tại AIPT đang có các chương trình thực tập rất hấp dẫn dành cho sinh viên năm cuối hoặc các bạn mới tốt nghiệp muốn trải nghiệm môi trường chuyên nghiệp.
+
+Dưới đây là các vị trí thực tập đang mở:
+
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * **Số lượng:** 01
+    * **Lương hỗ trợ:** 3.000.000 - 5.000.000 VND/tháng.
+    * **Mô tả:** Triển khai tìm kiếm yêu cầu sản phẩm, xây dựng hệ thống theo yêu cầu khách hàng, demo và hỗ trợ khách hàng sử dụng sản phẩm.
+    * **Yêu cầu:** Không yêu cầu kinh nghiệm. Có kiến thức về mạng, viễn thông, sóng truyền. Tốt nghiệp hoặc đang học các ngành CNTT, Tự động hóa, Điện, Điện tử Viễn thông... Có khả năng đọc hiểu tiếng Anh kỹ thuật tốt (TOEIC 650+).
+    * **Quyền lợi:** Được đào tạo nghiệp vụ kỹ thuật và kỹ năng mềm bởi chuyên gia; được hỗ trợ dấu thực tập; có cơ hội trở thành nhân viên chính thức với chế độ đãi ngộ tốt.
+
+* **Thực tập sinh Kinh doanh Dự án**
+    * **Số lượng:** 02
+    * **Lương hỗ trợ:** 3.000.000 - 5.000.000 VND/tháng (Lương cứng không phụ thuộc doanh số).
+    * **Mô tả:** Hỗ trợ liên hệ khách hàng báo giá, chăm sóc khách hàng, soạn thảo tài liệu sản phẩm và hỗ trợ hoàn thiện hồ sơ dự án/hợp đồng.
+    * **Yêu cầu:** Sinh viên năm 4 hoặc mới tốt nghiệp chuyên ngành Kinh tế, Marketing, Quản trị kinh doanh, Quản lý dự án, Kỹ thuật điện tử viễn thông, CNTT... Có đam mê kinh doanh, giao tiếp tốt, nhanh nhẹn và đảm bảo thời gian thực tập tối thiểu 5 ngày/tuần.
+    * **Quyền lợi:** Được đào tạo nghiệp vụ kinh doanh chuyên sâu; làm việc trong môi trường trẻ, năng động; được ưu tiên lựa chọn trở thành nhân viên chính thức sau kỳ thực tập.
+
+Nếu bạn quan tâm đến vị trí nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn ứng tuyển ngay nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug** (không có câu lệnh SQL), tôi sẽ đánh giá dựa trên sự logic giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm thông tin về các chương trình thực tập (intern).
+2. **Câu trả lời của chatbot:** 
+    - Xác nhận có chương trình thực tập.
+    - Liệt kê chi tiết các vị trí thực tập đang mở (Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng và Thực tập sinh Kinh doanh Dự án).
+    - Cung cấp đầy đủ các thông tin liên quan: Số lượng, lương, mô tả, yêu cầu và quyền lợi.
+    - Có lời kêu gọi hành động (Call to action) rõ ràng.
+3. **Tính hợp lý:** Câu trả lời rất đầy đủ, chuyên nghiệp và đi thẳng vào vấn đề người dùng cần tìm. Dù không thấy SQL, nhưng dựa trên nội dung phản hồi, có thể thấy hệ thống đã truy xuất đúng dữ liệu từ cơ sở dữ liệu về các vị trí ""Intern/Thực tập sinh"".
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm của người dùng và cung cấp thông tin chi tiết, chính xác về các vị trí thực tập đang tuyển dụng. Câu trả lời đầy đủ và có tính hỗ trợ cao.",8,"Ứng viên là sinh viên mới tốt nghiệp, chưa có kinh nghiệm, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (có mảng Frontend), các vị trí yêu cầu tiếng Anh tốt và đang tìm hiểu về các chương trình thực tập.",9.53
+45,job,Hiện tại vị trí nhân viên IT đang cần tuyển bao nhiêu người vậy?,"Hiện tại, trong danh sách các vị trí thuộc khối Công nghệ thông tin (IT) đang tuyển dụng tại AIPT, chúng tôi đang cần tuyển các vị trí sau:
+
+* **Nhân viên FullStack Developer**: 01 người.
+* **Nhân viên Phát triển AI**: 01 người.
+
+Ngoài ra, nếu bạn quan tâm đến mảng kỹ thuật liên quan đến phần cứng, chúng tôi cũng đang tuyển:
+* **Kỹ sư thiết kế UAV**: 01 người.
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**: 01 người.
+
+Bạn hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn ứng tuyển vào vị trí phù hợp nhất nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi sẽ thực hiện đánh giá dựa trên logic đối chiếu giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm tổng số lượng người cần tuyển cho vị trí ""nhân viên IT"".
+2. **Câu trả lời của chatbot:** 
+   - Chatbot đã phân loại các vị trí thuộc khối IT (FullStack Developer, Phát triển AI).
+   - Chatbot liệt kê chi tiết từng vị trí và số lượng (01 + 01 = 02 người).
+   - Chatbot có sự mở rộng thông tin hợp lý (các vị trí kỹ thuật liên quan) để hỗ trợ người dùng.
+   - Tuy nhiên, chatbot không đưa ra một con số tổng duy nhất (ví dụ: ""Tổng cộng có 02 vị trí IT đang tuyển"") mà liệt kê chi tiết, điều này vẫn đáp ứng tốt yêu cầu tìm kiếm thông tin.
+
+**Giả định:** Nếu câu lệnh SQL (dù không hiển thị ở đây) đã truy vấn đúng các vị trí có chứa từ khóa ""IT"", ""Developer"", ""AI"" hoặc thuộc phòng ban ""Công nghệ thông tin"", thì câu trả lời này là hoàn toàn chính xác.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm về vị trí IT. Thay vì chỉ đưa ra một con số vô hồn, chatbot đã liệt kê chi tiết các vị trí cụ thể thuộc khối IT và số lượng tương ứng, giúp người dùng có thông tin đầy đủ và hữu ích hơn. Câu trả lời có tính tương tác cao.",8,"Ứng viên là sinh viên mới tốt nghiệp, chưa có kinh nghiệm, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (có mảng Frontend), các vị trí yêu cầu tiếng Anh tốt, đang tìm hiểu về chương trình thực tập và số lượng tuyển dụng IT.",6.33
+46,job,tìm việc,"Chào bạn, để tôi có thể tư vấn chính xác nhất vị trí phù hợp với năng lực và mong muốn của bạn, bạn có thể chia sẻ thêm một chút về: **Chuyên ngành bạn đã học, kỹ năng thế mạnh và mức lương mong muốn** được không?
+
+Dựa trên dữ liệu hiện tại, AIPT đang có rất nhiều vị trí đa dạng ở các mảng khác nhau. Bạn có thể tham khảo danh sách dưới đây:
+
+**1. Khối Công nghệ & Kỹ thuật (IT, AI, UAV):**
+* **Nhân viên FullStack Developer** (01 người): Lương 14 - 18 triệu VND.
+* **Nhân viên Phát triển AI** (01 người): Lương 12 - 18 triệu VND.
+* **Kỹ sư thiết kế UAV** (01 người): Lương 15 - 25 triệu VND.
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (01 người): Lương 3 - 5 triệu VND.
+
+**2. Khối Kinh doanh & Dự án (Sales, Admin, Mua hàng):**
+* **Sales Admin** (03 người): Lương 12 - 15 triệu VND.
+* **Nhân viên Kinh doanh Dự án** (01 người): Lương 10 - 15 triệu VND + hoa hồng.
+* **Nhân viên Mua hàng Quốc tế** (02 người): Lương 15 - 18 triệu VND.
+* **Thực tập sinh Kinh doanh Dự án** (02 người): Lương 3 - 5 triệu VND.
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (03 người): Lương 15 - 18 triệu VND.
+
+Bạn hãy xem qua và nếu thấy vị trí nào ""hợp gu"", hãy **nộp CV trực tiếp vào khung chat này** để tôi hỗ trợ bạn ứng tuyển ngay nhé!",PASS,"RESULT: PASS
+REASON: Câu hỏi của người dùng ""tìm việc"" là một truy vấn cực kỳ mơ hồ (underspecified), không có các tiêu chí cụ thể như vị trí, kỹ năng hay mức lương để có thể thực hiện một câu lệnh SQL lọc dữ liệu chính xác. Trong trường hợp này, chatbot đã xử lý rất thông minh bằng cách: 1. Đặt câu hỏi ngược lại để thu thập thêm thông tin (clarification); 2. Cung cấp một danh sách tổng quan các vị trí đang tuyển dụng để người dùng tham khảo. Cách tiếp cận này giúp duy trì trải nghiệm người dùng tốt thay vì báo lỗi hoặc trả về kết quả trống.",8,"Ứng viên là sinh viên mới tốt nghiệp, chưa có kinh nghiệm, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (mảng Frontend), các vị trí yêu cầu tiếng Anh tốt, đang tìm hiểu về chương trình thực tập và số lượng tuyển dụng IT.",9.77
+47,job,tester,"Rất tiếc, hiện tại trong danh sách các vị trí đang tuyển dụng tại AIPT **chưa có vị trí Tester (Kiểm thử phần mềm)**.
+
+Tuy nhiên, nếu bạn có nền tảng về kỹ thuật hoặc muốn phát triển theo hướng phát triển sản phẩm, bạn có thể tham khảo các vị trí liên quan đến mảng Công nghệ và Kỹ thuật đang mở tại công ty như sau:
+
+* **Nhân viên FullStack Developer** (01 người): Lương 14 - 18 triệu VND.
+* **Nhân viên Phát triển AI** (01 người): Lương 12 - 18 triệu VND.
+* **Kỹ sư thiết kế UAV** (01 người): Lương 15 - 25 triệu VND.
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (01 người): Lương 3 - 5 triệu VND.
+
+Bạn có thể gửi CV để tôi lưu lại thông tin, nếu sắp tới công ty có đợt tuyển dụng Tester, tôi sẽ chủ động thông báo cho bạn nhé.
+
+Bạn hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ bạn tìm kiếm các cơ hội khác phù hợp hơn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu lệnh đầu vào của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Người dùng nhập từ khóa ""tester"", đây là một truy vấn tìm kiếm vị trí công việc cụ thể.
+2. **Phản hồi của Chatbot:** 
+   - Chatbot xác định không có vị trí ""Tester"" trong cơ sở dữ liệu hiện tại.
+   - Chatbot thực hiện bước ""gợi ý thông minh"" (fallback mechanism) bằng cách đưa ra các vị trí kỹ thuật khác có liên quan để giữ chân người dùng.
+   - Chatbot có lời kêu gọi hành động (CTA) rõ ràng (gửi CV).
+3. **Giả định về SQL:** Mặc dù không thấy SQL, nhưng dựa trên câu trả lời, có thể suy luận AI đã thực hiện một câu lệnh dạng `SELECT * FROM jobs WHERE position LIKE '%tester%'` và nhận về kết quả rỗng (empty set). Việc chatbot trả lời ""chưa có vị trí Tester"" là hoàn toàn khớp với kết quả truy vấn rỗng đó.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Mặc dù không có SQL hiển thị, nhưng dựa trên câu trả lời, AI đã hiểu đúng ý định tìm kiếm từ khóa ""tester"". Khi không tìm thấy kết quả khớp chính xác, AI đã xử lý rất tốt bằng cách thông báo rõ ràng và đưa ra các gợi ý công việc liên quan trong cùng lĩnh vực kỹ thuật để hỗ trợ người dùng thay vì chỉ trả lời ""không tìm thấy"".",8,"Ứng viên là sinh viên mới tốt nghiệp, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (Frontend), thực tập và số lượng tuyển IT. Đang tìm hiểu về vị trí Tester nhưng công ty chưa tuyển.",5.84
+48,chitchat,việc sg,Hiện tại văn phòng của AIPT chỉ đặt tại Hà Nội nên chúng tôi chưa có các vị trí làm việc tại TP. Hồ Chí Minh. Bạn có thể tham khảo các vị trí tại Hà Nội hoặc để lại thông tin để tôi hỗ trợ khi có thay đổi nhé.,N/A,Chit-chat (Bỏ qua),8,"Ứng viên là sinh viên mới tốt nghiệp, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (Frontend), thực tập và số lượng tuyển IT. Đang tìm hiểu về Tester nhưng công ty chưa tuyển. Ứng viên đang hỏi về việc làm tại TP.HCM.",1.97
+49,company,HR lương bn,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên là sinh viên mới tốt nghiệp, thu nhập mong muốn 10-25 triệu. Quan tâm vị trí FullStack (Frontend), thực tập và số lượng tuyển IT. Đang tìm hiểu về Tester nhưng công ty chưa tuyển. Ứng viên đang hỏi về việc làm tại TP.HCM và lương HR.",3.86
+50,job,"Chào anh chị phòng nhân sự, em vừa hoàn thành chương trình đại học chuyên ngành marketing, nhưng lại có kinh nghiệm làm sale được 2 năm. Em muốn hỏi liệu công ty mình có vị trí sale nào nhàn nhàn mà lương khoảng 12-15 triệu không ạ? Mong anh chị phản hồi giúp em!","Chào bạn, rất cảm ơn bạn đã quan tâm đến cơ hội nghề nghiệp tại AIPT. Với nền tảng chuyên ngành Marketing cùng 2 năm kinh nghiệm làm Sale, bạn đang có lợi thế rất lớn để ứng tuyển vào các vị trí tại công ty.
+
+Về mong muốn của bạn, tôi xin chia sẻ thẳng thắn là các vị trí kinh doanh tại AIPT đều gắn liền với các dự án công nghệ cao và thiết bị chuyên dụng, đòi hỏi sự chủ động và trách nhiệm cao để đạt được hiệu quả công việc. Tuy nhiên, dựa trên mức lương và kinh nghiệm bạn đang có, tôi có 2 vị trí rất phù hợp để bạn cân nhắc:
+
+* **Sales Admin (03 người):**
+    * **Mức lương:** 12.000.000 - 15.000.000 VND.
+    * **Đặc điểm:** Đây là vị trí thiên về hỗ trợ kinh doanh, quản lý hồ sơ thầu, hợp đồng và phối hợp giữa các phòng ban. Công việc này sẽ ít áp lực về việc phải đi thị trường hay tìm kiếm khách hàng mới hơn so với Sales thuần túy, rất phù hợp nếu bạn muốn tận dụng kỹ năng quản lý và sự tỉ mỉ của mình.
+* **Nhân viên Kinh doanh Dự án (01 người):**
+    * **Mức lương:** 10.000.000 - 15.000.000 VND + % hoa hồng doanh số.
+    * **Đặc điểm:** Vị trí này dành cho người muốn phát huy tối đa kinh nghiệm 2 năm làm Sale của mình để chăm sóc khách hàng hiện tại và mở rộng khách hàng mới, với thu nhập tiềm năng cao hơn nhờ hoa hồng.
+
+Bạn hãy xem xét kỹ mô tả công việc và nếu thấy phù hợp, hãy **nộp CV trực tiếp vào khung chat này** để tôi hỗ trợ bạn gửi đến bộ phận chuyên môn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với ý định (intent) của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm vị trí **Sale**, tiêu chí **""nhàn nhàn""** (tương đương với ít áp lực doanh số/hỗ trợ) và mức lương **12-15 triệu**.
+2. **Phản hồi của Chatbot:**
+    * Chatbot đã nhận diện được sự mâu thuẫn giữa yêu cầu ""Sale"" và ""nhàn nhàn"".
+    * Chatbot đưa ra giải pháp thông minh: Gợi ý vị trí **Sales Admin** (đáp ứng tiêu chí ""nhàn"" hơn vì thiên về hỗ trợ, không phải đi thị trường) với mức lương đúng dải **12-15 triệu**.
+    * Chatbot cũng đưa ra phương án thứ hai là **Nhân viên Kinh doanh Dự án** để người dùng có thêm lựa chọn về thu nhập.
+    * Cách hành văn chuyên nghiệp, phù hợp với vai trò nhân sự.
+
+**Kết luận:** Mặc dù không thấy SQL, nhưng dựa trên nội dung trả lời, có thể khẳng định hệ thống đã truy vấn đúng dữ liệu (mức lương và tên vị trí) để đưa ra phản hồi khớp hoàn toàn với yêu cầu của người dùng.
+
+RESULT: PASS
+REASON: Chatbot hiểu đúng ý định phức tạp của người dùng (vừa muốn làm sale, vừa muốn việc nhẹ, vừa có mức lương cụ thể). Chatbot đã khéo léo chuyển đổi yêu cầu ""sale nhàn"" thành vị trí ""Sales Admin"" phù hợp với dải lương 12-15 triệu và cung cấp thông tin chính xác, có tính định hướng nghề nghiệp cao.",8,"Ứng viên tốt nghiệp Marketing, có 2 năm kinh nghiệm Sale. Quan tâm vị trí Sale/Sales Admin với mức lương 12-15 triệu. Đang tìm hiểu về các vị trí kinh doanh tại công ty.",7.27
+51,job,"Dạ công ty ơi, đợt vừa rồi em rải CV nhiều nơi mà chưa đậu. Em thấy bên công ty mình phúc lợi tốt quá nên muốn hỏi xem có vị trí kế toán nào trống không? Lương trên 10 củ là em làm.","Rất chia sẻ với những khó khăn mà bạn đang gặp phải trong quá trình tìm việc. Đừng quá nản lòng nhé, đôi khi chỉ là do chúng ta chưa tìm đúng nơi phù hợp với thế mạnh của mình thôi.
+
+Về câu hỏi của bạn, hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT **chưa có vị trí Kế toán**.
+
+Tuy nhiên, nếu bạn đang tìm kiếm công việc có mức lương từ 10 triệu trở lên, tôi xin gợi ý một số vị trí khác tại công ty có thể phù hợp với mong muốn về thu nhập của bạn:
+
+* **Sales Admin (03 người):** Lương 12.000.000 - 15.000.000 VND (Công việc thiên về giấy tờ, hồ sơ, hợp đồng, rất cần sự cẩn thận tương tự như kế toán).
+* **Nhân viên Kinh doanh Dự án (01 người):** Lương 10.000.000 - 15.000.000 VND.
+* **Nhân viên Mua hàng Quốc tế (02 người):** Lương 15.000.000 - 18.000.000 VND (Công việc liên quan đến đàm phán, hợp đồng và quản lý nhà cung cấp).
+* **Nhân viên FullStack Developer (01 người):** Lương 14.000.000 - 18.000.000 VND.
+* **Nhân viên Phát triển AI (01 người):** Lương 12.000.000 - 18.000.000 VND.
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (03 người):** Lương 15.000.000 - 18.000.000 VND.
+* **Kỹ sư thiết kế UAV (01 người):** Lương 15.000.000 - 25.000.000 VND.
+
+Nếu bạn có kỹ năng về quản lý chứng từ, hợp đồng hoặc giao tiếp tốt, vị trí **Sales Admin** hoặc **Mua hàng Quốc tế** có thể là một hướng đi mới rất tiềm năng cho bạn đấy.
+
+Bạn hãy **nộp CV trực tiếp vào khung chat này** để tôi xem xét và tư vấn kỹ hơn cho bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với yêu cầu của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm vị trí ""Kế toán"" có mức lương ""> 10 triệu"".
+2. **Phản hồi của Chatbot:**
+   - Xác nhận không có vị trí ""Kế toán"" nào đang tuyển.
+   - Thực hiện bước ""Upsell/Suggest"" (gợi ý thay thế) rất thông minh: Tìm các vị trí khác có mức lương $\ge$ 10 triệu để đáp ứng điều kiện về thu nhập của người dùng.
+   - Các vị trí gợi ý (Sales Admin, Nhân viên Kinh doanh,...) đều có mức lương thỏa mãn điều kiện ""> 10 củ"" (10 triệu).
+   - Thái độ phản hồi (Tone of voice) rất chuyên nghiệp, có sự đồng cảm và hướng dẫn hành động tiếp theo (nộp CV).
+
+**Kết luận:** Dù không thấy SQL, nhưng dựa trên kết quả trả về, có thể thấy AI đã thực hiện hai truy vấn logic: một là tìm `job_title LIKE '%Kế toán%'` (kết quả rỗng) và hai là tìm `salary >= 10,000,000` (kết quả có danh sách). Chatbot đã xử lý tình huống ""không có kết quả chính xác"" bằng cách đưa ra ""kết quả liên quan"" một cách hợp lý.
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng hai điều kiện của người dùng: vị trí (Kế toán) và mức lương (> 10 triệu). Khi không tìm thấy vị trí Kế toán, chatbot đã thông minh gợi ý các vị trí khác thỏa mãn điều kiện về lương và có tính chất công việc tương đồng, giúp duy trì trải nghiệm người dùng tốt.",8,"Ứng viên tốt nghiệp Marketing, 2 năm kinh nghiệm Sale. Quan tâm vị trí Sales Admin, Mua hàng Quốc tế hoặc Kinh doanh với lương >10 triệu. Đang hỏi về vị trí Kế toán.",7.22
+52,job,có chóp lào 15 chẹo hk ad ưi?,"Chào bạn, nếu bạn đang tìm kiếm các vị trí có mức lương khởi điểm từ **15 triệu đồng trở lên**, AIPT hiện đang có các cơ hội sau đây:
+
+* **Kỹ sư thiết kế UAV (01 người):**
+    * **Mức lương:** 15.000.000 - 25.000.000 VND.
+    * **Yêu cầu:** Thành thạo các công cụ CAD (SolidWorks, CATIA...), có kiến thức về thiết kế cơ khí, vật liệu và ưu tiên kinh nghiệm về UAV/Robotics.
+
+* **Nhân viên Mua hàng Quốc tế (02 người):**
+    * **Mức lương:** 15.000.000 - 18.000.000 VND.
+    * **Yêu cầu:** Tiếng Anh tốt (4 kỹ năng), có kinh nghiệm Xuất nhập khẩu hoặc Mua hàng quốc tế.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (03 người):**
+    * **Mức lương:** 15.000.000 - 18.000.000 VND.
+    * **Yêu cầu:** Nam, tốt nghiệp chuyên ngành Điện tử, Viễn thông, CNTT... có khả năng đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (Toeic 650+).
+
+Bạn hãy xem mình có thế mạnh ở mảng nào và **nộp CV trực tiếp vào khung chat này** để tôi hỗ trợ bạn nhé!",PASS,"RESULT: PASS
+REASON: Người dùng sử dụng ngôn ngữ không chính thức (""teencode"") với câu hỏi ""có chóp lào 15 chẹo hk ad ưi?"" thực chất là ""có chỗ nào 15 triệu không ad ơi?"". AI đã hiểu đúng ý định tìm kiếm công việc có mức lương từ 15 triệu đồng. Mặc dù không có thông tin SQL để kiểm tra logic truy vấn, nhưng dựa trên câu trả lời, chatbot đã liệt kê chính xác các vị trí có mức lương bắt đầu từ 15.000.000 VND, phản ánh đúng yêu cầu của người dùng một cách hợp lý và chuyên nghiệp.",8,"Tốt nghiệp Marketing, 2 năm kinh nghiệm Sale. Quan tâm Sales Admin, Mua hàng Quốc tế hoặc Kinh doanh với lương >10 triệu. Đang hỏi về vị trí Kế toán và các công việc có lương từ 15 triệu.",7.35
+53,job,tuỷn nv code khum,"Có chứ bạn ơi! AIPT đang có các vị trí dành cho dân lập trình (code) với mức thu nhập rất hấp dẫn. Bạn tham khảo các vị trí dưới đây nhé:
+
+* **Nhân viên FullStack Developer (01 người):**
+    * **Mức lương:** 14.000.000 - 18.000.000 VND (Thỏa thuận thêm theo năng lực + Thưởng).
+    * **Yêu cầu chính:** Từ 2 năm kinh nghiệm; thành thạo JavaScript, Python; có kinh nghiệm với ReactJS, Flask, NodeJS...; làm việc được với SQL, MongoDB và Docker.
+
+* **Nhân viên Phát triển AI (01 người):**
+    * **Mức lương:** 12.000.000 - 18.000.000 VND (Thỏa thuận thêm theo năng lực + Thưởng).
+    * **Yêu cầu chính:** Tốt nghiệp ngành CNTT/AI/Data Science; thành thạo Python/C++ và các framework AI/ML (PyTorch, TensorFlow); hiểu về LLMs, NLP, RAG và các framework như LangGraph/LangChain.
+
+Nếu bạn thấy mình phù hợp với mảng nào, hãy **nộp CV trực tiếp vào khung chat này** để mình kết nối bạn với bộ phận kỹ thuật nhé!",PASS,"RESULT: PASS
+REASON: Mặc dù câu hỏi của người dùng sử dụng ngôn ngữ không chính thức (teencode: ""tuỷn nv code khum"" = ""tuyển nhân viên code không""), AI đã hiểu đúng ý định tìm kiếm các vị trí lập trình. Chatbot đã phản hồi bằng cách liệt kê các vị trí công việc liên quan đến lập trình (FullStack Developer, Phát triển AI) kèm theo thông tin chi tiết về lương và yêu cầu, hoàn toàn phù hợp với ngữ cảnh tìm việc làm.",8,"Tốt nghiệp Marketing, 2 năm kinh nghiệm Sale. Quan tâm Sales Admin, Mua hàng Quốc tế, hoặc các vị trí lập trình (FullStack, AI) với lương từ 12-18 triệu. Đang hỏi về các vị trí có lương từ 15 triệu.",7.2
+54,job,tỉm vjệc nàm tester paithong,"Rất tiếc là hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT **chưa có vị trí Tester** bạn nhé.
+
+Tuy nhiên, nếu bạn có nền tảng về kỹ thuật hoặc muốn làm việc trong các dự án công nghệ, bạn có thể tham khảo các vị trí liên quan đến phát triển phần mềm và hệ thống đang có sẵn tại công ty:
+
+* **Nhân viên FullStack Developer (01 người):**
+    * **Mức lương:** 14.000.000 - 18.000.000 VND.
+    * **Yêu cầu:** Thành thạo JavaScript, Python, ReactJS, Flask, NodeJS... và các hệ quản trị cơ sở dữ liệu.
+
+* **Nhân viên Phát triển AI (01 người):**
+    * **Mức lương:** 12.000.000 - 18.000.000 VND.
+    * **Yêu cầu:** Thành thạo Python/C++, các framework AI/ML (PyTorch, TensorFlow) và hiểu về LLMs, NLP.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (03 người):**
+    * **Mức lương:** 15.000.000 - 18.000.000 VND.
+    * **Yêu cầu:** Tốt nghiệp chuyên ngành Điện tử, Viễn thông, CNTT... và có khả năng đọc hiểu tài liệu tiếng Anh kỹ thuật.
+
+Bạn hãy xem xét các vị trí trên, nếu thấy có điểm nào phù hợp với kỹ năng của mình thì hãy **nộp CV trực tiếp vào khung chat này** để tôi hỗ trợ nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (chứa câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Câu hỏi người dùng:** ""tỉm vjệc nàm tester paithong"" (Tìm việc làm tester part-time). Đây là một câu hỏi có lỗi chính tả nhưng ý định (intent) rất rõ ràng: Tìm vị trí **Tester** với hình thức **Part-time**.
+2. **Câu trả lời của Chatbot:** 
+   - Chatbot xác nhận không có vị trí ""Tester"".
+   - Chatbot đưa ra các gợi ý thay thế (FullStack, AI, Presales) để giữ chân người dùng.
+   - Chatbot có hướng dẫn bước tiếp theo (nộp CV).
+3. **Logic hệ thống:** Mặc dù không thấy SQL, nhưng dựa trên câu trả lời ""chưa có vị trí Tester"", có thể suy luận rằng hệ thống đã thực hiện truy vấn tìm kiếm với từ khóa ""Tester"" và kết quả trả về là rỗng (empty set). Việc chatbot thông báo không có kết quả và gợi ý các công việc liên quan là một hành vi xử lý thông minh (graceful degradation) và đúng với trải nghiệm người dùng.
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Mặc dù câu hỏi của người dùng có nhiều lỗi chính tả, chatbot đã hiểu đúng ý định tìm kiếm vị trí ""Tester"". Khi không tìm thấy kết quả khớp trong cơ sở dữ liệu, chatbot đã phản hồi trung thực và đưa ra các gợi ý công việc liên quan một cách chuyên nghiệp để hỗ trợ người dùng.",8,"Tốt nghiệp Marketing, 2 năm kinh nghiệm Sale. Quan tâm Sales Admin, Mua hàng Quốc tế, FullStack, AI hoặc các vị trí lương >15 triệu. Đang hỏi về vị trí Tester.",7.94
+55,job,có cv nà0 ch0 ng m0i ra tru0ng hok dza?,"Chào bạn, nếu bạn là sinh viên mới ra trường hoặc đang tìm kiếm cơ hội để bắt đầu sự nghiệp, AIPT có các vị trí thực tập sinh rất phù hợp để bạn vừa làm vừa được đào tạo bài bản nhé:
+
+* **Thực tập sinh Kinh doanh Dự án (02 người):**
+    * **Mức lương hỗ trợ:** 3.000.000 - 5.000.000 VND/tháng.
+    * **Mô tả:** Hỗ trợ các công việc thuộc phòng Kinh doanh như liên hệ khách hàng, báo giá, soạn thảo tài liệu sản phẩm, hỗ trợ hoàn thiện hồ sơ dự án...
+    * **Yêu cầu:** Sinh viên năm 4, chuẩn bị tốt nghiệp hoặc đã tốt nghiệp chuyên ngành Kinh tế, Marketing, Quản trị kinh doanh, CNTT, Điện tử viễn thông... Có đam mê kinh doanh và kỹ năng giao tiếp tốt.
+
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales (01 người):**
+    * **Mức lương hỗ trợ:** 3.000.000 - 5.000.000 VND/tháng.
+    * **Mô tả:** Tìm kiếm yêu cầu sản phẩm cho dự án an ninh quốc phòng, xây dựng hệ thống, demo sản phẩm và hỗ trợ khách hàng.
+    * **Yêu cầu:** Không yêu cầu kinh nghiệm. Có kiến thức về mạng, viễn thông, sóng truyền. Tốt nghiệp/đang học chuyên ngành CNTT, Tự động hóa, Điện, Điện tử Viễn thông... Có khả năng đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (Toeic 650+).
+
+Ngoài ra, nếu bạn có kỹ năng chuyên môn tốt, bạn cũng có thể ứng tuyển các vị trí nhân viên chính thức như **Nhân viên Phát triển AI** hoặc **Nhân viên FullStack Developer** (tùy vào năng lực thực tế của bạn).
+
+Bạn hãy **nộp CV trực tiếp vào khung chat này** để mình xem xét hồ sơ và tư vấn lộ trình phù hợp nhất cho bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug** (không có câu lệnh SQL), tôi sẽ đánh giá dựa trên sự logic giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Người dùng hỏi bằng ngôn ngữ không chính thức (""teencode""): *""có cv nà0 ch0 ng m0i ra tru0ng hok dza?""* $\rightarrow$ Dịch: *""Có công việc nào cho người mới ra trường không vậy?""*.
+2. **Khả năng hiểu của AI:** AI đã hiểu đúng ý định (intent) của người dùng mặc dù câu hỏi viết sai chính tả và dùng từ lóng.
+3. **Chất lượng câu trả lời:** 
+    - AI không chỉ liệt kê các vị trí thực tập (phù hợp với đối tượng mới ra trường) mà còn gợi ý các vị trí chính thức nếu ứng viên có năng lực.
+    - Thông tin cung cấp chi tiết (mức lương, mô tả, yêu cầu).
+    - Có lời kêu gọi hành động (Call to Action) rõ ràng (nộp CV vào khung chat).
+4. **Về mặt kỹ thuật (Giả định):** Dù không thấy SQL, nhưng dựa trên nội dung trả lời, có thể thấy hệ thống đã truy vấn thành công các vị trí có từ khóa liên quan đến ""Thực tập sinh"" hoặc ""Không yêu cầu kinh nghiệm"" từ cơ sở dữ liệu.
+
+**Đánh giá:**
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định của người dùng dù câu hỏi sử dụng ngôn ngữ không chính thức (teencode). Câu trả lời cung cấp thông tin chính xác, phù hợp với đối tượng ""mới ra trường"" (các vị trí thực tập sinh) và có tính tương tác cao.",8,"Quan tâm vị trí Kế toán (lương >10 triệu), Tester, hoặc các vị trí lập trình (code). Đang tìm kiếm công việc cho người mới ra trường/thực tập sinh.",9.16
+56,job,"Mình tìm việc sale, không yêu cầu kinh nghiệm, làm tại Nam Từ Liêm, lương trên 8 triệu, được hỗ trợ xăng xe.","Chào bạn, dựa trên các yêu cầu cụ thể của bạn về vị trí Sale, không yêu cầu kinh nghiệm và mức lương mong muốn, mình xin phản hồi như sau:
+
+Hiện tại, AIPT đang có vị trí phù hợp nhất với định hướng của bạn là:
+
+* **Thực tập sinh Kinh doanh Dự án (02 người):**
+    * **Mức lương hỗ trợ:** 3.000.000 - 5.000.000 VND/tháng.
+    * **Mô tả:** Hỗ trợ các công việc thuộc phòng Kinh doanh như liên hệ khách hàng, báo giá, soạn thảo tài liệu sản phẩm, hỗ trợ hoàn thiện hồ sơ dự án...
+    * **Yêu cầu:** Sinh viên năm 4, chuẩn bị tốt nghiệp hoặc đã tốt nghiệp chuyên ngành Kinh tế, Marketing, Quản trị kinh doanh, CNTT, Điện tử viễn thông... Có đam mê kinh doanh và kỹ năng giao tiếp tốt.
+    * **Lưu ý:** Vị trí này hiện đang ở mức hỗ trợ thực tập sinh, chưa đạt mức lương trên 8 triệu như bạn mong đợi.
+
+Rất tiếc là trong danh sách tuyển dụng hiện tại của công ty, mình **chưa có** vị trí Sale chính thức nào đáp ứng đồng thời tất cả các tiêu chí: không kinh nghiệm, lương trên 8 triệu và có hỗ trợ xăng xe.
+
+Tuy nhiên, nếu bạn có nền tảng về kỹ thuật hoặc muốn thử sức ở các mảng công nghệ khác để có mức thu nhập cao hơn, bạn có thể tham khảo các vị trí như **Nhân viên Phát triển AI** hoặc **Nhân viên FullStack Developer**.
+
+Bạn có muốn mình gửi thêm thông tin chi tiết về vị trí Thực tập sinh Kinh doanh để bạn tham khảo trước không? Nếu có, hãy **nộp CV trực tiếp vào khung chat này** để mình hỗ trợ nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với yêu cầu của người dùng.
+
+**Phân tích:**
+1. **Yêu cầu người dùng:** 
+   - Vị trí: Sale.
+   - Kinh nghiệm: Không yêu cầu.
+   - Địa điểm: Nam Từ Liêm.
+   - Lương: > 8 triệu.
+   - Phúc lợi: Hỗ trợ xăng xe.
+2. **Phản hồi của Chatbot:**
+   - Chatbot đã quét dữ liệu và nhận diện được vị trí ""Thực tập sinh Kinh doanh"" nhưng chỉ đạt mức lương 3-5 triệu (không thỏa mãn điều kiện > 8 triệu).
+   - Chatbot đưa ra kết luận trung thực: **Không có vị trí nào đáp ứng đồng thời tất cả các tiêu chí.**
+   - Chatbot có sự tư vấn thêm (upsell/cross-sell) sang các vị trí khác hoặc đề xuất vị trí gần nhất, đây là hành vi xử lý ngôn ngữ tự nhiên tốt.
+
+**Đánh giá:** Mặc dù không thấy SQL, nhưng dựa trên nội dung trả lời, có thể thấy AI đã thực hiện việc lọc dữ liệu (filtering) đúng theo các tham số người dùng đưa ra (lương, vị trí, kinh nghiệm) và đưa ra câu trả lời logic, không bị ""ảo giác"" (hallucination) khi cố tình đưa ra một công việc không phù hợp để làm hài lòng người dùng.
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng và đầy đủ các điều kiện phức tạp của người dùng (vị trí, lương, kinh nghiệm). Thay vì đưa ra kết quả sai lệch, chatbot đã xác nhận không có công việc nào khớp 100% và đưa ra gợi ý gần nhất kèm theo giải thích rõ ràng lý do tại sao không phù hợp (về mức lương). Điều này thể hiện khả năng xử lý logic và lọc dữ liệu chính xác.",8,"Tìm việc Sale, không yêu cầu kinh nghiệm, làm tại Nam Từ Liêm, lương >8 triệu, có hỗ trợ xăng xe. Trước đó quan tâm Kế toán, Tester, Lập trình và các vị trí cho người mới ra trường.",6.84
+57,job,Có công việc marketing nào cho fresher mà lương cứng 15 triệu không?,"Rất tiếc là hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT **không có vị trí Marketing** nào dành cho fresher với mức lương cứng 15 triệu bạn nhé.
+
+Các vị trí có mức lương tương đương hoặc cao hơn 15 triệu tại công ty hiện đang tập trung vào mảng Kỹ thuật, Công nghệ và Mua hàng quốc tế. Bạn có thể tham khảo các vị trí sau nếu có kỹ năng phù hợp:
+
+* **Kỹ sư thiết kế UAV (01 người):** 15.000.000 - 25.000.000 VND.
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (03 người):** 15.000.000 - 18.000.000 VND.
+* **Nhân viên Mua hàng Quốc tế (02 người):** 15.000.000 - 18.000.000 VND.
+* **Nhân viên FullStack Developer (01 người):** 14.000.000 - 18.000.000 VND.
+* **Nhân viên Phát triển AI (01 người):** 12.000.000 - 18.000.000 VND.
+
+Nếu bạn có các kỹ năng khác hoặc muốn tìm hiểu thêm về các vị trí kinh doanh/hỗ trợ dự án, đừng ngần ngại **nộp CV trực tiếp vào khung chat này** để mình xem xét hồ sơ của bạn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm công việc thỏa mãn đồng thời 3 điều kiện: (1) Ngành: Marketing, (2) Kinh nghiệm: Fresher, (3) Lương cứng: 15 triệu.
+2. **Phản hồi của Chatbot:** 
+   - Chatbot xác nhận không tìm thấy vị trí Marketing nào thỏa mãn điều kiện (Fresher + 15 triệu).
+   - Chatbot thực hiện bước ""Upsell/Suggest"" (gợi ý thêm) các công việc khác có mức lương tương đương để giữ chân người dùng. Đây là một hành vi xử lý ngôn ngữ tự nhiên rất tốt và thông minh trong trải nghiệm khách hàng.
+   - Các vị trí gợi ý có mức lương từ 15 triệu trở lên là hợp lý với ngữ cảnh ""mức lương tương đương hoặc cao hơn"".
+
+**Kết luận:** Mặc dù không thấy SQL, nhưng dựa trên câu trả lời, có thể suy luận rằng hệ thống đã thực hiện truy vấn tìm kiếm với các filter (Marketing, Fresher, Lương >= 15tr) và trả về kết quả rỗng, sau đó chatbot đã xử lý thông tin rỗng đó một cách chuyên nghiệp.
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng các điều kiện lọc (ngành nghề, cấp bậc, mức lương). Khi không tìm thấy kết quả chính xác, chatbot đã phản hồi lịch sự và đưa ra các gợi ý thay thế có mức lương tương đương để hỗ trợ người dùng, thay vì chỉ trả lời ""Không có"".",8,"Tìm việc Marketing cho fresher, lương cứng 15 triệu. Trước đó quan tâm Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr), Tester, Code, và các vị trí cho người mới ra trường.",7.15
+58,company,"Công ty mình có bán laptop cũ không, mình đang cần mua?","Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Tìm việc Marketing cho fresher, lương cứng 15 triệu. Trước đó quan tâm Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr), Tester, Code, và các vị trí cho người mới ra trường. Ứng viên cũng hỏi về việc mua laptop cũ.",2.32
+59,job,"Chị ơi, nhà em ở gần công ty, em xin làm bảo vệ được không? Lương tháng nhiêu?","Rất tiếc là hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT **không có vị trí Bảo vệ** bạn nhé. Các vị trí hiện tại của công ty chủ yếu tập trung vào mảng Kỹ thuật, Công nghệ, Kinh doanh và Hành chính.
+
+Vì vậy, mình cũng không có thông tin về mức lương cho vị trí này để tư vấn cho bạn.
+
+Nếu bạn có các kỹ năng về văn phòng, kinh doanh hoặc kỹ thuật, bạn có thể tham khảo các vị trí đang tuyển như **Sales Admin** hoặc các vị trí **Thực tập sinh** mà mình đã chia sẻ ở trên nhé.
+
+Bạn có thể **nộp CV trực tiếp vào khung chat này** để mình xem có vị trí nào khác phù hợp với năng lực của bạn không nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug** (không có câu lệnh SQL cụ thể để kiểm tra), tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm vị trí ""Bảo vệ"" và hỏi về ""Mức lương"".
+2. **Phản hồi của Chatbot:** 
+   - Xác nhận không có vị trí ""Bảo vệ"" trong danh sách tuyển dụng.
+   - Do không có vị trí nên không có thông tin lương (logic hợp lý).
+   - Đưa ra gợi ý các vị trí khác và hướng dẫn nộp CV (tăng trải nghiệm người dùng).
+3. **Logic hệ thống:** Dù không thấy SQL, nhưng dựa trên câu trả lời, có thể hiểu hệ thống đã thực hiện truy vấn tìm kiếm vị trí ""Bảo vệ"" trong cơ sở dữ liệu và trả về kết quả trống (Empty set). Chatbot đã xử lý tình huống ""không tìm thấy kết quả"" một cách chuyên nghiệp và đúng trọng tâm.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm vị trí công việc và mức lương của người dùng. Dù không có dữ liệu về vị trí ""Bảo vệ"", chatbot đã phản hồi trung thực, giải thích lý do không có thông tin lương và đưa ra các gợi ý thay thế phù hợp, giúp duy trì tương tác với người dùng.",8,"Tìm việc Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr, hỗ trợ xăng xe), Marketing fresher (lương cứng 15tr). Quan tâm mua laptop cũ và xin việc bảo vệ. Trước đó quan tâm Tester, Code.",5.13
+60,job,Có tuyển phó giám đốc không?,"Hiện tại, trong danh sách các vị trí đang tuyển dụng của AIPT **không có vị trí Phó Giám đốc** bạn nhé.
+
+Các vị trí đang mở tuyển của công ty hiện đang tập trung vào các mảng chuyên môn như Kỹ thuật, Công nghệ, Kinh doanh và Mua hàng. Nếu bạn có kinh nghiệm quản lý hoặc chuyên môn cao trong các lĩnh vực này, bạn có thể tham khảo các vị trí cấp chuyên viên/kỹ sư đang tuyển để tìm hiểu thêm về môi trường làm việc của công ty.
+
+Nếu bạn có nhu cầu tìm hiểu các vị trí khác, hãy **nộp CV trực tiếp vào khung chat này** để mình hỗ trợ tư vấn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug** (không có câu lệnh SQL), tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**Giả định:** Để đưa ra câu trả lời ""không có vị trí Phó Giám đốc"", hệ thống đã thực hiện một truy vấn tìm kiếm trong cơ sở dữ liệu các vị trí đang tuyển dụng với từ khóa liên quan đến ""Phó Giám đốc"".
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm của người dùng (tìm kiếm chức danh cụ thể). Câu trả lời đưa ra thông tin trực diện (không có vị trí đó), đồng thời cung cấp thêm thông tin bổ trợ về các mảng đang tuyển dụng và hướng dẫn người dùng cách tiếp theo (nộp CV), giúp trải nghiệm người dùng tốt hơn thay vì chỉ trả lời ""Không"".",8,"Tìm việc Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr, hỗ trợ xăng xe), Marketing fresher (lương cứng 15tr). Quan tâm mua laptop cũ, xin việc bảo vệ, phó giám đốc. Trước đó quan tâm Tester, Code.",5.31
+61,chitchat,Muốn lên làm CEO thì cần học những gì hả bot?,"Rất tiếc tôi không thể tư vấn về các vấn đề học thuật hay lộ trình phát triển sự nghiệp cá nhân ngoài phạm vi tuyển dụng. Tôi có thể giúp bạn cung cấp thông tin công ty, tư vấn các vị trí đang tuyển dụng hoặc tiếp nhận hồ sơ ứng tuyển của bạn.",N/A,Chit-chat (Bỏ qua),8,"Tìm việc Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr, hỗ trợ xăng xe), Marketing fresher (lương cứng 15tr). Quan tâm mua laptop cũ, xin việc bảo vệ, phó giám đốc. Hỏi về lộ trình lên CEO. Trước đó quan tâm Tester, Code.",1.64
+62,chitchat,Đội bóng công ty có cần tuyển tiền đạo không?,"Rất tiếc tôi không có thông tin về các hoạt động thể thao của công ty. Tôi chỉ có thể hỗ trợ bạn về cung cấp thông tin công ty, tư vấn vị trí tuyển dụng hoặc tiếp nhận hồ sơ ứng tuyển.",N/A,Chit-chat (Bỏ qua),8,"Tìm việc Sale (không kinh nghiệm, Nam Từ Liêm, lương >8tr, hỗ trợ xăng xe), Marketing fresher (lương cứng 15tr). Quan tâm mua laptop cũ, xin việc bảo vệ, phó giám đốc. Hỏi về lộ trình lên CEO. Trước đó quan tâm Tester, Code.",1.77

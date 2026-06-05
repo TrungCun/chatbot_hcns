@@ -8,7 +8,7 @@ from sqlalchemy import desc, func
 import requests
 
 from src.extensions import db
-from environment import DEFAULT_CHAT_SOURCE_ID
+from environment import RECRUITMENT_CHAT_SOURCE_ID
 from src.models.recruitment.recruitment_campaign import (
     RecruitmentCampaign,
     RecruitmentCandidate,
@@ -21,9 +21,32 @@ from src.models.recruitment.recruitment_chat_session import RecruitmentChatSessi
 ROLE_USER = 1
 ROLE_ASSISTANT = 2
 MSG_TYPE_TEXT = 1
+MSG_TYPE_FILE_UPLOAD = 3
 MSG_TYPE_JD = 5
 SESSION_STATUS_ACTIVE = 1
+# FE buildRecruitmentSessionKey: không có campaign → session_id = {phone}_2002
+GENERAL_CHAT_SESSION_SUFFIX = "2002"
 AI_CHAT_ENDPOINT = os.environ.get("AI_CHAT_ENDPOINT", "http://127.0.0.1:9080/api/chat/")
+
+
+def _is_general_chat_session_suffix(value):
+    return str(value).strip() == GENERAL_CHAT_SESSION_SUFFIX
+
+
+def _normalize_campaign_id(campaign_id):
+    """Trả về int campaign_id hoặc None (chat chung, không gắn JD)."""
+    if campaign_id is None:
+        return None
+    raw = str(campaign_id).strip()
+    if not raw or _is_general_chat_session_suffix(raw):
+        return None
+    return int(raw)
+
+
+def _has_chat_session_context(campaign_id=None, session=None):
+    if campaign_id is not None and str(campaign_id).strip() != "":
+        return True
+    return bool((session or "").strip())
 
 
 def _normalize_candidate_payload(data):
@@ -40,16 +63,9 @@ def _normalize_candidate_payload(data):
     return {"fullName": full_name, "email": email, "phone": phone}
 
 
-def _resolve_session_source_id(body=None):
-    """source_id mặc định khi đăng ký session; body có thể ghi đè."""
-    body = body or {}
-    raw = body.get("source_id")
-    if raw is not None and str(raw).strip() != "":
-        try:
-            return int(raw)
-        except (TypeError, ValueError):
-            pass
-    return DEFAULT_CHAT_SOURCE_ID
+def _resolve_session_source_id():
+    """source_id cố định = 10 (chatbot tuyển dụng)."""
+    return RECRUITMENT_CHAT_SOURCE_ID
 
 
 def _candidate_has_cv_record(session, candidate_id=None, email=None):
@@ -79,7 +95,7 @@ def _candidate_has_cv_record(session, candidate_id=None, email=None):
 
 
 def _get_or_create_candidate(
-    session, candidate_data, source_id=DEFAULT_CHAT_SOURCE_ID
+    session, candidate_data, source_id=RECRUITMENT_CHAT_SOURCE_ID
 ):
     email = candidate_data["email"]
     candidate = (
@@ -131,16 +147,16 @@ def _session_context_matches_candidate(chat_session, candidate_data):
 
 
 def _get_or_create_active_session(session, campaign_id, candidate_id, user_agent=None):
-    chat_session = (
-        session.query(RecruitmentChatSession)
-        .filter(
-            RecruitmentChatSession.campaign_id == campaign_id,
-            RecruitmentChatSession.candidate_id == candidate_id,
-            RecruitmentChatSession.status == SESSION_STATUS_ACTIVE,
-        )
-        .order_by(desc(RecruitmentChatSession.created_at))
-        .first()
+    query = session.query(RecruitmentChatSession).filter(
+        RecruitmentChatSession.candidate_id == candidate_id,
+        RecruitmentChatSession.status == SESSION_STATUS_ACTIVE,
     )
+    if campaign_id is None:
+        query = query.filter(RecruitmentChatSession.campaign_id.is_(None))
+    else:
+        query = query.filter(RecruitmentChatSession.campaign_id == campaign_id)
+
+    chat_session = query.order_by(desc(RecruitmentChatSession.created_at)).first()
 
     if chat_session:
         return chat_session
@@ -160,16 +176,16 @@ def _get_or_create_active_session(session, campaign_id, candidate_id, user_agent
 def _find_guest_active_session(session, campaign_id, candidate_data):
     """Phiên chat chưa gắn recruitment_candidates (chưa nộp CV)."""
     email = candidate_data["email"]
-    rows = (
-        session.query(RecruitmentChatSession)
-        .filter(
-            RecruitmentChatSession.campaign_id == campaign_id,
-            RecruitmentChatSession.candidate_id.is_(None),
-            RecruitmentChatSession.status == SESSION_STATUS_ACTIVE,
-        )
-        .order_by(desc(RecruitmentChatSession.created_at))
-        .all()
+    query = session.query(RecruitmentChatSession).filter(
+        RecruitmentChatSession.candidate_id.is_(None),
+        RecruitmentChatSession.status == SESSION_STATUS_ACTIVE,
     )
+    if campaign_id is None:
+        query = query.filter(RecruitmentChatSession.campaign_id.is_(None))
+    else:
+        query = query.filter(RecruitmentChatSession.campaign_id == campaign_id)
+
+    rows = query.order_by(desc(RecruitmentChatSession.created_at)).all()
     for chat_session in rows:
         ctx = _parse_context_candidate(chat_session.context_data)
         if ctx and ctx["email"] == email:
@@ -195,16 +211,21 @@ def _get_or_create_chat_session(
             .filter(RecruitmentChatSession.session_token == token)
             .first()
         )
+        campaign_match = (
+            chat_session.campaign_id is None
+            if campaign_id is None
+            else chat_session.campaign_id == campaign_id
+        )
         if (
             chat_session
-            and chat_session.campaign_id == int(campaign_id)
+            and campaign_match
             and chat_session.status == SESSION_STATUS_ACTIVE
             and _session_context_matches_candidate(chat_session, candidate_data)
         ):
             return chat_session
 
     if not token:
-        guest = _find_guest_active_session(session, int(campaign_id), candidate_data)
+        guest = _find_guest_active_session(session, campaign_id, candidate_data)
         if guest:
             return guest
 
@@ -215,7 +236,7 @@ def _get_or_create_chat_session(
     )
     if linked:
         existing = _get_or_create_active_session(
-            session, int(campaign_id), linked.id, user_agent
+            session, campaign_id, linked.id, user_agent
         )
         if _session_context_matches_candidate(existing, candidate_data) or not (
             existing.context_data or ""
@@ -223,7 +244,7 @@ def _get_or_create_chat_session(
             return existing
 
     chat_session = RecruitmentChatSession(
-        campaign_id=int(campaign_id),
+        campaign_id=campaign_id,
         candidate_id=None,
         session_token=secrets.token_urlsafe(32),
         status=SESSION_STATUS_ACTIVE,
@@ -274,6 +295,48 @@ def _message_to_ui(message):
     }
     if message.message_type == MSG_TYPE_JD:
         item["type"] = "jd"
+    elif (
+        message.message_type == MSG_TYPE_FILE_UPLOAD
+        and message.role == ROLE_USER
+        and message.payload
+    ):
+        try:
+            payload = (
+                json.loads(message.payload)
+                if isinstance(message.payload, str)
+                else message.payload
+            )
+        except (json.JSONDecodeError, TypeError):
+            payload = None
+
+        if isinstance(payload, dict):
+            cv_id = payload.get("cv_id")
+            candidate_id = payload.get("candidate_id")
+            original_name = (
+                payload.get("original_filename")
+                or payload.get("original_name")
+                or ""
+            )
+            if cv_id is not None or candidate_id is not None or original_name:
+                item["type"] = "file"
+                item["text"] = ""
+                download_url = (
+                    f"/api/recruitment/files/download?cv_id={cv_id}"
+                    if cv_id is not None
+                    else (
+                        f"/api/recruitment/files/download?candidate_id={candidate_id}"
+                        if candidate_id is not None
+                        else None
+                    )
+                )
+                item["attachment"] = {
+                    "name": original_name or "CV",
+                    "original_name": original_name or "CV",
+                    "cv_id": cv_id,
+                    "candidate_id": candidate_id,
+                    "cv_path": payload.get("cv_path"),
+                    "download_url": download_url,
+                }
     return item
 
 
@@ -287,18 +350,24 @@ def _default_bot_reply():
 def _resolve_campaign_id(campaign_id=None, session=None):
     """
     Lấy campaign_id thực từ request.
-    FE gửi session dạng {sdt}_{campaignId} cho AI; campaign_id là field riêng.
+    FE gửi session dạng {sdt}_{campaignId} cho AI; không có JD → {sdt}_2002 → None.
     """
-    if campaign_id is not None and str(campaign_id).strip() != "":
-        return int(campaign_id)
+    normalized = _normalize_campaign_id(campaign_id)
+    if normalized is not None:
+        return normalized
 
     raw = ("" if session is None else str(session)).strip()
     if not raw:
-        raise ValueError("campaign_id is required")
+        return None
 
     if "_" in raw:
-        return int(raw.rsplit("_", 1)[-1])
+        suffix = raw.rsplit("_", 1)[-1]
+        if _is_general_chat_session_suffix(suffix):
+            return None
+        return int(suffix)
 
+    if _is_general_chat_session_suffix(raw):
+        return None
     return int(raw)
 
 
@@ -306,9 +375,12 @@ def _build_job_context_from_campaign(db_session, campaign_id, override=None):
     if override is not None and str(override).strip():
         return str(override).strip()
 
+    if campaign_id is None:
+        return None
+
     campaign = (
         db_session.query(RecruitmentCampaign)
-        .filter(RecruitmentCampaign.id == int(campaign_id))
+        .filter(RecruitmentCampaign.id == campaign_id)
         .first()
     )
     if not campaign:
@@ -344,7 +416,8 @@ def _build_chatbot_params(
     """
     cid = _resolve_campaign_id(campaign_id, session)
     uid = (user_id or candidate_data.get("email") or "anonymous").strip().lower()
-    ai_session_id = f"{uid}_{cid}"
+    session_suffix = GENERAL_CHAT_SESSION_SUFFIX if cid is None else str(cid)
+    ai_session_id = f"{uid}_{session_suffix}"
     user_info = json.dumps(candidate_data, ensure_ascii=False)
     ctx = _build_job_context_from_campaign(db_session, cid, job_context)
     return {
@@ -404,22 +477,15 @@ class RecruitmentChatView:
         Body: {
           campaign_id,
           candidate: { fullName, email, phone },
-          source_id (optional, mặc định DEFAULT_CHAT_SOURCE_ID=10)
         }
         Chỉ tạo/khôi phục recruitment_chat_sessions; lưu thông tin ứng viên
         tạm trong context_data. recruitment_candidates chỉ ghi khi nộp CV.
         """
         try:
             body = request.get_json(silent=True) or {}
-            campaign_id = body.get("campaign_id")
+            campaign_id = _normalize_campaign_id(body.get("campaign_id"))
             candidate_data = _normalize_candidate_payload(body.get("candidate"))
-            source_id = _resolve_session_source_id(body)
-
-            if not campaign_id:
-                return (
-                    jsonify({"success": False, "error": "campaign_id is required"}),
-                    400,
-                )
+            source_id = _resolve_session_source_id()
 
             if not candidate_data:
                 return (
@@ -434,19 +500,23 @@ class RecruitmentChatView:
 
             session = db.session()
 
-            campaign = (
-                session.query(RecruitmentCampaign)
-                .filter(RecruitmentCampaign.id == int(campaign_id))
-                .first()
-            )
-            if not campaign:
-                session.close()
-                return jsonify({"success": False, "error": "Campaign not found"}), 404
+            if campaign_id is not None:
+                campaign = (
+                    session.query(RecruitmentCampaign)
+                    .filter(RecruitmentCampaign.id == campaign_id)
+                    .first()
+                )
+                if not campaign:
+                    session.close()
+                    return (
+                        jsonify({"success": False, "error": "Campaign not found"}),
+                        404,
+                    )
 
             session_token = (body.get("session_token") or "").strip()
             chat_session = _get_or_create_chat_session(
                 session,
-                int(campaign_id),
+                campaign_id,
                 candidate_data,
                 session_token=session_token or None,
                 user_agent=request.headers.get("User-Agent"),
@@ -455,7 +525,7 @@ class RecruitmentChatView:
             chat_session.context_data = json.dumps(
                 {
                     "candidate": candidate_data,
-                    "campaign_id": int(campaign_id),
+                    "campaign_id": campaign_id,
                     "source_id": source_id,
                 },
                 ensure_ascii=False,
@@ -482,18 +552,19 @@ class RecruitmentChatView:
                 )
                 if candidate:
                     candidate_payload = candidate.to_dict()
-                    cc = (
-                        session.query(RecruitmentCandidateCampaign)
-                        .filter(
-                            RecruitmentCandidateCampaign.candidate_id
-                            == candidate.id,
-                            RecruitmentCandidateCampaign.campaign_id
-                            == int(campaign_id),
+                    if campaign_id is not None:
+                        cc = (
+                            session.query(RecruitmentCandidateCampaign)
+                            .filter(
+                                RecruitmentCandidateCampaign.candidate_id
+                                == candidate.id,
+                                RecruitmentCandidateCampaign.campaign_id
+                                == campaign_id,
+                            )
+                            .first()
                         )
-                        .first()
-                    )
-                    if cc:
-                        candidate_campaign_payload = cc.to_dict()
+                        if cc:
+                            candidate_campaign_payload = cc.to_dict()
 
             has_cv, cv_record = _candidate_has_cv_record(
                 session,
@@ -525,35 +596,32 @@ class RecruitmentChatView:
         POST /api/recruitment/chat/messages
         Body: {
           session_token,
-          campaign_id,
-          candidate: { fullName, email, phone },
-          content,
-          source_id (optional, mặc định DEFAULT_CHAT_SOURCE_ID=10),
-          user_id (str, optional),
-          session (int, campaign_id — ưu tiên hơn campaign_id nếu gửi),
-          job_context (str, optional)
+          session_id: "{phone}_{campaign_id}",
+          message,
+          user_info: { name, email, phone },
+          job_context (str, optional),
         }
         """
         try:
             body = request.get_json(silent=True) or {}
             session_token = (body.get("session_token") or "").strip()
-            campaign_id = body.get("campaign_id")
-            content = (body.get("content") or "").strip()
-            candidate_data = _normalize_candidate_payload(body.get("candidate"))
+            session_id = (body.get("session_id") or "").strip()
+            content = (body.get("message") or "").strip()
+            candidate_data = _normalize_candidate_payload(body.get("user_info"))
 
             if not session_token:
                 return (
                     jsonify({"success": False, "error": "session_token is required"}),
                     400,
                 )
-            if not campaign_id:
+            if not session_id:
                 return (
-                    jsonify({"success": False, "error": "campaign_id is required"}),
+                    jsonify({"success": False, "error": "session_id is required"}),
                     400,
                 )
             if not content:
                 return (
-                    jsonify({"success": False, "error": "content is required"}),
+                    jsonify({"success": False, "error": "message is required"}),
                     400,
                 )
             if not candidate_data:
@@ -561,13 +629,26 @@ class RecruitmentChatView:
                     jsonify(
                         {
                             "success": False,
-                            "error": "candidate.fullName, candidate.email and candidate.phone are required",
+                            "error": "user_info.name, user_info.email and user_info.phone are required",
                         }
                     ),
                     400,
                 )
 
-            source_id = _resolve_session_source_id(body)
+            try:
+                campaign_id = _resolve_campaign_id(session=session_id)
+            except (ValueError, TypeError):
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "error": "session_id must contain a valid campaign id",
+                        }
+                    ),
+                    400,
+                )
+
+            source_id = _resolve_session_source_id()
             session = db.session()
 
             chat_session = (
@@ -579,7 +660,7 @@ class RecruitmentChatView:
                 session.close()
                 return jsonify({"success": False, "error": "Session not found"}), 404
 
-            if chat_session.campaign_id != int(campaign_id):
+            if chat_session.campaign_id != campaign_id:
                 session.close()
                 return (
                     jsonify(
@@ -641,8 +722,8 @@ class RecruitmentChatView:
                 campaign_id=campaign_id,
                 candidate_data=candidate_data,
                 content=content,
-                user_id=body.get("user_id"),
-                session=body.get("session") or campaign_id,
+                user_id=candidate_data.get("phone"),
+                session=session_id,
                 job_context=body.get("job_context"),
                 db_session=session,
             )
@@ -660,7 +741,7 @@ class RecruitmentChatView:
             chat_session.context_data = json.dumps(
                 {
                     "candidate": candidate_data,
-                    "campaign_id": int(campaign_id),
+                    "campaign_id": campaign_id,
                     "source_id": source_id,
                 },
                 ensure_ascii=False,

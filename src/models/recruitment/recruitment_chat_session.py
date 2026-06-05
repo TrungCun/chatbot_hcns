@@ -13,7 +13,7 @@ class RecruitmentChatSession(db.Model):
     campaign_id = Column(
         Integer,
         ForeignKey("recruitment_campaigns.id"),
-        nullable=False,
+        nullable=True,
         index=True,
     )
 
@@ -32,7 +32,7 @@ class RecruitmentChatSession(db.Model):
     )
 
     status = Column(Integer, nullable=False, default=1, index=True)
-    # 1=active, 2=completed, 3=abandoned
+    # 1=active
 
     user_agent = Column(String(1000), nullable=True)
 

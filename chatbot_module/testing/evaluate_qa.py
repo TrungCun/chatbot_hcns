@@ -1,11 +1,18 @@
 import asyncio
 import csv
 import logging
+import time
+import os
+import sys
+import re
 from typing import List, Dict, Any
 
-from app.graph.builder import main_graph
-from app.graph.state import create_initial_state
-from app.model.llm import llm
+# Add project root to sys.path so 'app' can be imported
+sys.path.append(os.path.abspath(os.path.dirname(os.path.dirname(__file__))))
+
+from bot_app.graph.builder import main_graph
+from bot_app.graph.state import create_initial_state
+from bot_app.model.llm import llm
 from langchain_core.messages import HumanMessage
 import uuid
 
@@ -26,61 +33,19 @@ logger = logging.getLogger()
 log_capture = LogCaptureHandler()
 logger.addHandler(log_capture)
 
+def load_questions_from_md(file_path: str) -> List[str]:
+    questions = []
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                # Tìm các dòng có định dạng "1. Câu hỏi...", "2. Câu hỏi..."
+                match = re.match(r'^\d+\.\s*(.+)', line.strip())
+                if match:
+                    questions.append(match.group(1))
+    except Exception as e:
+        print(f"Lỗi khi đọc file markdown: {e}")
+    return questions
 
-QUESTIONS = [
-    # 1. Chế độ Thử việc & Đào tạo
-    "Cho mình hỏi thời gian thử việc ở công ty là bao lâu vậy ạ?",
-    "Trong thời gian thử việc mình có được nhận 100% lương không, hay nhận 85% ạ?",
-    "Thử việc bên mình có được đóng bảo hiểm (BHXH, BHYT) luôn không?",
-    "Mới vào thì công ty có quy trình training (đào tạo) người mới không hay là vào làm việc luôn?",
-    "Đánh giá đạt thử việc thì dựa trên những tiêu chí nào vậy ạ?",
-    
-    # 2. Lương, Thưởng & Phúc lợi
-    "Công ty mình có lương tháng 13 không ạ?",
-    "Bên mình review đánh giá tăng lương mấy lần 1 năm vậy?",
-    "Ngoài lương cứng ra, công ty mình có phụ cấp ăn trưa, xăng xe hay gửi xe gì không?",
-    "Vào các dịp Lễ, Tết (30/4, 2/9...) thì công ty có thưởng không? Mức thưởng thường là bao nhiêu ạ?",
-    "Công ty có chế độ khám sức khỏe định kỳ hay bảo hiểm sức khỏe nào khác ngoài BHXH không?",
-    "Cho mình hỏi các chế độ công đoàn như sinh nhật, ốm đau, hiếu hỉ bên mình quy định sao ạ?",
-
-    # 3. Thời gian làm việc, Chấm công & OT
-    "Thời gian làm việc bên mình là từ mấy giờ đến mấy giờ vậy? Có phải làm Thứ 7 không?",
-    "Công ty mình chấm công bằng vân tay, quẹt thẻ hay chấm công qua app trên điện thoại thế ạ?",
-    "Nếu đi muộn hoặc về sớm thì bị trừ lương như thế nào?",
-    "Đặc thù công việc nếu phải ra ngoài gặp khách hàng thì chấm công kiểu gì vậy ạ?",
-    "Nếu mình phải làm thêm giờ (OT) thì công ty tính lương OT như thế nào? Có quy trình đăng ký phức tạp không?",
-    "Bên mình có cho phép làm remote (làm từ xa) hoặc thời gian linh hoạt (flexitime) không?",
-
-    # 4. Chế độ Công tác
-    "Vị trí này có hay phải đi công tác tỉnh không ạ?",
-    "Công tác phí bên mình tính như thế nào? Tiền ăn ở, đi lại công ty lo trọn gói hay mình tự chi rồi về thanh toán?",
-    "Trước khi đi công tác mình có được tạm ứng tiền trước không, hay phải tự bỏ tiền túi ra trước?",
-    "Thủ tục hoàn ứng và thanh toán sau công tác có nhanh không ạ?",
-
-    # 5. Môi trường, Văn hóa & Đồng phục
-    "Công ty mình có bắt buộc mặc đồng phục cả tuần không hay được mặc đồ tự do ạ?",
-    "Cho mình hỏi đồng phục công ty sẽ cấp phát hay nhân viên tự may/mua?",
-    "Văn hóa công ty mình thế nào ạ? Mọi người có hay tổ chức team building hay du lịch công ty hàng năm không?",
-    "Bên mình có quy tắc gì đặc biệt về trang phục hay tác phong làm việc không?",
-
-    # 6. Giao việc & Đánh giá hiệu suất
-    "Công ty mình quản lý công việc qua phần mềm nào (Jira, Trello, Base...) hay qua Zalo/Email ạ?",
-    "KPI của vị trí này được đánh giá theo ngày, tuần hay tháng?",
-    "Quy trình làm việc và giao việc giữa các phòng ban có rõ ràng không ạ?",
-
-    # 7. Nghỉ phép & Nghỉ việc
-    "Một năm mình được bao nhiêu ngày phép năm vậy ạ? Phép không nghỉ hết có được thanh toán tiền không?",
-    "Nếu hết hạn hợp đồng hoặc muốn xin nghỉ việc thì mình phải báo trước bao nhiêu ngày?",
-
-    # 8. Chuyên môn & Khác
-    "Cho mình hỏi vị trí này phỏng vấn mấy vòng vậy ạ? Có bài test đầu vào không?",
-    "Team Marketing hiện tại đang có bao nhiêu nhân sự vậy ạ?",
-    "Sản phẩm/dịch vụ chủ lực hiện tại mang lại doanh thu chính cho AIPT Group là gì vậy?",
-
-    # 9. Chit-chat (Kiểm tra xem bot có xử lý đúng không)
-    "Bạn là bot hay là người thật đang chat với mình vậy?",
-    "Chị HR bên mình có khó tính không bạn?"
-]
 
 async def evaluate_response_with_llm(question: str, response: str, documents: List[str]) -> tuple[str, str]:
     """Sử dụng LLM-as-a-judge để đánh giá câu trả lời dựa trên documents"""
@@ -131,16 +96,23 @@ REASON: Câu trả lời cung cấp chính xác thông tin từ tài liệu 1 v�
 
 
 async def run_evaluation():
-    from app.application import application
+    from bot_app.application import application
     print("Đang tải các models...")
     application.load_models()
     
+    base_dir = os.path.dirname(__file__)
+    md_path = os.path.join(base_dir, "qa_test_bank.md")
+    questions = load_questions_from_md(md_path)
+    if not questions:
+        print(f"Không tìm thấy câu hỏi nào trong {md_path}")
+        return
+        
     results = []
     
-    print(f"Bắt đầu đánh giá {len(QUESTIONS)} câu hỏi...")
+    print(f"Bắt đầu đánh giá {len(questions)} câu hỏi...")
     
-    for i, question in enumerate(QUESTIONS):
-        print(f"\n--- Đang xử lý câu {i+1}/{len(QUESTIONS)}: {question} ---")
+    for i, question in enumerate(questions):
+        print(f"\n--- Đang xử lý câu {i+1}/{len(questions)}: {question} ---")
         
         session_id = str(uuid.uuid4())
         user_id = "test_user_eval"
@@ -161,6 +133,7 @@ async def run_evaluation():
             domain = "unknown"
             retrieved_docs = []
             
+            start_time = time.time()
             async for event in main_graph.astream_events(state, config, version="v2"):
                 if event.get("event") == "on_chain_end":
                     output = event.get("data", {}).get("output")
@@ -171,6 +144,9 @@ async def run_evaluation():
                             retrieved_docs = output["retrieved_documents"]
                         if "response" in output:
                             response = output["response"]
+            
+            end_time = time.time()
+            response_time = end_time - start_time
             
             # Lọc các log quan trọng (SQL, Rerank scores)
             debug_logs = []
@@ -199,12 +175,13 @@ async def run_evaluation():
                 "Câu hỏi": question,
                 "Câu trả lời": response,
                 "Số lượng tài liệu": len(retrieved_docs),
+                "Thời gian trả lời (s)": round(response_time, 2),
                 "Kết quả (PASS/FAIL)": eval_result,
                 "Lý do đánh giá": eval_reason,
                 "Debug Logs (SQL/Rerank)": debug_info_str
             })
             
-            print(f"Hoàn thành câu {i+1}. Kết quả: {eval_result}")
+            print(f"Hoàn thành câu {i+1}. Kết quả: {eval_result} | Thời gian: {response_time:.2f}s")
             
         except Exception as e:
             print(f"Lỗi khi xử lý câu hỏi '{question}': {e}")
@@ -214,15 +191,42 @@ async def run_evaluation():
                 "Câu hỏi": question,
                 "Câu trả lời": f"Lỗi: {e}",
                 "Số lượng tài liệu": 0,
+                "Thời gian trả lời (s)": 0,
                 "Kết quả (PASS/FAIL)": "ERROR",
                 "Lý do đánh giá": "Có lỗi hệ thống",
                 "Debug Logs (SQL/Rerank)": ""
             })
 
+    # Tính toán thống kê
+    total_questions = len(results)
+    pass_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "PASS")
+    fail_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "FAIL")
+    error_count = sum(1 for r in results if r["Kết quả (PASS/FAIL)"] == "ERROR")
+    
+    accuracy = (pass_count / total_questions) * 100 if total_questions > 0 else 0
+    
+    valid_times = [r["Thời gian trả lời (s)"] for r in results if r.get("Thời gian trả lời (s)", 0) > 0]
+    avg_time = sum(valid_times) / len(valid_times) if valid_times else 0
+    max_time = max(valid_times) if valid_times else 0
+    min_time = min(valid_times) if valid_times else 0
+
+    print("\n" + "="*50)
+    print("BÁO CÁO THỐNG KÊ ĐÁNH GIÁ (QA)")
+    print("="*50)
+    print(f"Tổng số câu hỏi       : {total_questions}")
+    print(f"Số câu PASS           : {pass_count}")
+    print(f"Số câu FAIL           : {fail_count}")
+    print(f"Số câu LỖI            : {error_count}")
+    print(f"Độ chính xác (PASS)   : {accuracy:.2f}%")
+    print(f"Thời gian TB          : {avg_time:.2f}s")
+    print(f"Thời gian Min         : {min_time:.2f}s")
+    print(f"Thời gian Max         : {max_time:.2f}s")
+    print("="*50)
+
     # Lưu kết quả ra file CSV
     output_file = "qa_evaluation_report.csv"
     if results:
-        fieldnames = ["STT", "Chủ đề / Nhánh", "Câu hỏi", "Câu trả lời", "Số lượng tài liệu", "Kết quả (PASS/FAIL)", "Lý do đánh giá", "Debug Logs (SQL/Rerank)"]
+        fieldnames = ["STT", "Chủ đề / Nhánh", "Câu hỏi", "Câu trả lời", "Số lượng tài liệu", "Thời gian trả lời (s)", "Kết quả (PASS/FAIL)", "Lý do đánh giá", "Debug Logs (SQL/Rerank)"]
         with open(output_file, mode="w", encoding="utf-8-sig", newline="") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()

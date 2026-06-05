@@ -8,6 +8,7 @@ from langchain_core.messages import RemoveMessage, HumanMessage, AIMessage
 from bot_app.graph.state import AppState
 from bot_app.prompt.loader import load_prompt
 from bot_app.model.llm import llm
+from bot_app.config import _REPO_ROOT
 
 from bot_app.log import get_logger
 logger = get_logger(__name__)
@@ -60,65 +61,13 @@ async def update_context(state: AppState) -> Dict[str, Any]:
     }
 
 async def classify_user_intent(state: AppState) -> dict:
-    message = state["message"]
     context = state.get("context") or "Chưa có bối cảnh hội thoại."
-    
-    # Log context ở đầu mỗi tin nhắn để user dễ theo dõi
     logger.info(f"[classify_user_intent] CURRENT CONTEXT: '{context}'")
     
     file_urls = state.get("file_urls") or []
-    history = state.get("history", [])
-    filtered_history = [m for m in history if m.type in ["human", "ai"]]
-
-    try:
-        prompt = load_prompt("parent/classify_intent")
-        chain = prompt | llm
-        response = await chain.ainvoke({
-                "message": message,
-                "context": context,
-                "history": filtered_history
-            })
-        intent = response.content.strip().lower()
-    except Exception as e:
-        logger.error(f"[classify_user_intent] LLM Error: {e}")
-        intent = "provide" if file_urls else "ask" # Fallback thông minh: có ảnh thì thường là cung cấp CV
-
-    # Fallback
-    if intent not in ("ask", "provide"):
-        intent = "ask"
+    
+    # Chỉ khi nào có đính kèm file thì mới coi là provide
+    intent = "provide" if file_urls else "ask"
 
     logger.info(f"[classify_user_intent] intent='{intent}'")
     return {"intent": intent}
-
-
-async def save_history(state: AppState) -> Dict[str, Any]:
-    """
-    Node lưu lại danh sách file_urls vào folder history/user_id/session_id.json
-    (Không lưu history chat)
-    """
-    user_id = state.get("user_id", "default_user")
-    session_id = state.get("session_id", "unknown_session")
-    file_urls = state.get("file_urls", [])
-
-    if not file_urls:
-        return {}
-
-    save_data = {
-        "session_id": session_id,
-        "file_urls": file_urls,
-        "updated_at": datetime.now().isoformat()
-    }
-
-    # Tạo thư mục và lưu file
-    dir_path = os.path.join("chatbot_module", "history", user_id)
-    os.makedirs(dir_path, exist_ok=True)
-
-    file_path = os.path.join(dir_path, f"{session_id}.json")
-    try:
-        with open(file_path, "w", encoding="utf-8") as f:
-            json.dump(save_data, f, ensure_ascii=False, indent=2)
-        logger.info(f"[save_history] Saved file paths to {file_path}")
-    except Exception as e:
-        logger.error(f"[save_history] Error saving file paths: {e}")
-
-    return {}

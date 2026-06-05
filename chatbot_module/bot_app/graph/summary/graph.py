@@ -1,61 +1,26 @@
 from langgraph.graph import StateGraph, END
 
 from bot_app.graph.summary.state import SummaryState
-from bot_app.graph.summary.nodes import extract_info, summary, respond_complete, respond_incomplete, evaluation, ask_confirmation, check_confirmation
-from bot_app.graph.summary.edges import route_summary, route_check_confirmation, route_entry
+from bot_app.graph.summary.nodes import extract_info, respond_complete, evaluation
 
 def build_summary_graph():
     workflow = StateGraph(SummaryState)
 
     # Nodes
     workflow.add_node("extract_info", extract_info)
-    workflow.add_node("summary", summary)
-    workflow.add_node("respond_complete", respond_complete)
-    workflow.add_node("respond_incomplete", respond_incomplete)
     workflow.add_node("evaluation", evaluation)
-    workflow.add_node("ask_confirmation", ask_confirmation)
-    workflow.add_node("check_confirmation", check_confirmation)
+    workflow.add_node("respond_complete", respond_complete)
 
     # Entry
-    workflow.set_conditional_entry_point(
-        route_entry,
-        {
-            "check_confirmation": "check_confirmation",
-            "extract_info": "extract_info"
-        }
-    )
+    workflow.set_entry_point("extract_info")
 
     # Edges
-    workflow.add_edge("extract_info", "summary")
-
-    # Conditional branching after summary
-    workflow.add_conditional_edges(
-        "summary",
-        route_summary,
-        {
-            "complete": "evaluation",
-            "incomplete": "respond_incomplete",
-            "ask_confirmation": "ask_confirmation",
-            "check_confirmation": "check_confirmation"
-        }
-    )
-    
-    # Conditional branching after check_confirmation
-    workflow.add_conditional_edges(
-        "check_confirmation",
-        route_check_confirmation,
-        {
-            "confirmed": "evaluation",
-            "modify": "extract_info"
-        }
-    )
-
-    workflow.add_edge("ask_confirmation", END)
+    workflow.add_edge("extract_info", "evaluation")
     workflow.add_edge("evaluation", "respond_complete")
     workflow.add_edge("respond_complete", END)
-    workflow.add_edge("respond_incomplete", END)
 
-    return workflow.compile()
+    # Interrupt before extract_info so background task can pick it up
+    return workflow.compile(interrupt_before=["extract_info"])
 
 
 summary_graph = build_summary_graph()

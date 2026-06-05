@@ -12,6 +12,14 @@ from sqlalchemy import text
 from bot_app.log import get_logger
 logger = get_logger(__name__)
 
+async def acknowledge_receipt(state: SummaryState) -> dict:
+    logger.info("[acknowledge_receipt] Sending immediate acknowledgment to user.")
+    response = "Đã nhận thông tin/CV của bạn. Hệ thống đang tiến hành xử lý và phân tích hồ sơ, vui lòng chờ trong giây lát (hoặc bạn có thể hỏi các câu hỏi khác trong lúc chờ)."
+    return {
+        "response": response,
+        "history": [AIMessage(content=response)]
+    }
+
 async def extract_info(state: SummaryState) -> dict:
     logger.info(f"[EXTRACT INFO] extracting information from message, attachments={len(state.get('attachments', [])) if state.get('attachments') else 0}")
 
@@ -136,48 +144,7 @@ async def extract_info(state: SummaryState) -> dict:
         "template": current_template.model_dump()
     }
 
-def summary(state: SummaryState) -> dict:
-    logger.info("[summary] evaluating template completeness")
 
-    template_data = state.get("template")
-    if not template_data:
-        return {"evaluation": "incomplete"}
-
-    template = template_data if isinstance(template_data, CVTemplate) else CVTemplate(**template_data)
-
-    # 1. KHỞI TẠO MẢNG MISSING TRỐNG TỪ ĐẦU
-    missing = []
-
-    if not template.candidate_overview.applied_position:
-        missing.append("applied_position")
-
-    if not template.candidate_overview.contact_info:
-        missing.append("contact_info")
-
-    evidence_list = template.professional_evidence
-
-    if len(evidence_list) > 0:
-        # Nếu ứng viên ĐÃ liệt kê ít nhất một công ty/dự án
-        # Ta kiểm tra xem có cái nào bị thiếu mô tả chi tiết không
-        has_meaningful_content = any(
-            ev.context_and_tasks and len(ev.context_and_tasks.strip()) > 15
-            for ev in evidence_list
-        )
-
-        if not has_meaningful_content:
-            # Có tên công ty nhưng mô tả quá sơ sài hoặc trống rỗng
-            missing.append("work_description")
-    else:
-        pass
-
-    template.missing_information = missing
-
-    if missing:
-        logger.info(f"[summary] incomplete - missing fields: {missing}")
-        return {"evaluation": "incomplete", "template": template.model_dump()}
-
-    logger.info("[summary] complete - all required fields filled")
-    return {"evaluation": "complete", "template": template.model_dump()}
 
 async def evaluation(state: SummaryState) -> dict:
     logger.info("[evaluation] Generating professional HR insights")
@@ -274,117 +241,4 @@ async def respond_complete(state: SummaryState) -> dict:
         "history": [AIMessage(content=confirmation_response)]
     }
 
-import json
 
-async def respond_incomplete(state: SummaryState) -> dict:
-    logger.info("[respond_incomplete] generating missing-info question")
-
-    # 1. KHỞI TẠO TEMPLATE
-    template_data = state.get("template")
-    if isinstance(template_data, dict):
-        template = CVTemplate(**template_data)
-    else:
-        template = template_data or CVTemplate()
-
-    # 2. TẬN DỤNG THÀNH QUẢ TỪ NODE SUMMARY (Single Source of Truth)
-    # Lấy danh sách 'nợ' đã được tính toán ở Node Summary
-    missing_list = template.missing_information
-
-    # Fallback an toàn phòng khi bị lọt luồng
-    if not missing_list:
-        logger.warning("[respond_incomplete] Triggered but missing_information is empty!")
-        next_field = "general_experience"
-    else:
-        # Lấy trường quan trọng nhất (nằm đầu danh sách) để hỏi trước
-        next_field = missing_list[0]
-
-    # 3. DATA MASKING (Tạo bản sao sạch cho LLM, giống hệt Node Complete)
-    safe_template_for_user = template.model_dump(
-        exclude={"evaluator_insights", "missing_information"}
-    )
-
-    facts_json = json.dumps(safe_template_for_user, ensure_ascii=False, indent=2)
-    message = state.get("message", "")
-    history = state.get("history", [])
-    filtered_history = [m for m in history if m.type in ["human", "ai"]]
-
-
-    # 4. GỌI LLM ĐỂ TẠO CÂU HỎI
-    chain = load_prompt("summary/ask_next_question") | llm_stream | StrOutputParser()
-
-    response = await chain.ainvoke({
-            "context": facts_json,
-            "history": filtered_history,
-            "message": message,
-            "missing_field": next_field # Biến bổ trợ để AI biết mục tiêu hỏi
-        })
-
-    logger.info(f"[respond_incomplete] asking about field: {next_field}")
-
-    # Trả về câu hỏi để hiển thị cho ứng viên
-    return {
-        "response": response,
-        "history": [AIMessage(content=response)]
-    }
-
-async def ask_confirmation(state: SummaryState) -> dict:
-    logger.info("[ask_confirmation] generating confirmation request")
-    template_data = state.get("template")
-    if isinstance(template_data, dict):
-        template = CVTemplate(**template_data)
-    else:
-        template = template_data or CVTemplate()
-
-    safe_template_for_user = template.model_dump(
-        exclude={"evaluator_insights", "missing_information"}
-    )
-    facts_json = json.dumps(safe_template_for_user, ensure_ascii=False, indent=2)
-    history = state.get("history", [])
-    filtered_history = [m for m in history if m.type in ["human", "ai"]]
-
-    chain = load_prompt("summary/ask_confirmation") | llm_stream | StrOutputParser()
-
-    response = await chain.ainvoke({
-        "context": facts_json,
-        "history": filtered_history,
-        "message": state.get("message", "")
-    })
-
-    return {
-        "response": response,
-        "history": [AIMessage(content=response)],
-        "summary_status": "pending_confirmation"
-    }
-
-async def check_confirmation(state: SummaryState) -> dict:
-    logger.info("[check_confirmation] checking user confirmation intent")
-    message = state.get("message", "")
-
-    chain = load_prompt("summary/check_confirmation") | llm | StrOutputParser()
-    result = await chain.ainvoke({
-        "message": message,
-        "history": []
-    })
-
-    try:
-        clean_result = result.strip()
-        if clean_result.startswith("```json"):
-            clean_result = clean_result[7:]
-        elif clean_result.startswith("```"):
-            clean_result = clean_result[3:]
-        if clean_result.endswith("```"):
-            clean_result = clean_result[:-3]
-
-        parsed_intent = json.loads(clean_result.strip())
-        intent = parsed_intent.get("intent", "modify")
-    except Exception as e:
-        logger.error(f"[check_confirmation] Parsing error: {e}, raw result: {result}")
-        intent = "modify" # Default to modify for safety if can't parse
-
-    logger.info(f"[check_confirmation] intent determined: {intent}")
-
-    if intent == "agree":
-        return {"summary_status": "confirmed"}
-    else:
-        # Nếu modify, quay lại trạng thái collecting để loop lại quá trình hỏi
-        return {"summary_status": "collecting"}

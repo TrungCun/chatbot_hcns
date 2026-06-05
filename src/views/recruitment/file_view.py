@@ -2,10 +2,11 @@ import json
 import os
 from datetime import datetime
 
-from flask import jsonify, request
+from flask import jsonify, request, send_file
 from sqlalchemy import func
 
 from chatbot_module.bot_app.schema.chat_schema import FilePayload
+from environment import RECRUITMENT_CHAT_SOURCE_ID
 from src.extensions import db
 from src.models.recruitment.recruitment_campaign import (
     RecruitmentCandidate,
@@ -18,11 +19,11 @@ from src.views.recruitment.chat_view import (
     ROLE_USER,
     _build_chatbot_params,
     _get_or_create_candidate_campaign,
+    _has_chat_session_context,
     _message_to_ui,
     _next_sequence_no,
     _normalize_candidate_payload,
     _resolve_campaign_id,
-    _resolve_session_source_id,
 )
 
 MSG_TYPE_FILE_UPLOAD = 3
@@ -37,6 +38,59 @@ DEFAULT_AI_REPLY = (
 
 MAX_FILE_BYTES = int(os.environ.get("RECRUITMENT_MAX_FILE_BYTES", 10 * 1024 * 1024))
 ALLOWED_EXTENSIONS = {".pdf", ".doc", ".docx"}
+_PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", ".."))
+_CHATBOT_MODULE_ROOT = os.path.join(_PROJECT_ROOT, "chatbot_module")
+
+
+def _normalize_cv_relative_path(path_str):
+    """Chuẩn hóa path relative trong chatbot_module (uploads/...)."""
+    rel = str(path_str).strip().replace("\\", "/").lstrip("./")
+    prefix = "chatbot_module/"
+    if rel.startswith(prefix):
+        rel = rel[len(prefix) :]
+    return rel
+
+
+def _resolve_existing_file_path(stored_path):
+    """Resolve cv_path thành đường dẫn tuyệt đối trong chatbot_module."""
+    if not stored_path:
+        return None
+
+    raw = str(stored_path).strip()
+    if not raw:
+        return None
+
+    normalized = raw.replace("\\", "/")
+    candidates = []
+
+    if os.path.isabs(normalized):
+        if (
+            normalized.startswith(_CHATBOT_MODULE_ROOT + "/")
+            or normalized == _CHATBOT_MODULE_ROOT
+        ):
+            candidates.append(normalized)
+    else:
+        rel = _normalize_cv_relative_path(normalized)
+        candidates.append(os.path.join(_CHATBOT_MODULE_ROOT, rel))
+
+    for candidate in candidates:
+        path = os.path.normpath(candidate)
+        if os.path.isfile(path):
+            return path
+    return None
+
+
+def _normalize_cv_storage_path(ai_file_path):
+    """
+    Xác minh file AI vừa lưu, trả về path relative từ project root để ghi DB.
+    """
+    resolved = _resolve_existing_file_path(ai_file_path)
+    if not resolved:
+        raise FileNotFoundError(
+            f"Không tìm thấy file CV trong chatbot_module: {ai_file_path}"
+        )
+    rel = os.path.relpath(resolved, _CHATBOT_MODULE_ROOT).replace("\\", "/")
+    return f"chatbot_module/{rel}"
 
 
 def _parse_bool(value, default=True):
@@ -63,17 +117,6 @@ def _parse_candidate_json():
         return None
 
 
-def _resolve_source_id():
-    """Mặc định DEFAULT_CHAT_SOURCE_ID=10 (cùng luồng chat tuyển dụng)."""
-    raw = request.form.get("source_id")
-    if raw is not None and str(raw).strip() != "":
-        try:
-            return int(raw)
-        except (TypeError, ValueError):
-            pass
-    return _resolve_session_source_id()
-
-
 def _get_or_create_candidate(db_session, candidate_data, source_id=None):
     email = candidate_data["email"]
     candidate = (
@@ -82,6 +125,7 @@ def _get_or_create_candidate(db_session, candidate_data, source_id=None):
         .first()
     )
     now = int(datetime.now().timestamp())
+    source_id = RECRUITMENT_CHAT_SOURCE_ID if source_id is None else source_id
     if candidate:
         candidate.name = candidate_data["fullName"]
         candidate.phone = candidate_data["phone"]
@@ -117,7 +161,7 @@ def _resolve_candidate_on_cv_submit(db_session):
     Trả về (candidate, None) hoặc (None, error_tuple).
     """
     candidate_data = _parse_candidate_json()
-    source_id = _resolve_source_id()
+    source_id = RECRUITMENT_CHAT_SOURCE_ID
 
     if candidate_data:
         candidate = _get_or_create_candidate(
@@ -172,7 +216,7 @@ def _build_ai_context(db_session, candidate, campaign_id):
         campaign_id,
         candidate_data,
         user_id=user_id,
-        session=campaign_id,
+        session=request.form.get("session"),
         job_context=request.form.get("job_context"),
     )
     return {**params, "candidate": candidate}
@@ -217,21 +261,27 @@ def _call_chatbot_for_upload(
 
 
 def _pick_ai_saved_path(file_urls):
-    for path in file_urls:
-        if path and os.path.isfile(path):
-            return path.replace(os.sep, "/")
-    for path in file_urls:
-        if path:
-            return str(path).replace(os.sep, "/")
-    return None
+    """
+    AI state gộp file_urls cũ + mới (file cũ đứng trước).
+    Nộp lại CV phải lấy file mới nhất theo mtime, không lấy bản cũ.
+    """
+    resolved_paths = []
+    for path in file_urls or []:
+        resolved = _resolve_existing_file_path(path)
+        if resolved:
+            resolved_paths.append(resolved)
+
+    if not resolved_paths:
+        return None
+
+    newest_path = max(resolved_paths, key=os.path.getmtime)
+    return _normalize_cv_storage_path(newest_path)
 
 
 def _remove_cv_file_on_disk(cv_path):
     """Xóa file CV cũ trên đĩa trước khi ghi đè bản ghi mới."""
-    if not cv_path:
-        return
-    path = str(cv_path).strip()
-    if not path or not os.path.isfile(path):
+    path = _resolve_existing_file_path(cv_path)
+    if not path:
         return
     try:
         os.remove(path)
@@ -240,9 +290,9 @@ def _remove_cv_file_on_disk(cv_path):
 
 
 def _save_candidate_cv_from_ai_path(db_session, candidate_id, original_filename, ai_file_path):
-    """Ghi DB — mỗi ứng viên một bản ghi CV; upload lại thì ghi đè và xóa file cũ."""
+    """Ghi DB — mỗi ứng viên một bản ghi CV; upload lại thì ghi đè toàn bộ metadata file mới."""
     now = int(datetime.now().timestamp())
-    normalized_path = str(ai_file_path).replace(os.sep, "/")
+    normalized_path = _normalize_cv_storage_path(ai_file_path)
     cv_file_name = os.path.basename(normalized_path)
     existing = (
         db_session.query(RecruitmentCandidateCV)
@@ -335,8 +385,8 @@ class RecruitmentFileView:
         - candidate (JSON): fullName, email, phone (bắt buộc lần đầu)
         - session / campaign_id (bắt buộc — context AI / chiến dịch)
         - candidate_id (optional — nộp lại CV khi đã có ứng viên)
-        - source_id (optional, default DEFAULT_CHAT_SOURCE_ID=10)
         - user_id, job_context, session_token, message, is_cv
+        (source_id do BE cố định: RECRUITMENT_CHAT_SOURCE_ID=10)
         """
         db_session = db.session()
         try:
@@ -383,7 +433,10 @@ class RecruitmentFileView:
                 )
 
             campaign_id = _campaign_id_from_request()
-            if not campaign_id:
+            if not _has_chat_session_context(
+                request.form.get("campaign_id"),
+                request.form.get("session"),
+            ):
                 db_session.close()
                 return (
                     jsonify(
@@ -425,15 +478,21 @@ class RecruitmentFileView:
                     500,
                 )
 
-            cv_record = _save_candidate_cv_from_ai_path(
-                db_session,
-                candidate.id,
-                original_filename,
-                ai_file_path,
-            )
-            _get_or_create_candidate_campaign(
-                db_session, candidate.id, int(campaign_id)
-            )
+            try:
+                cv_record = _save_candidate_cv_from_ai_path(
+                    db_session,
+                    candidate.id,
+                    original_filename,
+                    ai_file_path,
+                )
+            except FileNotFoundError as exc:
+                db_session.rollback()
+                db_session.close()
+                return jsonify({"success": False, "error": str(exc)}), 404
+            if campaign_id is not None:
+                _get_or_create_candidate_campaign(
+                    db_session, candidate.id, campaign_id
+                )
             chat_messages = _persist_upload_chat(
                 db_session,
                 candidate,
@@ -491,5 +550,44 @@ class RecruitmentFileView:
             db_session.close()
             return jsonify({"success": True, "data": data}), 200
 
+        except Exception as e:
+            return jsonify({"success": False, "error": str(e)}), 500
+
+    @staticmethod
+    def download_file():
+        """GET /api/recruitment/files/download?candidate_id=<id>"""
+        candidate_id = request.args.get("candidate_id", type=int)
+        if not candidate_id:
+            return (
+                jsonify({"success": False, "error": "candidate_id is required"}),
+                400,
+            )
+
+        try:
+            db_session = db.session()
+            cv = (
+                db_session.query(RecruitmentCandidateCV)
+                .filter(RecruitmentCandidateCV.candidate_id == candidate_id)
+                .first()
+            )
+            db_session.close()
+            if not cv or not cv.cv_path:
+                return jsonify({"success": False, "error": "CV not found"}), 404
+
+            file_path = _resolve_existing_file_path(cv.cv_path)
+            if not file_path:
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "error": "File CV không tồn tại trên server",
+                            "cv_path": cv.cv_path,
+                        }
+                    ),
+                    404,
+                )
+
+            download_name = cv.original_name or cv.cv_file or os.path.basename(file_path)
+            return send_file(file_path, as_attachment=True, download_name=download_name)
         except Exception as e:
             return jsonify({"success": False, "error": str(e)}), 500

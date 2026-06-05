@@ -20,33 +20,30 @@ services:
       - qdrant-storage:/qdrant/storage
     restart: unless-stopped
 
-  n8n:
-    image: docker.n8n.io/n8nio/n8n
-    container_name: chatbot-hcns-n8n
+  chatbot-app:
+    build: .
+    container_name: chatbot-hcns-app
     ports:
-      - "9050:5678"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "9070:9070"
+      - "9080:9080"
     environment:
-      - NODE_ENV=production
-      - GENERIC_TIMEZONE=Asia/Ho_Chi_Minh
-      - TZ=Asia/Ho_Chi_Minh
-      - N8N_HOST=10.0.99.116
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - WEBHOOK_URL=https://chatbot-tuyendung.aipt.vn/
-      - N8N_EDITOR_BASE_URL=http://10.0.99.116:9050/
-      - N8N_SECURE_COOKIE=false
-      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_RUNNERS_ENABLED=true
+      - DB_HOST=10.0.10.87
+      - DB_PORT=3306
+      - DB_USER=aipt
+      - DB_PASSWORD=aipt2023
+      - DB_NAME=training
+      - TIME_ZONE=Asia/Ho_Chi_Minh
+      - REDIS_HOST=redis
+      - QDRANT_HOST=qdrant
+    depends_on:
+      - redis
+      - qdrant
     volumes:
-      - n8n-storage:/home/node/.n8n
+      - .:/app
     restart: unless-stopped
 
 volumes:
   redis-storage:
     driver: local
   qdrant-storage:
-    driver: local
-  n8n-storage:
     driver: local

@@ -54,3 +54,45 @@ Dưới đây là danh sách 35 câu hỏi được dùng để đánh giá hệ
 ## 9. Chit-chat
 34. Bạn là bot hay là người thật đang chat với mình vậy?
 35. Chị HR bên mình có khó tính không bạn?
+
+
+
+## [Tuyển dụng] Câu hỏi chuẩn, lịch sự
+36. Hiện tại bên mình có công việc nào thu nhập khoảng 18 triệu không ạ?
+37. Có vị trí nào đòi hỏi kinh nghiệm 3 năm trở lên không?
+38. Tìm giúp mình các cơ hội việc làm liên quan đến mảng sales.
+39. Công ty có văn phòng ở Hồ Chí Minh và đang tuyển dụng không?
+40. Những vị trí nào yêu cầu ứng viên có khả năng ngoại ngữ (tiếng Anh) tốt?
+41. Mình đang tìm mức lương từ 10 đến 25 triệu, có job nào phù hợp không?
+42. Sinh viên mới tốt nghiệp, chưa có kinh nghiệm thực tế thì apply được những vị trí nào?
+43. Vị trí lập trình viên Frontend có yêu cầu kỹ năng gì đặc biệt không?
+44. Bên mình có chương trình tuyển thực tập (intern) không?
+45. Hiện tại vị trí nhân viên IT đang cần tuyển bao nhiêu người vậy?
+
+## [Tuyển dụng] Câu hỏi cộc lốc, siêu ngắn
+46. tìm việc
+47. tester
+48. việc sg
+49. HR lương bn
+
+## [Tuyển dụng] Câu hỏi dài dòng, lan man
+50. Chào anh chị phòng nhân sự, em vừa hoàn thành chương trình đại học chuyên ngành marketing, nhưng lại có kinh nghiệm làm sale được 2 năm. Em muốn hỏi liệu công ty mình có vị trí sale nào nhàn nhàn mà lương khoảng 12-15 triệu không ạ? Mong anh chị phản hồi giúp em!
+51. Dạ công ty ơi, đợt vừa rồi em rải CV nhiều nơi mà chưa đậu. Em thấy bên công ty mình phúc lợi tốt quá nên muốn hỏi xem có vị trí kế toán nào trống không? Lương trên 10 củ là em làm.
+
+## [Tuyển dụng] Câu hỏi sai chính tả, teen code
+52. có chóp lào 15 chẹo hk ad ưi?
+53. tuỷn nv code khum
+54. tỉm vjệc nàm tester paithong
+55. có cv nà0 ch0 ng m0i ra tru0ng hok dza?
+
+## [Tuyển dụng] Câu hỏi đa điều kiện
+56. Mình tìm việc sale, không yêu cầu kinh nghiệm, làm tại Nam Từ Liêm, lương trên 8 triệu, được hỗ trợ xăng xe.
+57. Có công việc marketing nào cho fresher mà lương cứng 15 triệu không?
+
+## [Tuyển dụng] Câu hỏi ngoại luồng, không liên quan, đùa giỡn
+58. Công ty mình có bán laptop cũ không, mình đang cần mua?
+59. Chị ơi, nhà em ở gần công ty, em xin làm bảo vệ được không? Lương tháng nhiêu?
+60. Có tuyển phó giám đốc không?
+61. Muốn lên làm CEO thì cần học những gì hả bot?
+62. Đội bóng công ty có cần tuyển tiền đạo không?
+

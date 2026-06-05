@@ -1,0 +1,104 @@
+﻿Turn,Domain,Question,Response,Result,Reason,History Length,Context Used,Time (s)
+1,company,"Chào bạn, mình muốn hỏi công ty mình chấm công bằng vân tay, quẹt thẻ hay chấm công qua app trên điện thoại thế ạ?","Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),2,Ứng viên đang hỏi về hình thức chấm công tại công ty.,1.42
+2,job,Công ty mình có vị trí nào đòi hỏi kinh nghiệm 3 năm trở lên không?,"Chào bạn, dựa trên dữ liệu hiện tại, tôi có các vị trí phù hợp với yêu cầu kinh nghiệm từ 3 năm trở lên của bạn như sau:
+
+*   **[ID: 1] Nhân viên FullStack Developer**
+    *   Số lượng: 1
+    *   Lương: 14.000.000 - 18.000.000 VND
+    *   Mô tả: Tham gia phát triển website và ứng dụng di động (front-end & back-end); thiết kế/tối ưu RESTful APIs; tích hợp các tính năng AI; triển khai và vận hành ứng dụng trên môi trường Linux, Docker.
+
+*   **[ID: 4] Sales Admin**
+    *   Số lượng: 3
+    *   Lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh (soạn báo giá, phối hợp dự án); thực hiện công tác đấu thầu; quản lý hợp đồng, theo dõi tiến độ dự án và thu hồi công nợ; thực hiện các công việc hành chính của phòng.
+
+*   **[ID: 6] Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 3
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Nghiên cứu tài liệu kỹ thuật các giải pháp công nghệ cao; tham gia triển khai kỹ thuật dự án; thực hiện trình diễn/Demo sản phẩm; lắp đặt và hướng dẫn khách hàng sử dụng thiết bị.
+
+*   **[ID: 8] Nhân viên Kinh doanh Dự án**
+    *   Số lượng: 1
+    *   Lương: 10.000.000 - 15.000.000 VND
+    *   Mô tả: Lập kế hoạch bán hàng; chăm sóc khách hàng hiện tại và mở rộng khách hàng mới; phối hợp với bộ phận kỹ thuật để tư vấn giải pháp; chuẩn bị hồ sơ chào giá/dự thầu và giám sát dự án.
+
+*   **[ID: 9] Nhân viên Mua hàng Quốc tế**
+    *   Số lượng: 2
+    *   Lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Tìm kiếm sản phẩm/hãng phù hợp; đàm phán giá cả và điều kiện cung ứng; thực hiện nghiệp vụ mua hàng dự án (soạn thảo hợp đồng, giám sát nhập khẩu); phát triển mối quan hệ với nhà cung ứng.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nộp hồ sơ nhé!",FAIL,"Vì bạn không cung cấp nội dung trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi không thể kiểm tra tính chính xác của câu lệnh SQL để xác nhận xem dữ liệu chatbot trả về là kết quả thực tế từ database hay là kết quả do AI tự ""bịa"" ra (hallucination).
+
+Tuy nhiên, dựa trên logic của câu hỏi và câu trả lời, tôi có đánh giá như sau:
+
+**RESULT: FAIL**
+
+**REASON:** 
+1. **Thiếu bằng chứng về SQL:** Không có thông tin SQL để đối chiếu xem hệ thống có thực hiện truy vấn đúng điều kiện `experience >= 3` hay không.
+2. **Dấu hiệu Hallucination (Ảo giác):** Trong câu trả lời của chatbot, các vị trí được liệt kê (FullStack Developer, Sales Admin, Presales,...) đều **không hiển thị thông tin về số năm kinh nghiệm** trong phần mô tả chi tiết. Một hệ thống AI tốt khi trả lời câu hỏi về ""điều kiện kinh nghiệm"" phải hiển thị rõ số năm kinh nghiệm của từng vị trí đó để chứng minh cho người dùng thấy chúng thỏa mãn yêu cầu ""3 năm trở lên"". 
+3. **Tính logic:** Nếu không có cột kinh nghiệm hiển thị, người dùng không thể xác nhận được chatbot đang trả lời đúng hay đang liệt kê ngẫu nhiên các công việc có sẵn trong database.
+
+*Lưu ý: Nếu bạn cung cấp thêm câu lệnh SQL, tôi sẽ có thể đưa ra đánh giá chính xác hơn về mặt kỹ thuật.*",4,Ứng viên đang hỏi về các vị trí công việc yêu cầu kinh nghiệm từ 3 năm trở lên.,6.99
+3,job,Có vị trí nào dành cho thực tập sinh (fresher/intern) phòng Kinh doanh không?,"Chào bạn, hiện tại công ty đang có vị trí thực tập sinh dành cho phòng Kinh doanh rất phù hợp với nhu cầu của bạn:
+
+* **[ID: 3] Thực tập sinh Kinh doanh Dự án**
+    * **Số lượng:** 2
+    * **Lương:** 3.000.000 - 5.000.000 VND
+    * **Mô tả công việc:** 
+        - Hỗ trợ các công việc thuộc phòng Kinh doanh: liên hệ khách hàng để báo giá, hỗ trợ khách hàng trong quá trình sử dụng sản phẩm, chăm sóc khách hàng cũ, xử lý và giải đáp các vấn đề khách hàng thắc mắc.
+        - Hỗ trợ soạn thảo và chuẩn bị tài liệu sản phẩm để gửi cho khách hàng, phối hợp cùng các nhân viên kinh doanh chuẩn bị các buổi thuyết trình, giới thiệu sản phẩm.
+        - Hỗ trợ hoàn thiện hồ sơ dự án, hợp đồng... và các công việc khác theo yêu cầu của phòng Kinh doanh và Ban giám đốc.
+    * **Quyền lợi:** Được đào tạo nghiệp vụ kinh doanh và kỹ năng mềm chuyên nghiệp; môi trường trẻ trung, năng động; có cơ hội trở thành nhân viên chính thức lâu dài với chế độ đãi ngộ tốt sau kỳ thực tập.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nộp hồ sơ nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **""Thông tin Debug (chứa câu lệnh SQL đã được sinh ra, nếu có)""**, tôi sẽ đánh giá dựa trên logic đối chiếu giữa **Câu hỏi của người dùng** và **Câu trả lời của chatbot**.
+
+**Phân tích:**
+1. **Ý định người dùng:** Tìm kiếm vị trí dành cho ""thực tập sinh (fresher/intern)"" thuộc ""phòng Kinh doanh"".
+2. **Câu trả lời của chatbot:** Đã lọc và đưa ra chính xác một vị trí là ""Thực tập sinh Kinh doanh Dự án"". Thông tin về chức danh (Thực tập sinh), bộ phận (Kinh doanh) và các chi tiết đi kèm (lương, mô tả, quyền lợi) hoàn toàn khớp với yêu cầu tìm kiếm.
+3. **Giả định về SQL:** Mặc dù không thấy câu lệnh SQL, nhưng dựa trên kết quả trả về rất chính xác và có cấu trúc, có thể suy luận rằng hệ thống đã thực hiện truy vấn đúng các điều kiện: `department LIKE '%Kinh doanh%'` và `position LIKE '%Thực tập sinh%'` (hoặc các từ khóa tương đương).
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã hiểu đúng ý định tìm kiếm về đối tượng (thực tập sinh) và bộ phận (Kinh doanh). Câu trả lời cung cấp thông tin chi tiết, chính xác và phù hợp với yêu cầu của người dùng.",6,Ứng viên đang hỏi về các vị trí công việc yêu cầu kinh nghiệm từ 3 năm trở lên và quan tâm đến vị trí thực tập sinh (fresher/intern) phòng Kinh doanh.,6.05
+4,company,Chế độ công tác phí cho các vị trí kinh doanh là khoán gọn hay thanh toán theo thực tế?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về các vị trí yêu cầu kinh nghiệm từ 3 năm trở lên, quan tâm đến vị trí thực tập sinh (fresher/intern) phòng Kinh doanh và đang hỏi về chế độ công tác phí.",1.87
+5,company,Các vị trí trên yêu cầu thử việc 1 tháng hay 2 tháng?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên đang hỏi về các vị trí yêu cầu kinh nghiệm từ 3 năm trở lên, quan tâm đến vị trí thực tập sinh (fresher/intern) phòng Kinh doanh và đang hỏi về chế độ công tác phí, thời gian thử việc.",2.14
+6,job,"Mình thấy có vị trí Backend, vị trí đó làm ở Hà Nội hay Hồ Chí Minh?","Chào bạn, hiện tại trong danh sách các vị trí đang tuyển dụng, tôi chỉ thấy có vị trí **[ID: 1] Nhân viên FullStack Developer** (bao gồm cả mảng Back-end). 
+
+Tuy nhiên, dữ liệu hiện tại không hiển thị thông tin cụ thể về địa điểm làm việc (Hà Nội hay Hồ Chí Minh) cho vị trí này.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nộp hồ sơ và trao đổi kỹ hơn với bộ phận chuyên môn nhé!",PASS,"Vì bạn không cung cấp thông tin trong phần **Thông tin Debug** (không có câu lệnh SQL), tôi sẽ đánh giá dựa trên logic phản hồi của Chatbot so với câu hỏi của người dùng.
+
+**RESULT: PASS**
+
+**REASON:** Người dùng hỏi về địa điểm làm việc của vị trí ""Backend"". Chatbot đã thực hiện tốt việc rà soát dữ liệu: 
+1. Xác định được vị trí gần nhất với yêu cầu (FullStack Developer có bao gồm mảng Back-end).
+2. Trả lời trung thực về việc dữ liệu hiện tại không có thông tin về địa điểm (Hà Nội hay Hồ Chí Minh) thay vì đoán mò hoặc đưa ra thông tin sai lệch.
+3. Có hướng dẫn tiếp theo (Call-to-action) để hỗ trợ người dùng nộp CV. 
+
+*Lưu ý: Nếu có SQL, tôi sẽ kiểm tra xem SQL có thực hiện `SELECT` các cột liên quan đến `job_title` chứa 'Backend' và `location` hay không. Dựa trên câu trả lời, có thể hiểu AI đã truy vấn và nhận thấy cột địa điểm bị trống hoặc không có kết quả khớp hoàn toàn.*",8,"Ứng viên quan tâm vị trí thực tập sinh/fresher phòng Kinh doanh, hỏi về kinh nghiệm 3 năm trở lên, chế độ công tác phí, thời gian thử việc và địa điểm làm việc của vị trí Backend.",4.66
+7,job,"Quy trình phỏng vấn vị trí đó gồm mấy vòng, có test kỹ năng hay chỉ phỏng vấn văn hóa?","Đối với vị trí **[ID: 1] Nhân viên FullStack Developer**, quy trình phỏng vấn được thực hiện qua các vòng sau:
+
+* **Vòng 1:** Sơ vấn
+* **Vòng 2:** Vòng 1 (Phỏng vấn chuyên môn)
+
+Hiện tại, tôi chưa có thông tin chi tiết về việc có bài kiểm tra kỹ năng (test) hay chỉ phỏng vấn văn hóa trong các vòng này.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nộp hồ sơ và được bộ phận chuyên môn tư vấn chi tiết hơn nhé!",PASS,"Vì bạn không cung cấp **Thông tin Debug (câu lệnh SQL)**, tôi sẽ đánh giá dựa trên logic của câu trả lời và sự tương quan giữa câu hỏi của người dùng với nội dung chatbot phản hồi.
+
+**Phân tích:**
+1. **Về ý định người dùng:** Người dùng muốn biết số lượng vòng phỏng vấn và nội dung chi tiết (có test kỹ năng hay không).
+2. **Về câu trả lời của chatbot:** 
+   - Chatbot đã xác định được vị trí đang nói đến (ID: 1 - FullStack Developer).
+   - Chatbot đã trả lời được số lượng vòng (2 vòng) và liệt kê tên các vòng.
+   - Chatbot đã trung thực thừa nhận không có dữ liệu về việc ""test kỹ năng hay phỏng vấn văn hóa"" thay vì tự bịa ra thông tin.
+   - Chatbot có lời kêu gọi hành động (CTA) hợp lý để hỗ trợ người dùng tiếp theo.
+3. **Về SQL (Giả định):** Dựa trên câu trả lời, có thể thấy AI đã truy vấn thành công bảng thông tin quy trình phỏng vấn (interview process) cho vị trí có ID tương ứng.
+
+**Đánh giá:**
+
+RESULT: PASS
+REASON: Chatbot đã trả lời trực diện và đầy đủ các khía cạnh của câu hỏi. Đối với phần thông tin không có trong cơ sở dữ liệu (test kỹ năng/văn hóa), chatbot đã phản hồi một cách trung thực thay vì đưa ra thông tin sai lệch, đồng thời đưa ra hướng giải quyết tiếp theo cho người dùng.",8,"Ứng viên quan tâm vị trí thực tập sinh/fresher phòng Kinh doanh; đang hỏi về chế độ công tác phí, thời gian thử việc, địa điểm làm việc vị trí Backend và quy trình phỏng vấn (số vòng, hình thức test).",4.33
+8,company,Nếu đỗ thì công ty sẽ gửi offer qua email hay gọi điện báo trực tiếp?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên quan tâm vị trí FullStack Developer; đang hỏi về địa điểm làm việc, quy trình phỏng vấn (số vòng, hình thức test) và cách thức nhận thông báo kết quả (email hay điện thoại).",1.55
+9,company,"Công ty có hỗ trợ cơm trưa không, mình tự mang cơm hay công ty phát phiếu ăn?","Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên quan tâm vị trí FullStack Developer; đang hỏi về địa điểm làm việc, quy trình phỏng vấn (số vòng, hình thức test) và cách thức nhận thông báo kết quả.",1.68
+10,company,Công ty mình có đóng bảo hiểm từ tháng thử việc không hay chờ thành chính thức mới đóng?,"Xin lỗi, hiện tại tôi chưa tìm thấy thông tin chính thức về vấn đề này trong bộ quy định của công ty. Bạn vui lòng liên hệ trực tiếp với phòng tuyển dụng (Email: tuyendung@aipt.vn, Zalo: 0862021176) để được giải đáp chính xác nhất nhé!",N/A,Không tìm thấy tài liệu (Fallback),8,"Ứng viên quan tâm vị trí FullStack Developer; đang hỏi về địa điểm làm việc, quy trình phỏng vấn (số vòng, hình thức test), cách thức nhận thông báo kết quả, chế độ ăn trưa và chính sách đóng bảo hiểm.",1.69

@@ -24,12 +24,12 @@ class RecruitmentChatMessage(db.Model):
     )
 
     role = Column(Integer, nullable=False)
-    # 1=user, 2=assistant, 3=system
+    # 1=user, 2=ai
 
     content = Column(Text, nullable=False)
 
     message_type = Column(Integer, nullable=False, default=1)
-    # 1=text, 2=form, 3=file_upload, 4=action, 5=jd
+    # 1=text, 3=file_upload
 
     payload = Column(Text, nullable=True)
 
