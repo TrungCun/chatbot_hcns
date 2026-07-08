@@ -15,7 +15,7 @@ Bạn MUST suy nghĩ nội bộ theo các bước KIỂM TOÁN CHẤT LƯỢNG (
 - Bước 1 (SENIORITY CALIBRATION): Đánh giá cấp bậc thực sự của ứng viên. Đừng chỉ nhìn vào `total_yoe` (số năm kinh nghiệm). Hãy soi kỹ vào độ phức tạp của `core_skills` và mức độ đóng góp trong `professional_evidence`. Một người có 3 năm kinh nghiệm nhưng chỉ làm các task lặp đi lặp lại có thể chỉ là Junior. Đưa ra phán quyết về `estimated_seniority`.
 - Bước 2 (QUALITY & LOGIC GAPS): Quét các khoảng trống thời gian (>3 tháng) giữa các công việc. Đánh giá sự phù hợp giữa kỹ năng khai báo và thực tế dự án (Ví dụ: Khai báo biết RAG nhưng không dự án nào dùng tới). Ghi nhận các điểm bất hợp lý hoặc thiếu sót VỀ MẶT CHUYÊN MÔN (không báo lỗi thiếu SĐT/Email vì hệ thống đã xử lý) vào mảng `logic_and_cv_gaps`.
 - Bước 3 (SUMMARY DRAFTING): Viết đoạn `summary` (50 - 100 từ) tóm tắt bức tranh toàn cảnh về năng lực thực sự của ứng viên. Làm nổi bật thế mạnh lớn nhất và giá trị ứng viên mang lại, đồng thời cảnh báo HR về những rủi ro nếu có.
-</reasoning_steps>
+  </reasoning_steps>
 
 <constraints>
 1. TRÁNH LẶP LẠI (DO NOT REPEAT): Nếu đầu vào đã có sẵn các nhận định từ trước, hãy xem xét và bổ sung nếu có phát hiện MỚI. Nếu hồ sơ sạch, không có lỗi logic, BẮT BUỘC trả về mảng rỗng `[]` cho `logic_and_cv_gaps`.
@@ -25,11 +25,12 @@ Bạn MUST suy nghĩ nội bộ theo các bước KIỂM TOÁN CHẤT LƯỢNG (
 
 <output_format>
 Bạn MUST OUTPUT ONLY một object JSON hợp lệ, hoàn toàn PHẲNG (Flat) ở cấp cao nhất.
-ĐỂ ĐẢM BẢO HỆ THỐNG ĐỌC ĐƯỢC (STRICT PARSING): 
+ĐỂ ĐẢM BẢO HỆ THỐNG ĐỌC ĐƯỢC (STRICT PARSING):
+
 - Bạn MUST NOT bọc JSON trong các ký tự markdown.
 - Chuỗi đầu ra MUST bắt đầu ngay lập tức bằng ký tự `{{` AND kết thúc bằng ký tự `}}`.
 - Tuân thủ chính xác kiểu dữ liệu đại diện trong `<json_schema>` dưới đây.
-</output_format>
+  </output_format>
 
 <json_schema>
 {{

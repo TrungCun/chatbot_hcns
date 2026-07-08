@@ -27,7 +27,7 @@ class ChatService:
 
         # 1. Trích xuất text cho LLM
         file_text = await HelperTools.process_files(request.files)
-        # 2. Lưu file vật lý để lưu history
+        # 2. Lưu file vật lý
         file_urls = await HelperTools.save_files_locally(request.files, user_id, session_id)
 
         original_message = request.message.strip() if request.message and request.message != "None" else ""
@@ -89,7 +89,7 @@ class ChatService:
 
             result = await self.graph.ainvoke(state, config)
 
-            # 🚀 Kích hoạt Resume đồ thị để chạy ngầm (update_context, save_history)
+            # 🚀 Kích hoạt Resume đồ thị để chạy ngầm (update_context)
             asyncio.create_task(self.graph.ainvoke(None, config))
 
             response_text = result.get("response") or "ngại quá không biết nói gì"
@@ -132,7 +132,7 @@ class ChatService:
         except Exception as e:
             logger.error(f"[CHAT SERVICE / PROCESS MESSAGE] error: {e}", exc_info=True)
             # Fallback
-            fallback_text = "Đang bận chút việc, chờ xíu nhé babe"
+            fallback_text = "Hệ thống đang bận xử lý, vui lòng thử lại sau giây lát."
             return ChatResponse(
                 user_id=user_id,
                 response=fallback_text,
@@ -142,7 +142,7 @@ class ChatService:
     async def stream_message(self, request: ChatRequest):
         """Async generator yielding SSE chunks for streaming response."""
         # Các node sinh response cuối cùng cho người dùng
-        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete", "handle_chitchat", "handle_job_query"}
+        RESPONSE_NODES = {"generate_response", "respond_complete", "respond_incomplete", "handle_chitchat", "handle_job_query", "acknowledge_receipt"}
 
         user_id = request.user_id
         session_id = request.session_id

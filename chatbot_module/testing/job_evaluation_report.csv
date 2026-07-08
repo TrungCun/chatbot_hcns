@@ -1,0 +1,542 @@
+﻿STT,Chủ đề / Nhánh,Câu hỏi,Câu trả lời,Thời gian trả lời (s),Kết quả (PASS/FAIL),Lý do đánh giá,Debug Logs (SQL)
+1,job,Hiện tại bên mình có công việc nào thu nhập khoảng 18 triệu không ạ?,"Chào bạn, hiện tại tại AIPT đang có khá nhiều vị trí với mức thu nhập khởi điểm lên đến 18.000.000 VND (hoặc cao hơn tùy theo năng lực thỏa thuận). 
+
+Dưới đây là danh sách các vị trí đang tuyển dụng để bạn tham khảo:
+
+* **Nhân viên FullStack Developer**
+    * Số lượng: 01
+    * Mức lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app (front-end & back-end), thiết kế RESTful APIs, tích hợp tính năng AI, vận hành trên Linux/Docker.
+
+* **Nhân viên Phát triển AI**
+    * Số lượng: 01
+    * Mức lương: 12.000.000 - 18.000.000 VND
+    * Mô tả: Thiết kế/triển khai chatbot sử dụng LLMs, xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI (LangGraph), tích hợp hệ thống.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Số lượng: 03
+    * Mức lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Nghiên cứu tài liệu kỹ thuật thiết bị chuyên dụng, tham gia triển khai cấu hình, demo sản phẩm cho khách hàng và hỗ trợ kỹ thuật sau bán hàng.
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Số lượng: 02
+    * Mức lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm nguồn hàng/hãng phù hợp, đàm phán giá, soạn thảo hợp đồng, giám sát thủ tục nhập khẩu và phát triển mối quan hệ với đối tác quốc tế.
+
+Bạn hãy xem qua các vị trí trên, nếu thấy phù hợp với chuyên môn của mình, hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhé!",18.95,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã sử dụng điều kiện `rc.jd_salary_range LIKE '%18%'` để lọc các công việc có chứa con số ""18"" trong dải lương, điều này phù hợp với ý định tìm kiếm mức thu nhập ""khoảng 18 triệu"" của người dùng. Kết quả trả về từ SQL (các vị trí có mức lương kết thúc ở 18.000.000 VND) đã được chatbot tổng hợp và trình bày lại một cách đầy đủ, chính xác và thân thiện.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rc.jd_salary_range, rr.quantity, rr.experience_level, rr.education_level, rc.jd_job_description, rc.jd_competency_requirements, rc.jd_benefits, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.jd_salary_range LIKE '%18%' GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rc.jd_salary_range, rr.quantity, rr.experience_level, rr.education_level, rc.jd_job_description, rc.jd_competency_requirements, rc.jd_benefits, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.jd_salary_range LIKE '%18%' GROUP BY rc.id LIMIT 10"
+2,job,Có vị trí nào đòi hỏi kinh nghiệm 3 năm trở lên không?,"Chào bạn, hiện tại tại AIPT đang có các vị trí yêu cầu kinh nghiệm từ 3 năm trở lên như sau:
+
+*   **Nhân viên FullStack Developer**
+    *   Số lượng: 01
+    *   Mức lương: 14.000.000 - 18.000.000 VND
+    *   Mô tả: Tham gia phát triển website và ứng dụng di động (front-end & back-end), thiết kế RESTful APIs, tích hợp tính năng AI và vận hành trên môi trường Linux/Docker.
+*   **Sales Admin**
+    *   Số lượng: 03
+    *   Mức lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh (soạn báo giá, phối hợp dự án), thực hiện hồ sơ đấu thầu, quản lý hợp đồng và các công việc hành chính của phòng kinh doanh.
+*   **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 03
+    *   Mức lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Nghiên cứu tài liệu kỹ thuật thiết bị chuyên dụng, tham gia triển khai kỹ thuật dự án, demo sản phẩm và hỗ trợ kỹ thuật sau bán hàng.
+*   **Nhân viên Kinh doanh Dự án**
+    *   Số lượng: 01
+    *   Mức lương: 10.000.000 - 15.000.000 VND
+    *   Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp với bộ phận kỹ thuật để tư vấn giải pháp và quản lý quá trình thực hiện dự án.
+*   **Nhân viên Mua hàng Quốc tế**
+    *   Số lượng: 02
+    *   Mức lương: 15.000.000 - 18.000.000 VND
+    *   Mô tả: Tìm kiếm nguồn hàng/hãng phù hợp, đàm phán giá, thực hiện nghiệp vụ mua hàng dự án và quản lý quan hệ nhà cung cấp quốc tế.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để mình hỗ trợ kết nối với bộ phận tuyển dụng nhé!",20.56,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra đã chuyển đổi chính xác ý định của người dùng (""3 năm trở lên"") thành điều kiện logic `rr.experience_level >= 3`. Các điều kiện bổ trợ về trạng thái chiến dịch (`status = 1`) và thời hạn (`end_time`) cũng được xử lý đúng để đảm bảo tính cập nhật của dữ liệu. Chatbot đã tổng hợp và trình bày kết quả trả về từ truy vấn một cách đầy đủ, rõ ràng và đúng trọng tâm câu hỏi.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level >= 3 GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level >= 3 GROUP BY rc.id LIMIT 10"
+3,job,Tìm giúp mình các cơ hội việc làm liên quan đến mảng sales.,"Chào bạn, rất vui được hỗ trợ bạn! Dựa trên nhu cầu tìm kiếm các vị trí liên quan đến mảng Sales (Kinh doanh), AIPT hiện đang có các cơ hội nghề nghiệp sau đây:
+
+*   **Thực tập sinh Kinh doanh Dự án**
+    *   Số lượng: 02
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả: Hỗ trợ liên hệ khách hàng báo giá, chăm sóc khách hàng cũ, soạn thảo tài liệu sản phẩm, hỗ trợ chuẩn bị các buổi thuyết trình và hoàn thiện hồ sơ dự án/hợp đồng.
+
+*   **Sales Admin**
+    *   Số lượng: 03
+    *   Mức lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh (soạn báo giá, phối hợp triển khai dự án), thực hiện công tác đấu thầu (nghiên cứu HSMT, chuẩn bị hồ sơ dự thầu), quản lý hợp đồng (theo dõi tiến độ, thu hồi công nợ) và các công việc hành chính của phòng.
+
+*   **Nhân viên Kinh doanh Dự án**
+    *   Số lượng: 01
+    *   Mức lương: 10.000.000 - 15.000.000 VND
+    *   Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng hiện tại và mở rộng khách hàng mới, phối hợp với bộ phận kỹ thuật để tư vấn giải pháp, chuẩn bị hồ sơ chào giá/dự thầu và giám sát quá trình thực hiện dự án.
+
+Bạn hãy xem qua các vị trí trên xem có phù hợp với định hướng của mình không nhé. Nếu quan tâm, bạn hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhanh nhất!",21.15,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra rất chính xác và đầy đủ. Nó không chỉ tìm kiếm từ khóa ""Sales"" trong tên chiến dịch tuyển dụng (`rc.name`) mà còn mở rộng sang từ khóa tương đương trong tiếng Việt là ""Kinh doanh"" và kiểm tra cả trong tên phòng ban (`d.name`). Các điều kiện về trạng thái chiến dịch (`status = 1`) và thời hạn (`end_time`) cũng được xử lý đúng để đảm bảo các công việc còn hạn. Chatbot đã trích xuất và trình bày thông tin từ kết quả truy vấn một cách rõ ràng, chuyên nghiệp và đúng trọng tâm yêu cầu của người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%' OR d.name LIKE '%Sales%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%' OR d.name LIKE '%Sales%') GROUP BY rc.id LIMIT 10"
+4,job,Công ty có văn phòng ở Hồ Chí Minh và đang tuyển dụng không?,"Chào bạn, mình là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Hiện tại, mình chưa tìm thấy thông tin về các vị trí đang tuyển dụng tại khu vực Hồ Chí Minh trong dữ liệu hệ thống.
+
+Nếu bạn có yêu cầu cụ thể về vị trí công việc hoặc mong muốn làm việc tại khu vực khác, hãy chia sẻ thêm để mình hỗ trợ kiểm tra nhé.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để mình lưu lại thông tin ứng tuyển nhé!",8.14,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã được sinh ra rất logic và bao quát. Thay vì chỉ tìm kiếm ở một cột, AI đã thực hiện tìm kiếm từ khóa ""Hồ Chí Minh"" trong cả hai trường `jd_job_description` (mô tả công việc) và `jd_benefits` (phúc lợi) để tăng khả năng tìm thấy thông tin địa điểm. Đồng thời, SQL cũng đảm bảo các điều kiện về trạng thái chiến dịch tuyển dụng đang hoạt động (`status = 1`) và chưa hết hạn (`end_time`). Vì kết quả truy vấn trả về rỗng, chatbot đã phản hồi một cách lịch sự và chính xác theo đúng dữ liệu tìm được.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%Hồ Chí Minh%' OR rc.jd_benefits LIKE '%Hồ Chí Minh%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%Hồ Chí Minh%' OR rc.jd_benefits LIKE '%Hồ Chí Minh%') GROUP BY rc.id LIMIT 10"
+5,job,Những vị trí nào yêu cầu ứng viên có khả năng ngoại ngữ (tiếng Anh) tốt?,"Chào bạn, dựa trên thông tin tuyển dụng hiện tại của AIPT, các vị trí yêu cầu ứng viên có khả năng tiếng Anh tốt bao gồm:
+
+* **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales (ID: 2):** Yêu cầu khả năng nghe, đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (tương ứng TOEIC 650+).
+* **Nhân viên Phát triển AI (ID: 5):** Yêu cầu kỹ năng tiếng Anh đọc hiểu tốt.
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (ID: 6):** Yêu cầu khả năng nghe, đọc hiểu tài liệu tiếng Anh kỹ thuật tốt (tương ứng TOEIC 650+).
+* **Nhân viên Kinh doanh Dự án (ID: 8):** Ưu tiên ứng viên có khả năng sử dụng tiếng Anh giao tiếp.
+* **Nhân viên Mua hàng Quốc tế (ID: 9):** Yêu cầu sử dụng tốt cả 4 kỹ năng tiếng Anh.
+
+Bạn có thể gửi CV trực tiếp vào khung chat này để mình hỗ trợ kết nối với bộ phận tuyển dụng nhé!",14.65,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra đã xử lý rất tốt yêu cầu của người dùng bằng cách sử dụng toán tử `LIKE` để tìm kiếm các từ khóa liên quan đến ngoại ngữ (""tiếng Anh"", ""English"") trong cả hai trường quan trọng là mô tả công việc (`jd_job_description`) và yêu cầu năng lực (`jd_competency_requirements`). Đồng thời, SQL cũng đảm bảo các điều kiện về trạng thái chiến dịch đang hoạt động (`status = 1`) và chưa hết hạn. Chatbot đã tổng hợp kết quả và phản hồi chính xác, chi tiết các vị trí tìm được kèm theo lý do cụ thể tại sao chúng khớp với yêu cầu.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%tiếng Anh%' OR rc.jd_job_description LIKE '%English%' OR rc.jd_competency_requirements LIKE '%tiếng Anh%' OR rc.jd_competency_requirements LIKE '%English%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%tiếng Anh%' OR rc.jd_job_description LIKE '%English%' OR rc.jd_competency_requirements LIKE '%tiếng Anh%' OR rc.jd_competency_requirements LIKE '%English%') GROUP BY rc.id LIMIT 10"
+6,job,"Mình đang tìm mức lương từ 10 đến 25 triệu, có job nào phù hợp không?","Chào bạn, với mức lương mong muốn từ 10 đến 25 triệu VND, AIPT hiện đang có rất nhiều vị trí phù hợp với các chuyên môn khác nhau. Bạn có thể tham khảo danh sách dưới đây nhé:
+
+* **Kỹ sư thiết kế UAV**
+    * Số lượng: 1
+    * Lương: 15.000.000 - 25.000.000 VND
+    * Mô tả: Thiết kế kết cấu UAV (frame, mounting, payload integration), tối ưu thiết kế, lựa chọn vật liệu, thực hiện mô phỏng và tích hợp phần cứng.
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Số lượng: 3
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Nghiên cứu tài liệu kỹ thuật, tham gia triển khai cấu hình, demo sản phẩm, lắp đặt và hỗ trợ kỹ thuật cho khách hàng.
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Số lượng: 2
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm nhà cung cấp, đàm phán giá, thực hiện nghiệp vụ mua hàng dự án và quản lý thủ tục nhập khẩu.
+
+* **Nhân viên FullStack Developer**
+    * Số lượng: 1
+    * Lương: 14.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển website/mobile app (front-end & back-end), xây dựng RESTful APIs, tích hợp tính năng AI và vận hành trên môi trường Linux/Docker.
+
+* **Nhân viên Phát triển AI**
+    * Số lượng: 1
+    * Lương: 12.000.000 - 18.000.000 VND
+    * Mô tả: Phát triển hệ thống chatbot (LLMs), xây dựng pipeline xử lý dữ liệu (RAG), phát triển workflow AI và tối ưu hóa mô hình.
+
+* **Sales Admin**
+    * Số lượng: 3
+    * Lương: 12.000.000 - 15.000.000 VND
+    * Mô tả: Hỗ trợ kinh doanh, soạn thảo báo giá, chuẩn bị hồ sơ thầu, quản lý hợp đồng và theo dõi tiến độ dự án.
+
+* **Nhân viên Kinh doanh Dự án**
+    * Số lượng: 1
+    * Lương: 10.000.000 - 15.000.000 VND
+    * Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật để tư vấn giải pháp và quản lý dự án/hợp đồng.
+
+Bạn hãy xem qua các vị trí trên, nếu thấy hứng thú với công việc nào, bạn hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhé!",27.39,FAIL,"RESULT: FAIL
+REASON: Câu lệnh SQL được sinh ra hoàn toàn không chứa điều kiện lọc theo mức lương (salary range) như người dùng yêu cầu. SQL chỉ lọc theo trạng thái (`status = 1`) và thời gian hết hạn (`end_time`), sau đó lấy 10 kết quả đầu tiên bất kỳ (`LIMIT 10`). Mặc dù câu trả lời của chatbot hiển thị các công việc có mức lương nằm trong khoảng 10-25 triệu, nhưng đây là sự trùng hợp ngẫu nhiên từ kết quả trả về của câu lệnh SQL thiếu điều kiện lọc, chứ không phải do hệ thống thực hiện truy vấn đúng ý định của người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) GROUP BY rc.id LIMIT 10"
+7,job,"Sinh viên mới tốt nghiệp, chưa có kinh nghiệm thực tế thì apply được những vị trí nào?","Chào bạn, rất vui được hỗ trợ bạn! Với đối tượng là sinh viên mới tốt nghiệp và chưa có kinh nghiệm thực tế, tại AIPT hiện đang có 2 vị trí thực tập sinh rất phù hợp để bạn bắt đầu sự nghiệp và được đào tạo bài bản:
+
+*   **ID 2: Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 01
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Triển khai tìm kiếm yêu cầu sản phẩm thiết bị cho dự án an ninh quốc phòng; xây dựng hệ thống phù hợp yêu cầu khách hàng; demo, bàn giao và hỗ trợ khách hàng sử dụng sản phẩm.
+
+*   **ID 3: Thực tập sinh Kinh doanh Dự án**
+    *   Số lượng: 02
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Hỗ trợ liên hệ khách hàng báo giá, chăm sóc khách hàng; soạn thảo tài liệu sản phẩm, chuẩn bị thuyết trình; hỗ trợ hoàn thiện hồ sơ dự án và hợp đồng.
+
+Cả hai vị trí này đều có chế độ hỗ trợ dấu thực tập cho sinh viên năm cuối và đặc biệt là được đào tạo chuyên sâu từ các nhân sự giàu kinh nghiệm, có cơ hội trở thành nhân viên chính thức sau kỳ thực tập.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để mình xem xét và hỗ trợ bạn nhanh nhất nhé!",14.15,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã xử lý chính xác ý định của người dùng thông qua điều kiện `rr.experience_level = 0` (tương ứng với mức độ kinh nghiệm bằng 0/chưa có kinh nghiệm). Các điều kiện về trạng thái chiến dịch (`status = 1`) và thời hạn (`end_time`) cũng được đảm bảo để lọc ra các công việc đang tuyển dụng. Chatbot đã tổng hợp thông tin từ kết quả truy vấn và phản hồi một cách tự nhiên, đầy đủ và phù hợp với đối tượng sinh viên mới tốt nghiệp.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level = 0 GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level = 0 GROUP BY rc.id LIMIT 10"
+8,job,Vị trí lập trình viên Frontend có yêu cầu kỹ năng gì đặc biệt không?,"Chào bạn, hiện tại trong dữ liệu tuyển dụng của AIPT chưa có thông tin về vị trí Lập trình viên Frontend. Do đó, mình chưa thể cung cấp các yêu cầu kỹ năng cụ thể cho vị trí này.
+
+Bạn vui lòng gửi CV trực tiếp vào khung chat để mình có thể hỗ trợ bạn tốt nhất khi có vị trí phù hợp nhé!",6.81,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra đã phản ánh đúng ý định của người dùng bằng cách tìm kiếm các chiến dịch tuyển dụng có tên chứa từ khóa '%Frontend%' và đảm bảo các điều kiện về trạng thái (status = 1) cũng như thời hạn (end_time). Do kết quả truy vấn trả về rỗng (không có dữ liệu), chatbot đã đưa ra câu trả lời trung thực và hợp lý với thực tế dữ liệu hiện có.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rc.jd_competency_requirements FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.name LIKE '%Frontend%' LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rc.jd_competency_requirements FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.name LIKE '%Frontend%' LIMIT 10"
+9,job,Bên mình có chương trình tuyển thực tập (intern) không?,"Chào bạn, hiện tại Công ty AIPT đang có các chương trình thực tập sinh rất hấp dẫn dành cho bạn. Dưới đây là các vị trí đang tuyển dụng:
+
+*   **ID 2: Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 01
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Triển khai, tìm kiếm yêu cầu sản phẩm thiết bị cho dự án an ninh quốc phòng; xây dựng hệ thống phù hợp yêu cầu khách hàng; demo, bàn giao và hỗ trợ khách hàng sử dụng sản phẩm.
+
+*   **ID 3: Thực tập sinh Kinh doanh Dự án**
+    *   Số lượng: 02
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Hỗ trợ các công việc phòng Kinh doanh (liên hệ báo giá, chăm sóc khách hàng, giải đáp thắc mắc); soạn thảo tài liệu sản phẩm, chuẩn bị thuyết trình; hỗ trợ hoàn thiện hồ sơ dự án, hợp đồng.
+
+Nếu bạn quan tâm đến vị trí nào, hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhé!",11.95,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra đã xử lý rất tốt ý định của người dùng bằng cách sử dụng toán tử `LIKE` để tìm kiếm từ khóa ""Thực tập"" trong các trường quan trọng như tên chiến dịch (`rc.name`), mô tả công việc (`rc.jd_job_description`) và phúc lợi (`rc.jd_benefits`). Đồng thời, SQL cũng đảm bảo các điều kiện về trạng thái chiến dịch đang hoạt động (`status = 1`) và chưa hết hạn (`end_time`). Chatbot đã tổng hợp chính xác các kết quả trả về từ truy vấn để đưa ra câu trả lời đầy đủ, chuyên nghiệp và đúng trọng tâm.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Thực tập%' OR rc.jd_job_description LIKE '%Thực tập%' OR rc.jd_benefits LIKE '%Thực tập%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Thực tập%' OR rc.jd_job_description LIKE '%Thực tập%' OR rc.jd_benefits LIKE '%Thực tập%') GROUP BY rc.id LIMIT 10"
+10,job,Hiện tại vị trí nhân viên IT đang cần tuyển bao nhiêu người vậy?,"Chào bạn, hiện tại Công ty AIPT đang có vị trí tuyển dụng thuộc mảng IT với thông tin chi tiết như sau:
+
+* **ID:** 1
+* **Tên vị trí:** Nhân viên FullStack Developer
+* **Số lượng:** 01 người
+
+Nếu bạn quan tâm đến vị trí này, hãy nộp CV trực tiếp vào khung chat để mình hỗ trợ nhé!",5.09,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã được sinh ra rất tốt, không chỉ tìm kiếm từ khóa ""IT"" mà còn mở rộng thêm các từ khóa liên quan như ""Developer"" và ""FullStack"" để đảm bảo không bỏ sót kết quả. Các điều kiện về trạng thái chiến dịch (status = 1) và thời hạn tuyển dụng (end_time) cũng được xử lý chính xác. Chatbot đã trích xuất đúng thông tin từ kết quả truy vấn (Tên vị trí: FullStack Developer, Số lượng: 01) để trả lời người dùng một cách tự nhiên và đầy đủ.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%IT%' OR rc.name LIKE '%Developer%' OR rc.name LIKE '%FullStack%') LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%IT%' OR rc.name LIKE '%Developer%' OR rc.name LIKE '%FullStack%') LIMIT 10"
+11,job,tìm việc,"Chào bạn, tôi là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Rất tiếc, hiện tại tôi chưa nhận được danh sách các vị trí công việc đang tuyển dụng từ hệ thống để có thể tư vấn chính xác cho bạn.
+
+Bạn vui lòng đợi trong giây lát để tôi cập nhật lại dữ liệu, hoặc nếu bạn có vị trí cụ thể nào đang quan tâm, hãy cho tôi biết nhé.
+
+Nếu bạn đã sẵn sàng, hãy gửi CV trực tiếp vào khung chat này để tôi hỗ trợ bạn nhanh nhất!",7.74,FAIL,"RESULT: FAIL
+REASON: Mặc dù câu lệnh SQL được sinh ra hoàn toàn chính xác và đầy đủ các điều kiện để lấy danh sách công việc đang tuyển dụng (status = 1 và chưa hết hạn), nhưng kết quả trả về từ hệ thống (thông qua log debug) cho thấy truy vấn đã được thực thi. Tuy nhiên, chatbot lại phản hồi là ""chưa nhận được danh sách các vị trí công việc"", điều này cho thấy có sự đứt gãy giữa việc thực thi SQL và việc xử lý kết quả trả về để đưa ra câu trả lời cho người dùng. AI đã không trình bày danh sách công việc tìm được mà lại đưa ra câu trả lời từ chối/xin lỗi không hợp lý.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id GROUP BY rc.id HAVING rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id GROUP BY rc.id HAVING rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) LIMIT 10"
+12,job,tester,"Chào bạn, mình là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Rất tiếc, hiện tại mình chưa tìm thấy vị trí Tester nào đang tuyển dụng trong danh sách dữ liệu của công ty.
+
+Nếu bạn có quan tâm đến các vị trí khác hoặc muốn mình cập nhật thông tin ngay khi có vị trí phù hợp, hãy để lại thông tin nhé.
+
+Bạn có thể gửi CV trực tiếp vào khung chat này để mình lưu hồ sơ cho các đợt tuyển dụng tới nhé!",7.18,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL được sinh ra đã xử lý chính xác ý định tìm kiếm của người dùng bằng cách sử dụng toán tử `LIKE '%tester%'` trên cả hai trường `rc.name` (tên vị trí) và `rc.jd_job_description` (mô tả công việc). Đồng thời, SQL cũng đảm bảo các điều kiện lọc logic như trạng thái chiến dịch đang hoạt động (`status = 1`) và thời hạn tuyển dụng chưa kết thúc. Chatbot phản hồi hợp lý khi thông báo không tìm thấy kết quả dựa trên truy vấn dữ liệu đã thực hiện.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%tester%' OR rc.jd_job_description LIKE '%tester%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%tester%' OR rc.jd_job_description LIKE '%tester%') GROUP BY rc.id LIMIT 10"
+13,job,việc sg,"Chào bạn, mình là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Rất tiếc là hiện tại mình chưa tìm thấy vị trí tuyển dụng nào tại khu vực TP. Hồ Chí Minh (Sài Gòn) trong danh sách dữ liệu hiện có.
+
+Bạn có thể cho mình biết thêm về chuyên môn hoặc vị trí bạn đang quan tâm để mình lưu lại thông tin và hỗ trợ bạn ngay khi có tin tuyển dụng mới nhé.
+
+Nếu bạn có sẵn CV, hãy gửi trực tiếp vào khung chat này để mình lưu hồ sơ nhé!",10.63,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã xử lý rất tốt ý định tìm kiếm mơ hồ của người dùng (""việc sg""). AI đã tự động suy luận ""sg"" là viết tắt của ""Sài Gòn"" hoặc ""TPHCM"" và áp dụng các điều kiện `LIKE` tương ứng vào các trường liên quan như `jd_job_description` và `jd_benefits`. Khi kết quả truy vấn trả về rỗng, chatbot đã phản hồi một cách lịch sự, xác nhận đúng khu vực người dùng đang tìm kiếm và đưa ra các hướng dẫn tiếp theo (gửi CV, cung cấp thêm thông tin).","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%SG%' OR rc.jd_job_description LIKE '%Sài Gòn%' OR rc.jd_benefits LIKE '%SG%' OR rc.jd_benefits LIKE '%Sài Gòn%' OR rc.jd_job_description LIKE '%TPHCM%' OR rc.jd_benefits LIKE '%TPHCM%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.jd_job_description LIKE '%SG%' OR rc.jd_job_description LIKE '%Sài Gòn%' OR rc.jd_benefits LIKE '%SG%' OR rc.jd_benefits LIKE '%Sài Gòn%' OR rc.jd_job_description LIKE '%TPHCM%' OR rc.jd_benefits LIKE '%TPHCM%') GROUP BY rc.id LIMIT 10"
+14,job,HR lương bn,"Chào bạn, hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT không có vị trí chuyên trách về Nhân sự (HR).
+
+Tuy nhiên, tôi xin gửi đến bạn danh sách đầy đủ các vị trí đang tuyển dụng để bạn tham khảo nhé:
+
+*   **Nhân viên FullStack Developer** (Số lượng: 1): 14.000.000 - 18.000.000 VND. Mô tả: Phát triển website/app, thiết kế RESTful APIs, tích hợp AI, quản lý trên Linux/Docker.
+*   **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (Số lượng: 1): 3.000.000 - 5.000.000 VND. Mô tả: Tìm kiếm yêu cầu thiết bị an ninh quốc phòng, xây dựng hệ thống, demo và hỗ trợ khách hàng.
+*   **Thực tập sinh Kinh doanh Dự án** (Số lượng: 2): 3.000.000 - 5.000.000 VND. Mô tả: Hỗ trợ báo giá, chăm sóc khách hàng, soạn thảo tài liệu và hoàn thiện hồ sơ dự án.
+*   **Sales Admin** (Số lượng: 3): 12.000.000 - 15.000.000 VND. Mô tả: Hỗ trợ kinh doanh, đấu thầu, thực hiện hợp đồng và các công việc hành chính phòng kinh doanh.
+*   **Nhân viên Phát triển AI** (Số lượng: 1): 12.000.000 - 18.000.000 VND. Mô tả: Phát triển chatbot LLMs, xây dựng pipeline RAG, workflow AI (LangGraph), tích hợp hệ thống.
+*   **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales** (Số lượng: 3): 15.000.000 - 18.000.000 VND. Mô tả: Nghiên cứu giải pháp công nghệ chuyên dụng, triển khai kỹ thuật, demo và lắp đặt thiết bị.
+*   **Kỹ sư thiết kế UAV** (Số lượng: 1): 15.000.000 - 25.000.000 VND. Mô tả: Thiết kế kết cấu UAV (SolidWorks/CATIA), mô phỏng, tích hợp phần cứng và thử nghiệm.
+*   **Nhân viên Kinh doanh Dự án** (Số lượng: 1): 10.000.000 - 15.000.000 VND. Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật để tư vấn giải pháp và quản lý dự án.
+*   **Nhân viên Mua hàng Quốc tế** (Số lượng: 2): 15.000.000 - 18.000.000 VND. Mô tả: Tìm kiếm nhà cung cấp, đàm phán giá, thực hiện nghiệp vụ mua hàng dự án và quản lý hợp đồng quốc tế.
+
+Nếu bạn quan tâm đến vị trí nào, hãy nộp CV trực tiếp vào khung chat này để tôi hỗ trợ nhé!",7.86,FAIL,"RESULT: FAIL
+REASON: Câu lệnh SQL được sinh ra (`generated SQL`) hoàn toàn thiếu điều kiện lọc theo từ khóa ""HR"" (ví dụ: `WHERE rc.name LIKE '%HR%'` hoặc `WHERE rc.name LIKE '%Nhân sự%'`). Thay vì tìm kiếm vị trí liên quan đến HR như người dùng yêu cầu, AI đã thực hiện một câu lệnh `SELECT` lấy 10 vị trí bất kỳ (`LIMIT 10`) mà không có bộ lọc. Mặc dù chatbot đã có bước xử lý ngôn ngữ để thông báo không tìm thấy HR, nhưng nguyên nhân gốc rễ là do SQL không thực hiện đúng ý định tìm kiếm của người dùng, dẫn đến việc phải dựa vào danh sách ngẫu nhiên để trả lời.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: ```sql
+SELECT rc.id, rc.name, rc.jd_salary_range FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) LIMIT 10
+```
+[check_jobs] executing query: SELECT rc.id, rc.name, rc.jd_job_description, rc.jd_salary_range, rr.quantity FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id WHERE rc.status = 1 LIMIT 10"
+15,job,"Chào anh chị phòng nhân sự, em vừa hoàn thành chương trình đại học chuyên ngành marketing, nhưng lại có kinh nghiệm làm sale được 2 năm. Em muốn hỏi liệu công ty mình có vị trí sale nào nhàn nhàn mà lương khoảng 12-15 triệu không ạ? Mong anh chị phản hồi giúp em!","Chào em, rất vui được kết nối với em!
+
+Với nền tảng chuyên ngành Marketing và 2 năm kinh nghiệm làm Sale, em có lợi thế rất tốt để phát triển tại AIPT. Về mong muốn của em, anh/chị xin chia sẻ thẳng thắn là tại các công ty về công nghệ và dự án như AIPT, các vị trí kinh doanh thường đòi hỏi sự chủ động và nỗ lực cao để đạt được kết quả tốt nhất, nên sẽ không có vị trí nào gọi là ""nhàn"" hoàn toàn em nhé.
+
+Tuy nhiên, dựa trên mức lương em kỳ vọng (12-15 triệu) và kinh nghiệm sẵn có, anh/chị có các vị trí phù hợp sau đây để em tham khảo:
+
+*   **Sales Admin (Số lượng: 3)**
+    *   **Mức lương:** 12.000.000 - 15.000.000 VND.
+    *   **Mô tả:** Hỗ trợ kinh doanh (soạn báo giá, phối hợp dự án), làm hồ sơ đấu thầu, thực hiện hợp đồng (soạn thảo biên bản, quản lý tiến độ, thu hồi công nợ) và các công việc hành chính của phòng.
+*   **Nhân viên Kinh doanh Dự án (Số lượng: 1)**
+    *   **Mức lương:** 10.000.000 - 15.000.000 VND + % hoa hồng doanh số.
+    *   **Mô tả:** Lập kế hoạch bán hàng, chăm sóc khách hàng cũ và mở rộng khách hàng mới, phối hợp với bộ phận kỹ thuật để tư vấn giải pháp, chuẩn bị hồ sơ chào giá/dự thầu và giám sát quá trình thực hiện dự án.
+
+Ngoài ra, nếu em muốn thử sức ở mảng kỹ thuật hoặc thực tập để lấy thêm kinh nghiệm chuyên sâu, công ty còn có:
+*   **Thực tập sinh Kinh doanh Dự án (Số lượng: 2):** Lương 3 - 5 triệu VND.
+*   **Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales (Số lượng: 1):** Lương 3 - 5 triệu VND.
+*   **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales (Số lượng: 3):** Lương 15 - 18 triệu VND trở lên.
+
+Em hãy xem xét kỹ mô tả công việc để xem mình phù hợp với hướng đi nào nhất nhé.
+
+Nếu em thấy hứng thú với vị trí nào, hãy nộp CV trực tiếp vào khung chat này để anh/chị xem xét và phản hồi sớm cho em!",7.14,PASS,"RESULT: PASS
+REASON: 
+1. **Về SQL:** Mặc dù câu lệnh SQL sinh ra không lọc trực tiếp điều kiện lương (do cấu trúc dữ liệu lương thường nằm trong chuỗi text `jd_salary_range` nên việc dùng SQL lọc chính xác khoảng số là khó khăn), nhưng AI đã thực hiện bước truy vấn các vị trí liên quan đến ""Sales/Kinh doanh"" một cách chính xác thông qua `LIKE '%Sales%'` và `LIKE '%Kinh doanh%'`.
+2. **Về nội dung trả lời:** Chatbot thể hiện sự thông minh và tinh tế (Human-like) khi xử lý yêu cầu ""nhàn nhàn"" của người dùng (giải thích khéo léo rằng công việc kinh doanh cần sự chủ động thay vì hứa hẹn một công việc nhàn hạ). 
+3. **Về độ chính xác thông tin:** Chatbot đã lọc và đưa ra các vị trí phù hợp nhất với yêu cầu về chuyên môn (Sale/Marketing) và mức lương kỳ vọng (12-15 triệu) từ kết quả truy vấn được trả về. Các thông tin về vị trí, số lượng và mô tả công việc được trình bày rõ ràng, đúng trọng tâm.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%') GROUP BY rc.id LIMIT 10"
+16,job,"Dạ công ty ơi, đợt vừa rồi em rải CV nhiều nơi mà chưa đậu. Em thấy bên công ty mình phúc lợi tốt quá nên muốn hỏi xem có vị trí kế toán nào trống không? Lương trên 10 củ là em làm.","Chào bạn, rất cảm ơn bạn đã quan tâm đến cơ hội nghề nghiệp tại AIPT. Mình rất chia sẻ với những khó khăn mà bạn đang gặp phải trong quá trình tìm việc.
+
+Tuy nhiên, hiện tại mình kiểm tra hệ thống dữ liệu tuyển dụng thì chưa thấy có vị trí Kế toán nào đang trống tại công ty.
+
+Bạn đừng quá nản lòng nhé, hãy tiếp tục theo dõi thông báo từ công ty. Nếu bạn có thêm thông tin về các vị trí khác hoặc muốn mình hỗ trợ gì thêm, cứ nhắn cho mình nhé.
+
+Bạn có thể gửi CV trực tiếp vào khung chat này để mình lưu lại thông tin và liên hệ ngay khi có vị trí phù hợp nhé!",4.21,FAIL,"RESULT: FAIL
+REASON: Câu lệnh SQL đã bỏ sót điều kiện quan trọng về mức lương (""Lương trên 10 củ""). Mặc dù SQL đã xử lý đúng từ khóa ""kế toán"" và kiểm tra trạng thái tuyển dụng đang diễn ra, nhưng nó không hề có điều kiện lọc `jd_salary_range` hoặc các cột liên quan đến thu nhập để đáp ứng yêu cầu ""Lương trên 10 củ"" của người dùng. Do đó, kết quả trả về không đảm bảo tính chính xác tuyệt đối theo ý định của người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%kế toán%' OR d.name LIKE '%kế toán%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%kế toán%' OR d.name LIKE '%kế toán%') GROUP BY rc.id LIMIT 10"
+17,job,có chóp lào 15 chẹo hk ad ưi?,"Chào bạn, mình là Chuyên viên Tuyển dụng từ AIPT đây ạ. 
+
+Dựa trên yêu cầu về mức lương khoảng 15 triệu của bạn, hiện tại công ty mình đang có các vị trí phù hợp sau đây:
+
+* **Chuyên viên Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    * Số lượng: 03
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm tài liệu kỹ thuật, tham gia triển khai cấu hình, đánh giá kỹ thuật, trình diễn demo sản phẩm và hỗ trợ kỹ thuật sau bán hàng.
+
+* **Nhân viên Mua hàng Quốc tế**
+    * Số lượng: 02
+    * Lương: 15.000.000 - 18.000.000 VND
+    * Mô tả: Tìm kiếm sản phẩm/hãng phù hợp, đàm phán giá với nhà sản xuất, thực hiện nghiệp vụ mua hàng dự án và giám sát thủ tục nhập khẩu.
+
+* **Kỹ sư thiết kế UAV**
+    * Số lượng: 01
+    * Lương: 15.000.000 - 25.000.000 VND
+    * Mô tả: Thiết kế kết cấu UAV (frame, mounting...), tối ưu hóa thiết kế, tích hợp phần cứng và thực hiện thử nghiệm/cải tiến thiết kế.
+
+* **Sales Admin**
+    * Số lượng: 03
+    * Lương: 12.000.000 - 15.000.000 VND (Có thể thỏa thuận cao hơn khi phỏng vấn)
+    * Mô tả: Hỗ trợ kinh doanh, soạn thảo báo giá, chuẩn bị hồ sơ đấu thầu và quản lý hợp đồng/công nợ.
+
+* **Nhân viên Kinh doanh Dự án**
+    * Số lượng: 01
+    * Lương: 10.000.000 - 15.000.000 VND + % hoa hồng doanh số
+    * Mô tả: Lập kế hoạch bán hàng, chăm sóc khách hàng, phối hợp kỹ thuật để tư vấn giải pháp và chuẩn bị hồ sơ thầu.
+
+Bạn quan tâm đến vị trí nào thì hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhé!",6.48,PASS,"RESULT: PASS
+REASON: Người dùng sử dụng ngôn ngữ không chính thức (""chóp lào 15 chẹo"" = ""có việc làm 15 triệu không""), AI đã hiểu đúng ý định tìm kiếm công việc có mức lương liên quan đến con số 15. Câu lệnh SQL được sinh ra sử dụng điều kiện `rc.jd_salary_range LIKE '%15%'` là hợp lý để lọc các dải lương có chứa số 15. Kết quả trả về của chatbot liệt kê chính xác các vị trí có mức lương bao gồm con số 15 triệu, phản ánh đúng dữ liệu từ truy vấn và đáp ứng tốt nhu cầu của người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.jd_salary_range LIKE '%15%' GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rc.jd_salary_range LIKE '%15%' GROUP BY rc.id LIMIT 10"
+18,job,tuỷn nv code khum,"Chào bạn, hiện tại Công ty AIPT đang có 02 vị trí chuyên về mảng lập trình và công nghệ rất hấp dẫn. Bạn tham khảo thông tin chi tiết dưới đây nhé:
+
+**1. Nhân viên FullStack Developer**
+* **Số lượng:** 01 người
+* **Mức lương:** 14.000.000 - 18.000.000 VND
+* **Mô tả công việc:** Phát triển website và ứng dụng di động (cả front-end và back-end); thiết kế/tối ưu RESTful APIs; tích hợp các tính năng AI; quản lý ứng dụng trên môi trường Linux, Docker.
+* **Yêu cầu chính:** Từ 2 năm kinh nghiệm; thành thạo JavaScript, Python; có kinh nghiệm với ReactJS, Flask, NodeJS, SQL, MongoDB; sử dụng thành thạo Git và Docker.
+
+**2. Nhân viên Phát triển AI**
+* **Số lượng:** 01 người
+* **Mức lương:** 12.000.000 - 18.000.000 VND
+* **Mô tả công việc:** Thiết kế và triển khai hệ thống chatbot sử dụng LLMs (OpenAI GPT, v.v.); xây dựng pipeline xử lý dữ liệu (RAG); phát triển workflow AI với LangGraph; tích hợp chatbot vào các nền tảng.
+* **Yêu cầu chính:** Tốt nghiệp ngành CNTT/AI/Data Science; thành thạo Python/C++ và framework AI (PyTorch, TensorFlow); hiểu rõ về LLMs, NLP, vector database; có kinh nghiệm làm việc với API của OpenAI, Google hoặc các model như Qwen, DeepSeek.
+
+Nếu bạn thấy phù hợp với vị trí nào, hãy nộp CV trực tiếp vào khung chat này để mình hỗ trợ nhé!",5.08,PASS,"RESULT: PASS
+REASON: Người dùng sử dụng ngôn ngữ không chính thức (""tuỷn nv code khum"" tương đương với ""tuyển nhân viên code không""), AI đã hiểu đúng ý định tìm kiếm các công việc liên quan đến lập trình. Câu lệnh SQL được sinh ra đã sử dụng các từ khóa liên quan như `%Developer%`, `%FullStack%`, `%AI%` để lọc dữ liệu, đảm bảo tính chính xác về mặt ngữ nghĩa. Câu trả lời của chatbot trình bày đầy đủ, chuyên nghiệp và khớp với dữ liệu được truy vấn từ SQL.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Developer%' OR rc.name LIKE '%FullStack%' OR rc.name LIKE '%AI%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, rc.jd_competency_requirements, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Developer%' OR rc.name LIKE '%FullStack%' OR rc.name LIKE '%AI%') GROUP BY rc.id LIMIT 10"
+19,job,tỉm vjệc nàm tester paithong,"Chào bạn, rất vui được hỗ trợ bạn!
+
+Hiện tại, qua kiểm tra dữ liệu tuyển dụng của Công ty AIPT, mình chưa thấy vị trí Tester nào đang mở. Tuy nhiên, công ty đang có 2 vị trí khác nếu bạn quan tâm:
+
+*   **Nhân viên FullStack Developer**
+    *   Số lượng: 01
+    *   Mức lương: 14.000.000 - 18.000.000 VND
+    *   Mô tả: Phát triển website và ứng dụng di động (front-end & back-end), thiết kế RESTful APIs, tích hợp tính năng AI, quản lý ứng dụng trên môi trường Linux/Docker.
+*   **Sales Admin**
+    *   Số lượng: 03
+    *   Mức lương: 12.000.000 - 15.000.000 VND
+    *   Mô tả: Hỗ trợ kinh doanh (soạn báo giá, làm việc với khách hàng), chuẩn bị hồ sơ đấu thầu, quản lý hợp đồng, theo dõi tiến độ dự án và thu hồi công nợ.
+
+Nếu bạn muốn ứng tuyển vào một trong hai vị trí trên hoặc muốn mình lưu lại thông tin để thông báo khi có vị trí Tester, bạn hãy gửi CV trực tiếp vào khung chat này nhé!",4.99,PASS,"RESULT: PASS
+REASON: Người dùng nhập liệu có lỗi chính tả (""tỉm vjệc nàm tester paithong"" -> ""tìm việc làm tester phần mềm""), nhưng AI đã hiểu đúng ý định thông qua việc sử dụng từ khóa ""tester"" và ""phần mềm"" trong câu lệnh SQL (sử dụng `LIKE '%tester%' OR rc.jd_job_description LIKE '%phần mềm%'`). Câu lệnh SQL được sinh ra rất đầy đủ, bao gồm các điều kiện lọc trạng thái chiến dịch đang hoạt động và thời hạn tuyển dụng. Khi kết quả truy vấn không trả về vị trí Tester, chatbot đã phản hồi một cách lịch sự, thông báo đúng thực tế và đưa ra các gợi ý công việc khác có sẵn trong hệ thống để giữ chân người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%tester%' OR rc.name LIKE '%phần mềm%' OR rc.jd_job_description LIKE '%tester%' OR rc.jd_job_description LIKE '%phần mềm%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%tester%' OR rc.name LIKE '%phần mềm%' OR rc.jd_job_description LIKE '%tester%' OR rc.jd_job_description LIKE '%phần mềm%') GROUP BY rc.id LIMIT 10"
+20,job,có cv nà0 ch0 ng m0i ra tru0ng hok dza?,"Chào bạn, rất vui được hỗ trợ bạn! Hiện tại tại AIPT đang có các vị trí thực tập sinh rất phù hợp cho các bạn mới ra trường hoặc sinh viên sắp tốt nghiệp muốn tìm kiếm môi trường để học hỏi và phát triển chuyên môn.
+
+Dưới đây là các vị trí đang tuyển dụng:
+
+*   **ID 2: Thực tập sinh Tư vấn Kỹ thuật Dự án Phần cứng - Presales**
+    *   Số lượng: 01
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Triển khai, tìm kiếm yêu cầu sản phẩm thiết bị cho dự án an ninh quốc phòng; xây dựng hệ thống phù hợp yêu cầu khách hàng; demo, bàn giao và hỗ trợ khách hàng sử dụng sản phẩm.
+
+*   **ID 3: Thực tập sinh Kinh doanh Dự án**
+    *   Số lượng: 02
+    *   Mức lương: 3.000.000 - 5.000.000 VND
+    *   Mô tả công việc: Hỗ trợ liên hệ khách hàng báo giá, chăm sóc khách hàng; soạn thảo tài liệu sản phẩm, chuẩn bị thuyết trình; hỗ trợ hoàn thiện hồ sơ dự án và hợp đồng.
+
+Bạn hãy gửi CV trực tiếp vào khung chat này để mình xem xét và hỗ trợ bạn nhanh nhất nhé!",4.66,PASS,"RESULT: PASS
+REASON: Người dùng sử dụng ngôn ngữ không chính thức (""có cv nà0 ch0 ng m0i ra tru0ng hok dza?"") để hỏi về công việc cho người mới ra trường. AI đã hiểu đúng ý định và chuyển đổi thành điều kiện lọc `rr.experience_level = 0` trong câu lệnh SQL (thường đại diện cho mức độ kinh nghiệm thấp nhất/mới ra trường). Câu lệnh SQL cũng đảm bảo các điều kiện về trạng thái chiến dịch đang hoạt động và chưa hết hạn. Kết quả trả về và câu trả lời của chatbot hoàn toàn khớp với dữ liệu truy vấn và đáp ứng đúng nhu cầu của người dùng.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level = 0 GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND rr.experience_level = 0 GROUP BY rc.id LIMIT 10"
+21,job,"Mình tìm việc sale, không yêu cầu kinh nghiệm, làm tại Nam Từ Liêm, lương trên 8 triệu, được hỗ trợ xăng xe.","Chào bạn, mình là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Rất tiếc là hiện tại mình chưa tìm thấy vị trí Sale nào tại khu vực Nam Từ Liêm đáp ứng đúng các tiêu chí về kinh nghiệm và mức lương mà bạn đang tìm kiếm trong dữ liệu tuyển dụng của công ty.
+
+Bạn vui lòng gửi CV trực tiếp vào khung chat này để mình lưu lại thông tin và chủ động liên hệ ngay khi có vị trí phù hợp nhé!",4.93,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã chuyển đổi chính xác các thực thể từ câu hỏi của người dùng thành các điều kiện lọc: ""sale"" (LIKE '%Sales%' hoặc '%Kinh doanh%'), ""không yêu cầu kinh nghiệm"" (experience_level = 0), ""Nam Từ Liêm"" (LIKE '%Nam Từ Liêm%' trong mô tả hoặc phúc lợi), và ""hỗ trợ xăng xe"" (LIKE '%xăng xe%'). Mặc dù điều kiện về lương ""trên 8 triệu"" chưa được thể hiện rõ ràng trong câu lệnh SQL (có thể do cấu trúc cột `jd_salary_range` là dạng text khó lọc chính xác bằng toán học), nhưng việc không tìm thấy kết quả và chatbot phản hồi lịch sự, đúng trọng tâm là một xử lý hợp lý khi dữ liệu không khớp hoàn toàn với các bộ lọc khắt khe đã thiết lập.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%') AND rr.experience_level = 0 AND (rc.jd_job_description LIKE '%Nam Từ Liêm%' OR rc.jd_benefits LIKE '%Nam Từ Liêm%') AND (rc.jd_benefits LIKE '%xăng xe%' OR rc.jd_benefits LIKE '%hỗ trợ xăng xe%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%Sales%' OR rc.name LIKE '%Kinh doanh%' OR d.name LIKE '%Kinh doanh%') AND rr.experience_level = 0 AND (rc.jd_job_description LIKE '%Nam Từ Liêm%' OR rc.jd_benefits LIKE '%Nam Từ Liêm%') AND (rc.jd_benefits LIKE '%xăng xe%' OR rc.jd_benefits LIKE '%hỗ trợ xăng xe%') GROUP BY rc.id LIMIT 10"
+22,job,Có công việc marketing nào cho fresher mà lương cứng 15 triệu không?,"Chào bạn, mình là Chuyên viên Tuyển dụng từ Công ty AIPT.
+
+Rất tiếc là hiện tại mình chưa tìm thấy vị trí Marketing nào dành cho Fresher với mức lương cứng 15 triệu trong danh sách công việc đang tuyển dụng của công ty.
+
+Bạn vui lòng gửi CV trực tiếp vào khung chat này để mình lưu lại thông tin và chủ động liên hệ ngay khi có vị trí phù hợp nhé!",3.84,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã chuyển đổi chính xác các thực thể từ câu hỏi của người dùng thành các điều kiện lọc: ""marketing"" (tìm trong tên campaign hoặc phòng ban), ""fresher"" (rr.experience_level = 0), và ""lương 15 triệu"" (rc.jd_salary_range LIKE '%15%'). Do kết quả truy vấn trả về rỗng, chatbot đã phản hồi một cách lịch sự và hợp lý rằng không tìm thấy vị trí phù hợp.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%marketing%' OR d.name LIKE '%marketing%') AND rr.experience_level = 0 AND rc.jd_salary_range LIKE '%15%' GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%marketing%' OR d.name LIKE '%marketing%') AND rr.experience_level = 0 AND rc.jd_salary_range LIKE '%15%' GROUP BY rc.id LIMIT 10"
+23,chitchat,"Công ty mình có bán laptop cũ không, mình đang cần mua?","Xin lỗi bạn, tôi là trợ lý tuyển dụng nên không thể hỗ trợ các vấn đề về mua bán thiết bị. Tôi có thể giúp bạn tìm hiểu thông tin công ty, tư vấn vị trí tuyển dụng hoặc hỗ trợ bạn nộp hồ sơ ứng tuyển.",1.14,FAIL,Không thuộc nhánh job (Nhánh hiện tại: chitchat). Đánh giá FAIL.,
+24,job,"Chị ơi, nhà em ở gần công ty, em xin làm bảo vệ được không? Lương tháng nhiêu?","Chào em, rất vui vì em đã quan tâm đến công việc tại AIPT.
+
+Hiện tại, chị kiểm tra danh sách các vị trí đang tuyển dụng thì chưa thấy có thông tin về vị trí bảo vệ. Do đó, chị chưa thể cung cấp thông tin chính xác về việc tuyển dụng cũng như mức lương cho vị trí này được.
+
+Em vui lòng gửi CV trực tiếp vào khung chat này để chị lưu lại thông tin, khi có vị trí phù hợp chị sẽ chủ động liên hệ với em ngay nhé!",3.49,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã được sinh ra rất chính xác, sử dụng điều kiện `LIKE '%bảo vệ%'` trên cả tên chiến dịch tuyển dụng (`rc.name`) và mô tả công việc (`rc.jd_job_description`) để tìm kiếm đúng ý định của người dùng. Dựa trên kết quả truy vấn không trả về dữ liệu (không có vị trí bảo vệ), chatbot đã đưa ra câu trả lời lịch sự, trung thực và đưa ra giải pháp thay thế (gửi CV) rất hợp lý.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%bảo vệ%' OR rc.jd_job_description LIKE '%bảo vệ%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%bảo vệ%' OR rc.jd_job_description LIKE '%bảo vệ%') GROUP BY rc.id LIMIT 10"
+25,job,Có tuyển phó giám đốc không?,"Chào bạn, hiện tại trong danh sách các vị trí đang tuyển dụng của AIPT chưa có vị trí Phó Giám đốc.
+
+Nếu bạn có quan tâm đến các vị trí khác hoặc muốn cập nhật thông tin tuyển dụng mới nhất, hãy để lại thông tin nhé.
+
+Bạn vui lòng gửi CV trực tiếp vào khung chat này để mình hỗ trợ xem xét các cơ hội phù hợp nhé!",2.98,PASS,"RESULT: PASS
+REASON: Câu lệnh SQL đã được sinh ra rất chính xác với ý định của người dùng. Nó không chỉ tìm kiếm từ khóa ""phó giám đốc"" trong tên chiến dịch tuyển dụng (`rc.name`) mà còn mở rộng tìm kiếm trong tên phòng ban (`d.name`) để tránh bỏ sót. Các điều kiện về trạng thái chiến dịch đang hoạt động (`status = 1`) và thời hạn tuyển dụng (`end_time`) cũng được xử lý đúng logic. Dựa trên kết quả truy vấn (không tìm thấy dữ liệu), chatbot đã đưa ra câu trả lời phủ định một cách lịch sự và hợp lý.","[check_jobs] executing query: 
+            SELECT DISTINCT rc.name
+            FROM recruitment_campaigns rc
+            JOIN recruitment_requests rr ON rc.request_id = rr.id
+            WHERE rc.status = 1
+            AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP())
+        
+[handle_job_query] generated SQL: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%phó giám đốc%' OR d.name LIKE '%phó giám đốc%') GROUP BY rc.id LIMIT 10
+[check_jobs] executing query: SELECT rc.id, rc.name, rr.quantity, rr.experience_level, rr.education_level, rc.jd_salary_range, rc.jd_benefits, rc.jd_job_description, GROUP_CONCAT(CONCAT('Vòng ', rcr.round_number, ': ', rcr.round_name) ORDER BY rcr.round_number ASC SEPARATOR '; ') AS interview_rounds FROM recruitment_campaigns rc JOIN recruitment_requests rr ON rc.request_id = rr.id LEFT JOIN recruitment_campaign_rounds rcr ON rc.id = rcr.campaign_id LEFT JOIN departments d ON rr.department_id = d.id WHERE rc.status = 1 AND (rc.end_time IS NULL OR rc.end_time >= UNIX_TIMESTAMP()) AND (rc.name LIKE '%phó giám đốc%' OR d.name LIKE '%phó giám đốc%') GROUP BY rc.id LIMIT 10"
+26,chitchat,Muốn lên làm CEO thì cần học những gì hả bot?,"Xin lỗi bạn, tôi chỉ có thể hỗ trợ các vấn đề liên quan đến tuyển dụng tại AIPT. Tôi có thể giúp bạn cung cấp thông tin công ty, tư vấn các vị trí tuyển dụng hoặc tiếp nhận hồ sơ ứng tuyển của bạn.",1.11,FAIL,Không thuộc nhánh job (Nhánh hiện tại: chitchat). Đánh giá FAIL.,
+27,chitchat,Đội bóng công ty có cần tuyển tiền đạo không?,"Xin lỗi bạn, tôi chỉ có thể hỗ trợ các thông tin liên quan đến tuyển dụng nhân sự tại AIPT. Bạn có muốn tôi cung cấp thông tin công ty, tư vấn các vị trí tuyển dụng hoặc hỗ trợ bạn nộp hồ sơ ứng tuyển không?",1.07,FAIL,Không thuộc nhánh job (Nhánh hiện tại: chitchat). Đánh giá FAIL.,
